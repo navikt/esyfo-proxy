@@ -1,0 +1,60 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: aia-backend
+  namespace: paw
+  labels:
+    team: paw
+spec:
+  image: {{image}}
+  port: 8080
+  liveness:
+    path: /aia-backend/internal/isAlive
+    initialDelay: 10
+  readiness:
+    path: /aia-backend/internal/isReady
+    initialDelay: 10
+  replicas:
+    min: 2
+    max: 4
+  tokenx:
+    enabled: true
+  ingresses:
+    - "https://www.dev.nav.no/aia-backend"
+    - "https://arbeid.dev.nav.no/aia-backend"
+    - "https://aia-backend.dev.intern.nav.no/aia-backend"
+  envFrom:
+    - configmap: loginservice-idporten
+  env:
+    - name: CORS_ALLOWED_ORIGINS
+      value: www.dev.nav.no
+    - name: CORS_ALLOWED_SCHEMES
+      value: https
+    - name: MELDEKORT_APP_NAME
+      value: "meldekort-api-q1"
+    - name: PTO_PROXY_URL
+      value: https://pto-proxy.dev.intern.nav.no/proxy
+    - name: UNLEASH_API_URL
+      value: https://unleash.nais.io/api/
+  resources:
+    limits:
+      cpu: "3"
+      memory: 768Mi
+    requests:
+      cpu: "500m"
+      memory: 580Mi
+  accessPolicy:
+    inbound:
+      rules:
+        - application: veientilarbeid
+    outbound:
+      rules:
+        - application: dp-innsyn
+          namespace: teamdagpenger
+        - application: meldekort-api-q1
+          namespace: meldekort
+#  gcp:
+#    sqlInstances:
+#      - type: POSTGRES_14
+#        databases:
+#          - name: bakveientilarbeid-dev
