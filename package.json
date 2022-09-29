@@ -1,0 +1,24 @@
+{
+  "name": "aia-backend",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "tsc -w",
+    "start": "ts-node src/index.ts"
+  },
+  "dependencies": {
+    "fastify": "4.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "18.7.23",
+    "ts-node": "10.9.1",
+    "typescript": "4.8.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/navikt/aia-backend.git"
+  },
+  "engines": {
+    "node": ">=16.17.1"
+  },
+  "license": "MIT"
+}
