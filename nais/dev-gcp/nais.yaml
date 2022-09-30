@@ -14,6 +14,8 @@ spec:
   readiness:
     path: /internal/isReady
     initialDelay: 10
+  prometheus:
+    enabled: false
   replicas:
     min: 2
     max: 4
