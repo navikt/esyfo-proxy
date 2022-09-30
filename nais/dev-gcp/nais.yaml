@@ -9,10 +9,10 @@ spec:
   image: {{image}}
   port: 3000
   liveness:
-    path: /aia-backend/internal/isAlive
+    path: /internal/isAlive
     initialDelay: 10
   readiness:
-    path: /aia-backend/internal/isReady
+    path: /internal/isReady
     initialDelay: 10
   replicas:
     min: 2
