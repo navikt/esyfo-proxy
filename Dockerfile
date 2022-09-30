@@ -7,8 +7,7 @@ WORKDIR /src
 RUN npm ci
 
 RUN npm run build
-ENV PORT=8080
 
 CMD ["node", "./build/index.js"]
 
-EXPOSE $PORT
+EXPOSE 3000

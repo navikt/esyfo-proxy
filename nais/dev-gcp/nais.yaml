@@ -7,7 +7,7 @@ metadata:
     team: paw
 spec:
   image: {{image}}
-  port: 8080
+  port: 3000
   liveness:
     path: /aia-backend/internal/isAlive
     initialDelay: 10
