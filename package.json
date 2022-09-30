@@ -2,7 +2,7 @@
   "name": "aia-backend",
   "version": "1.0.0",
   "scripts": {
-    "build": "tsc -w",
+    "build": "tsc",
     "start": "ts-node src/index.ts"
   },
   "dependencies": {
