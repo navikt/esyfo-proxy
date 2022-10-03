@@ -1,12 +1,16 @@
 import F from 'fastify';
 import healhApi from './api/health';
 import unleashApi from './api/unleash';
+import ptoProxy from './api/ptoproxy';
+import cookie from '@fastify/cookie';
 
 const PORT = 3000;
 
 const fastify = F({ logger: true });
+fastify.register(cookie)
 fastify.register(healhApi)
 fastify.register(unleashApi)
+fastify.register(ptoProxy)
 
 
 const startServer = async () => {
