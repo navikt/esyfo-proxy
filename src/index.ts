@@ -1,10 +1,12 @@
 import F from 'fastify';
 import healhApi from './api/health';
+import unleashApi from './api/unleash';
 
 const PORT = 3000;
 
 const fastify = F({ logger: true });
 fastify.register(healhApi)
+fastify.register(unleashApi)
 
 
 const startServer = async () => {
