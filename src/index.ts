@@ -1,7 +1,7 @@
 import F from 'fastify';
 import healhApi from './api/health';
 
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
 const fastify = F({ logger: true });
 fastify.register(healhApi)
