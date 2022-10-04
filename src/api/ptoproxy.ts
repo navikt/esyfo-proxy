@@ -1,11 +1,11 @@
 import axios, {AxiosError} from 'axios';
 import {Request, Response, Router} from 'express';
-import {CONSUMER_ID_HEADER_NAME, CONSUMER_ID_HEADER_VALUE, NAV_COOKIE_NAME} from '../config';
+import config from '../config';
 
 
 function ptoProxyCall(url: string) {
   return async (req: Request, res: Response) => {
-    const token = req.cookies[NAV_COOKIE_NAME];
+    const token = req.cookies[config.NAV_COOKIE_NAME];
     try {
       const { data } = await axios(url, {
         method: req.method,
@@ -13,7 +13,7 @@ function ptoProxyCall(url: string) {
         headers: {
           'Content-Type': req.headers['content-type'] || 'application/json',
           Authorization: `Bearer ${token}`,
-          [CONSUMER_ID_HEADER_NAME]: CONSUMER_ID_HEADER_VALUE,
+          [config.CONSUMER_ID_HEADER_NAME]: config.CONSUMER_ID_HEADER_VALUE,
         },
         responseType: 'stream',
       });
@@ -28,7 +28,7 @@ function ptoProxyCall(url: string) {
 
 function arbeidsSokerPerioder(url: string) {
   return async (req: Request, res: Response) => {
-    const token = req.cookies[NAV_COOKIE_NAME];
+    const token = req.cookies[config.NAV_COOKIE_NAME];
     try {
       const { data } = await axios(url, {
         method: 'POST',
@@ -36,7 +36,7 @@ function arbeidsSokerPerioder(url: string) {
         headers: {
           'Content-Type': req.headers['content-type'] || 'application/json',
           Authorization: `Bearer ${token}`,
-          [CONSUMER_ID_HEADER_NAME]: CONSUMER_ID_HEADER_VALUE,
+          [config.CONSUMER_ID_HEADER_NAME]: config.CONSUMER_ID_HEADER_VALUE,
         },
         responseType: 'stream',
       });
@@ -51,17 +51,17 @@ function arbeidsSokerPerioder(url: string) {
 
 function ptoProxy() {
   const router = Router();
-  router.get('/oppfolging', ptoProxyCall(`${process.env.PTO_PROXY_URL}/veilarboppfolging/api/oppfolging`));
-  router.get('/underoppfolging', ptoProxyCall(`${process.env.PTO_PROXY_URL}/veilarboppfolging/api/niva3/underoppfolging`));
-  router.get('/startregistrering', ptoProxyCall(`${process.env.PTO_PROXY_URL}/veilarbregistrering/api/startregistrering`));
-  router.get('/registrering', ptoProxyCall(`${process.env.PTO_PROXY_URL}/veilarbregistrering/api/registrering`));
-  router.get('/standard-innsats', ptoProxyCall(`${process.env.PTO_PROXY_URL}/veilarbregistrering/api/profilering/standard-innsats`));
-  router.get('/dialog/antallUleste', ptoProxyCall(`${process.env.PTO_PROXY_URL}/veilarbdialog/api/dialog/antallUleste`));
-  router.get('/vedtakinfo/besvarelse', ptoProxyCall(`${process.env.PTO_PROXY_URL}/veilarbvedtakinfo/api/behovsvurdering/besvarelse`));
-  router.get('/vedtakinfo/motestotte', ptoProxyCall(`${process.env.PTO_PROXY_URL}/veilarbvedtakinfo/api/motestotte`));
-  router.get('/arbeidssoker/perioder', arbeidsSokerPerioder(`${process.env.PTO_PROXY_URL}/veilarbregistrering/api/arbeidssoker/perioder`));
-  router.get('/gjelderfra', ptoProxyCall(`${process.env.PTO_PROXY_URL}/veilarbregistrering/api/registrering/gjelderfra`));
-  router.post('/gjelderfra', ptoProxyCall(`${process.env.PTO_PROXY_URL}/veilarbregistrering/api/registrering/gjelderfra`));
+  router.get('/oppfolging', ptoProxyCall(`${config.PTO_PROXY_URL}/veilarboppfolging/api/oppfolging`));
+  router.get('/underoppfolging', ptoProxyCall(`${config.PTO_PROXY_URL}/veilarboppfolging/api/niva3/underoppfolging`));
+  router.get('/startregistrering', ptoProxyCall(`${config.PTO_PROXY_URL}/veilarbregistrering/api/startregistrering`));
+  router.get('/registrering', ptoProxyCall(`${config.PTO_PROXY_URL}/veilarbregistrering/api/registrering`));
+  router.get('/standard-innsats', ptoProxyCall(`${config.PTO_PROXY_URL}/veilarbregistrering/api/profilering/standard-innsats`));
+  router.get('/dialog/antallUleste', ptoProxyCall(`${config.PTO_PROXY_URL}/veilarbdialog/api/dialog/antallUleste`));
+  router.get('/vedtakinfo/besvarelse', ptoProxyCall(`${config.PTO_PROXY_URL}/veilarbvedtakinfo/api/behovsvurdering/besvarelse`));
+  router.get('/vedtakinfo/motestotte', ptoProxyCall(`${config.PTO_PROXY_URL}/veilarbvedtakinfo/api/motestotte`));
+  router.get('/arbeidssoker/perioder', arbeidsSokerPerioder(`${config.PTO_PROXY_URL}/veilarbregistrering/api/arbeidssoker/perioder`));
+  router.get('/gjelderfra', ptoProxyCall(`${config.PTO_PROXY_URL}/veilarbregistrering/api/registrering/gjelderfra`));
+  router.post('/gjelderfra', ptoProxyCall(`${config.PTO_PROXY_URL}/veilarbregistrering/api/registrering/gjelderfra`));
 
   return router;
 }

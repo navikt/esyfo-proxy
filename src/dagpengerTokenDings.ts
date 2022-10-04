@@ -2,27 +2,20 @@ import { Issuer, TokenSet } from 'openid-client'
 import jwt from 'jsonwebtoken'
 import { JWK } from 'node-jose'
 import { ulid } from 'ulid'
-
-export interface DagpengerTokenDingsOptions  {
-  tokenXWellKnownUrl: string,
-  tokenXClientId: string,
-  tokenXTokenEndpoint: string,
-  tokenXPrivateJwk: string
-}
+import config from './config'
 
 export interface DagpengerTokenDings {
   (idPortenToken: string): Promise<TokenSet>
 }
 
-async function createClientAssertion(opts: DagpengerTokenDingsOptions): Promise<string> {
-  const { tokenXPrivateJwk, tokenXClientId, tokenXTokenEndpoint } = opts;
+async function createClientAssertion(): Promise<string> {
   const now = Math.floor(Date.now() / 1000)
-  const key = await JWK.asKey(tokenXPrivateJwk);
+  const key = await JWK.asKey(config.TOKEN_X_PRIVATE_JWK);
   return jwt.sign(
       {
-        sub: tokenXClientId,
-        aud: tokenXTokenEndpoint,
-        iss: tokenXClientId,
+        sub: config.TOKEN_X_CLIENT_ID,
+        aud: config.TOKEN_X_TOKEN_ENDPOINT,
+        iss: config.TOKEN_X_CLIENT_ID,
         exp: now + 60, // max 120
         iat: now,
         jti: ulid(),
@@ -33,22 +26,20 @@ async function createClientAssertion(opts: DagpengerTokenDingsOptions): Promise<
   )
 }
 
-const createDagpengerTokenDings = async (opts: DagpengerTokenDingsOptions): Promise<DagpengerTokenDings> => {
-  const { tokenXWellKnownUrl, tokenXClientId } = opts;
-  const tokenXIssuer = await Issuer.discover(tokenXWellKnownUrl);
+const createDagpengerTokenDings = async (): Promise<DagpengerTokenDings> => {
+  const tokenXIssuer = await Issuer.discover(config.TOKEN_X_WELL_KNOWN_URL);
   const tokenXClient = new tokenXIssuer.Client({
-    client_id: tokenXClientId,
+    client_id: config.TOKEN_X_CLIENT_ID,
     token_endpoint_auth_method: 'none'
   });
 
-  const exchangeIdPortenToken = async (idPortenToken: string,) => {
-    const clientAssertion = await createClientAssertion(opts);
-    const targetAudience = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-innsyn`;
+  const exchangeIdPortenToken = async (idPortenToken: string) => {
+    const clientAssertion = await createClientAssertion();
 
     try {
       return tokenXClient.grant({
         grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
-        audience: targetAudience,
+        audience: config.TOKEN_X_AUDIENCE,
         client_assertion: clientAssertion,
         client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
         subject_token: idPortenToken,

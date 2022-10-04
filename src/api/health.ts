@@ -3,10 +3,10 @@ import {Router} from 'express';
 function healthRoutes() {
   const router = Router();
 
-  router.get('/internal/isAlive', (req, res) => {
+  router.get('/internal/isAlive', (_, res) => {
     res.send('ALIVE');
   });
-  router.get('/internal/isReady', (req, res) => {
+  router.get('/internal/isReady', (_, res) => {
     res.send('READY');
   });
 

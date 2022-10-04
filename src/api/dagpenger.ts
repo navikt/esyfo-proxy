@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {CONSUMER_ID_HEADER_NAME, CONSUMER_ID_HEADER_VALUE, NAV_COOKIE_NAME} from '../config';
+import config from '../config';
 import {DagpengerTokenDings} from '../dagpengerTokenDings';
 import axios, {AxiosError} from 'axios';
 
@@ -12,7 +12,7 @@ function dagpengerRoutes(createDagpengerTokenDings: DagpengerTokenDings) {
   const router = Router();
   router.get('/dagpenger/soknad', async (req, res) => {
     const dagpengerTokenDings = await createDagpengerTokenDings;
-    const idPortenToken = req.cookies[NAV_COOKIE_NAME];
+    const idPortenToken = req.cookies[config.NAV_COOKIE_NAME];
     const tokenSet = await dagpengerTokenDings(idPortenToken);
     const token = tokenSet.access_token;
     try {
@@ -21,7 +21,7 @@ function dagpengerRoutes(createDagpengerTokenDings: DagpengerTokenDings) {
           'Content-Type': req.headers['content-type'] || 'application/json',
           Authorization: `Bearer ${token}`,
           TokenXAuthorization: `Bearer ${token}`,
-          [CONSUMER_ID_HEADER_NAME]: CONSUMER_ID_HEADER_VALUE,
+          [config.CONSUMER_ID_HEADER_NAME]: config.CONSUMER_ID_HEADER_VALUE,
         },
         responseType: 'stream',
       });
