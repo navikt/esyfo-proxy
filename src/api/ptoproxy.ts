@@ -3,36 +3,14 @@ import {Request, Response, Router} from 'express';
 import config from '../config';
 
 
-function ptoProxyCall(url: string) {
+function ptoProxyCall(url: string, overrideMethod?: string) {
   return async (req: Request, res: Response) => {
     const token = req.cookies[config.NAV_COOKIE_NAME];
     try {
       const { data } = await axios(url, {
-        method: req.method,
+        method: overrideMethod || req.method,
         data: req.method === 'POST' ? req.body : undefined,
-        headers: {
-          'Content-Type': req.headers['content-type'] || 'application/json',
-          Authorization: `Bearer ${token}`,
-          [config.CONSUMER_ID_HEADER_NAME]: config.CONSUMER_ID_HEADER_VALUE,
-        },
-        responseType: 'stream',
-      });
-      data.pipe(res);
-    } catch (err) {
-      console.error(err);
-      const status = (err as AxiosError).response?.status || 500;
-      res.status(status).send((err as Error).message);
-    }
-  }
-}
-
-function arbeidsSokerPerioder(url: string) {
-  return async (req: Request, res: Response) => {
-    const token = req.cookies[config.NAV_COOKIE_NAME];
-    try {
-      const { data } = await axios(url, {
-        method: 'POST',
-        params: req.query,
+        params: req.params,
         headers: {
           'Content-Type': req.headers['content-type'] || 'application/json',
           Authorization: `Bearer ${token}`,
@@ -59,7 +37,7 @@ function ptoProxy() {
   router.get('/dialog/antallUleste', ptoProxyCall(`${config.PTO_PROXY_URL}/veilarbdialog/api/dialog/antallUleste`));
   router.get('/vedtakinfo/besvarelse', ptoProxyCall(`${config.PTO_PROXY_URL}/veilarbvedtakinfo/api/behovsvurdering/besvarelse`));
   router.get('/vedtakinfo/motestotte', ptoProxyCall(`${config.PTO_PROXY_URL}/veilarbvedtakinfo/api/motestotte`));
-  router.get('/arbeidssoker/perioder', arbeidsSokerPerioder(`${config.PTO_PROXY_URL}/veilarbregistrering/api/arbeidssoker/perioder`));
+  router.get('/arbeidssoker/perioder', ptoProxyCall(`${config.PTO_PROXY_URL}/veilarbregistrering/api/arbeidssoker/perioder`, 'POST'));
   router.get('/gjelderfra', ptoProxyCall(`${config.PTO_PROXY_URL}/veilarbregistrering/api/registrering/gjelderfra`));
   router.post('/gjelderfra', ptoProxyCall(`${config.PTO_PROXY_URL}/veilarbregistrering/api/registrering/gjelderfra`));
 

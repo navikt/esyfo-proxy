@@ -7,7 +7,7 @@ import unleashApi from "./api/unleash";
 import ptoProxyApi from "./api/ptoproxy";
 import dagpengerApi from "./api/dagpenger";
 import bodyParser from "body-parser";
-import createDependencies from "./deps";
+import createDependencies from "./tokenx/deps";
 
 
 const PORT = 3000;

@@ -4,7 +4,7 @@ import config from "../config";
 
 initialize({
   appName: "aia-backend",
-  url: config.UNLEASH_API_URL!,
+  url: config.UNLEASH_API_URL,
 });
 
 function ensureArray(features?: string | Array<string>) {
