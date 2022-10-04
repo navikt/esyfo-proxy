@@ -3,7 +3,7 @@
     "outDir": "build",
     "rootDir": "src",
     "module": "nodenext",
-    "target": "es6",
+    "target": "es2017",
     "lib": ["es7"],
     "sourceMap": true,
     "allowJs": true,

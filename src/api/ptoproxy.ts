@@ -1,8 +1,7 @@
 import axios, {AxiosError} from 'axios';
 import {Request, Response, Router} from 'express';
-const NAV_COOKIE_NAME = 'selvbetjening-idtoken';
-const CONSUMER_ID_HEADER_NAME = 'Nav-Consumer-Id';
-const CONSUMER_ID_HEADER_VALUE = 'paw:bakveientilarbeid';
+import {CONSUMER_ID_HEADER_NAME, CONSUMER_ID_HEADER_VALUE, NAV_COOKIE_NAME} from '../config';
+
 
 function ptoProxyCall(url: string) {
   return async (req: Request, res: Response) => {

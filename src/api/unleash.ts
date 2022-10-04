@@ -1,9 +1,10 @@
-import {Request, Router} from 'express';
-const { initialize, isEnabled } = require('unleash-client');
+import { Request, Router } from "express";
+import { initialize, isEnabled } from "unleash-client";
+import { UNLEASH_API_URL } from "../config";
 
 initialize({
-  appName: 'aia-backend',
-  url: process.env.UNLEASH_API_URL,
+  appName: "aia-backend",
+  url: UNLEASH_API_URL!,
 });
 
 function ensureArray(features?: string | Array<string>) {
@@ -19,17 +20,17 @@ function ensureArray(features?: string | Array<string>) {
 }
 
 type FeatureQuery = {
-  feature: string
-}
+  feature: string;
+};
 
 function unleashRoutes() {
   const router = Router();
 
-  router.get('/unleash', (req: Request<{},{},{}, FeatureQuery>, res) => {
+  router.get("/unleash", (req: Request<{}, {}, {}, FeatureQuery>, res) => {
     const features = ensureArray(req.query.feature).reduce((acc, key) => {
       return {
         ...acc,
-        [key]: isEnabled(key)
+        [key]: isEnabled(key),
       };
     }, {});
 
