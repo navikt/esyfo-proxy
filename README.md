@@ -1,4 +1,5 @@
 # aia-backend
+
 Backend for AiA
 
 ## Utvikling
@@ -28,3 +29,7 @@ Spørsmål knyttet til koden eller prosjektet kan stilles via issues her på git
 # For NAV-ansatte
 
 Interne henvendelser kan sendes via Slack i kanalen [#team-paw-dev](https://nav-it.slack.com/archives/CLTFAEW75)
+
+# Lisens
+
+[MIT](LICENSE)
