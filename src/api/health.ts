@@ -1,14 +1,16 @@
-import {FastifyInstance} from 'fastify';
+import {Router} from 'express';
 
-function healthRoutes(fastify: FastifyInstance, options: any, done: any) {
-  fastify.get('/internal/isAlive', (req, reply) => {
-    reply.send('ALIVE');
+function healthRoutes() {
+  const router = Router();
+
+  router.get('/internal/isAlive', (req, res) => {
+    res.send('ALIVE');
   });
-  fastify.get('/internal/isReady', (req, reply) => {
-    reply.send('READY');
+  router.get('/internal/isReady', (req, res) => {
+    res.send('READY');
   });
 
-  done();
+  return router;
 }
 
 

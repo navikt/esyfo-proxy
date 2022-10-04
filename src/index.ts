@@ -1,35 +1,29 @@
-import F from 'fastify';
+import express from 'express';
+import cookieParser from 'cookie-parser';
 import healhApi from './api/health';
 import unleashApi from './api/unleash';
-import ptoProxy from './api/ptoproxy';
-import cookie from '@fastify/cookie';
+import ptoProxyApi from './api/ptoproxy';
 
 const PORT = 3000;
+const app = express();
+app.use(cookieParser())
 
-const fastify = F({ logger: true });
-fastify.register(cookie)
-fastify.register(healhApi)
-fastify.register(unleashApi)
-fastify.register(ptoProxy)
+app.use(healhApi())
+app.use(unleashApi())
+app.use(ptoProxyApi());
 
 
 const startServer = async () => {
   try {
     console.log(`Starting server...`);
-    await fastify.listen({port: PORT as number, host: '0.0.0.0'});
+    app.listen(PORT, () => {
+      console.log('Server running at http://localhost:3000');
+    });
   } catch(err) {
-    fastify.log.error(err);
+    console.error(err);
     process.exit(1);
   }
 }
 
 startServer();
 
-process.on('SIGTERM', async () => {
-  try {
-    await fastify.close();
-    fastify.log.info('Server closed...')
-  } catch (err) {
-    fastify.log.error(err)
-  }
-});

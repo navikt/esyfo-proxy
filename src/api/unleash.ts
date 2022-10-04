@@ -1,5 +1,4 @@
-import {FastifyInstance, FastifyRequest} from 'fastify';
-
+import {Request, Router} from 'express';
 const { initialize, isEnabled } = require('unleash-client');
 
 initialize({
@@ -19,12 +18,14 @@ function ensureArray(features?: string | Array<string>) {
   return [features];
 }
 
-type UnleashRequest = FastifyRequest<{
-  Querystring: { feature: string }
-}>
+type FeatureQuery = {
+  feature: string
+}
 
-function unleashRoutes(fastify: FastifyInstance, options: any, done: any) {
-  fastify.get('/unleash', (req: UnleashRequest, reply) => {
+function unleashRoutes() {
+  const router = Router();
+
+  router.get('/unleash', (req: Request<{},{},{}, FeatureQuery>, res) => {
     const features = ensureArray(req.query.feature).reduce((acc, key) => {
       return {
         ...acc,
@@ -32,10 +33,10 @@ function unleashRoutes(fastify: FastifyInstance, options: any, done: any) {
       };
     }, {});
 
-    reply.send(features);
+    res.send(features);
   });
 
-  done();
+  return router;
 }
 
 export default unleashRoutes;
