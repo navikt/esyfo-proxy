@@ -10,12 +10,17 @@ import bodyParser from 'body-parser';
 import createDependencies from './tokenx/deps';
 import { pinoHttp } from 'pino-http';
 import logger from './logger';
+import helmet from 'helmet';
+import cors from 'cors';
 
 const PORT = 3000;
 const app = express();
+
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(pinoHttp({ logger }));
+app.use(helmet());
+app.use(cors());
 
 async function setUpRoutes() {
     const { dagpengerTokenDings } = createDependencies();
