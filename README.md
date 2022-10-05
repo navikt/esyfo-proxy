@@ -23,6 +23,18 @@ For å starte: `docker-compose up -d`
 
 For å stoppe: `docker-compose rm -f && docker-compose stop`
 
+## Teste endepunkter lokalt
+
+1. Logg inn på https://www.dev.nav.no
+2. Finn cookien `selvbetjening-idtoken`
+3. Kopier verdien, og sett den inn i requesten under
+4. Kjør `curl` i terminalen eller bruk en REST-klient:
+```
+curl -vvv 'http://localhost:3000/<endepunkt>' \
+  -H $'Cookie: selvbetjening-idtoken=<TOKEN>'
+```
+
+
 # Henvendelser
 
 Spørsmål knyttet til koden eller prosjektet kan stilles via issues her på github.
