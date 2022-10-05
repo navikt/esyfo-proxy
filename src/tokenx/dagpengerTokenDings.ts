@@ -2,6 +2,7 @@ import { Issuer, TokenSet } from 'openid-client';
 import jwt from 'jsonwebtoken';
 import { JWK } from 'node-jose';
 import { ulid } from 'ulid';
+import log from '../logger';
 
 export interface ExchangeToken {
     (idPortenToken: string): Promise<TokenSet>;
@@ -62,7 +63,7 @@ const createDagpengerTokenDings = async (options: DagpengerTokenDingsOptions): P
                     token_endpoint_auth_method: 'private_key_jwt',
                 });
             } catch (err: unknown) {
-                console.error(`Feil under token exchange: ${err}`);
+                log.error(`Feil under token exchange: ${err}`);
                 return Promise.reject(err);
             }
         },

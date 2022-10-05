@@ -8,11 +8,14 @@ import ptoProxyApi from './api/ptoproxy';
 import dagpengerApi from './api/dagpenger';
 import bodyParser from 'body-parser';
 import createDependencies from './tokenx/deps';
+import { pinoHttp } from 'pino-http';
+import logger from './logger';
 
 const PORT = 3000;
 const app = express();
 app.use(cookieParser());
 app.use(bodyParser.json());
+app.use(pinoHttp({ logger }));
 
 async function setUpRoutes() {
     const { dagpengerTokenDings } = createDependencies();
@@ -26,12 +29,12 @@ async function setUpRoutes() {
 const startServer = async () => {
     try {
         await setUpRoutes();
-        console.log(`Starting server...`);
+        logger.info(`Starting server...`);
         app.listen(PORT, () => {
-            console.log('Server running at http://localhost:3000');
+            logger.info('Server running at http://localhost:3000');
         });
     } catch (err) {
-        console.error(err);
+        logger.error(err);
         process.exit(1);
     }
 };

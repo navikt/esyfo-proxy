@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import config from './config';
 import axios, { AxiosError } from 'axios';
+import log from './logger';
 
 interface ProxyOpts {
     headers?: Record<string, string>;
@@ -25,7 +26,7 @@ export function proxyHttpCall(url: string, opts?: ProxyOpts) {
             });
             data.pipe(res);
         } catch (err) {
-            console.error(err);
+            log.error(err);
             const status = (err as AxiosError).response?.status || 500;
             res.status(status).send((err as Error).message);
         }
