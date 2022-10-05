@@ -1,56 +1,59 @@
 {
-  "name": "aia-backend",
-  "version": "1.0.0",
-  "scripts": {
-    "build": "tsc",
-    "start": "ts-node-dev src/index.ts",
-    "test": "jest -w",
-    "test:ci": "npm run lint && jest --passWithNoTests",
-    "lint": "eslint --ext .ts src/**",
-    "prettier": "prettier --write 'src/**/*.ts'",
-    "refresh": "rm -rf node_modules && rm package-lock.json && npm i",
-    "prepare": "husky install"
-  },
-  "dependencies": {
-    "axios": "0.27.2",
-    "body-parser": "1.20.0",
-    "cookie-parser": "1.4.6",
-    "dotenv": "16.0.3",
-    "express": "4.18.1",
-    "jsonwebtoken": "8.5.1",
-    "node-jose": "2.1.1",
-    "openid-client": "5.1.10",
-    "ulid": "2.3.0",
-    "unleash-client": "3.15.0"
-  },
-  "devDependencies": {
-    "@types/body-parser": "1.19.2",
-    "@types/cookie-parser": "1.4.3",
-    "@types/express": "4.17.14",
-    "@types/jsonwebtoken": "8.5.9",
-    "@types/node": "18.7.23",
-    "@types/node-jose": "1.1.10",
-    "@typescript-eslint/eslint-plugin": "5.38.1",
-    "@typescript-eslint/parser": "5.39.0",
-    "eslint": "8.24.0",
-    "husky": "8.0.1",
-    "jest": "29.1.2",
-    "lint-staged": "13.0.3",
-    "prettier": "2.7.1",
-    "ts-node-dev": "2.0.0",
-    "typescript": "4.8.4"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/navikt/aia-backend.git"
-  },
-  "prettier": {
-    "printWidth": 120,
-    "singleQuote": true,
-    "tabWidth": 4
-  },
-  "engines": {
-    "node": ">=16.17.1"
-  },
-  "license": "MIT"
+    "name": "aia-backend",
+    "version": "1.0.0",
+    "scripts": {
+        "build": "tsc",
+        "start": "ts-node-dev src/index.ts",
+        "test": "jest -w",
+        "test:ci": "npm run lint && jest --passWithNoTests",
+        "lint": "eslint --ext .ts src/**",
+        "prettier": "prettier --write 'src/**/*.ts'",
+        "refresh": "rm -rf node_modules && rm package-lock.json && npm i",
+        "prepare": "husky install"
+    },
+    "dependencies": {
+        "axios": "0.27.2",
+        "body-parser": "1.20.0",
+        "cookie-parser": "1.4.6",
+        "dotenv": "16.0.3",
+        "express": "4.18.1",
+        "jsonwebtoken": "8.5.1",
+        "node-jose": "2.1.1",
+        "openid-client": "5.1.10",
+        "ulid": "2.3.0",
+        "unleash-client": "3.15.0"
+    },
+    "devDependencies": {
+        "@types/body-parser": "1.19.2",
+        "@types/cookie-parser": "1.4.3",
+        "@types/express": "4.17.14",
+        "@types/jsonwebtoken": "8.5.9",
+        "@types/node": "18.7.23",
+        "@types/node-jose": "1.1.10",
+        "@typescript-eslint/eslint-plugin": "5.38.1",
+        "@typescript-eslint/parser": "5.39.0",
+        "eslint": "8.24.0",
+        "husky": "8.0.1",
+        "jest": "29.1.2",
+        "lint-staged": "13.0.3",
+        "prettier": "2.7.1",
+        "ts-node-dev": "2.0.0",
+        "typescript": "4.8.4"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/navikt/aia-backend.git"
+    },
+    "prettier": {
+        "printWidth": 120,
+        "singleQuote": true,
+        "tabWidth": 4
+    },
+    "lint-staged": {
+        "*.{js,jsx,json,md,ts,tsx}": "prettier --write"
+    },
+    "engines": {
+        "node": ">=16.17.1"
+    },
+    "license": "MIT"
 }
