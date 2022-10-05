@@ -26,7 +26,7 @@ type FeatureQuery = {
 function unleashRoutes() {
     const router = Router();
 
-    router.get('/unleash', (req: Request<{}, {}, {}, FeatureQuery>, res) => {
+    router.get('/unleash', (req: Request<any, any, any, FeatureQuery>, res) => {
         const features = ensureArray(req.query.feature).reduce((acc, key) => {
             return {
                 ...acc,
