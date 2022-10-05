@@ -22,7 +22,8 @@ export function proxyHttpCall(url: string, opts?: ProxyOpts) {
                 data: req.method === 'POST' ? req.body : undefined,
                 params: req.params,
                 headers: {
-                    'Content-Type': req.headers['content-type'] || 'application/json',
+                    'Content-Type': req.header('Content-Type') || 'application/json',
+                    ...(req.header('Nav-Call-Id') ? { 'Nav-Call-Id': req.header('Nav-Call-Id') } : {}),
                     Authorization: `Bearer ${token}`,
                     [config.CONSUMER_ID_HEADER_NAME]: config.CONSUMER_ID_HEADER_VALUE,
                     ...opts?.headers,

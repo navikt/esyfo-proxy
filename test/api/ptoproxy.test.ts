@@ -32,4 +32,27 @@ describe('ptoproxy api', () => {
 
         proxy.close();
     });
+
+    it('sender med call-id', async () => {
+        const proxyServer = express();
+        proxyServer.get('/veilarboppfolging/api/oppfolging', (req, res) => {
+            if (req.header('Nav-Call-Id') === 'call-id-123') {
+                res.status(200).end();
+            } else {
+                res.status(400).end();
+            }
+        });
+        const proxy = proxyServer.listen(6665);
+        const app = express();
+        app.use(cookieParser());
+        app.use(ptoproxy('http://localhost:6665'));
+
+        const response = await request(app)
+            .get('/oppfolging')
+            .set('Cookie', ['selvbetjening-idtoken=token123;'])
+            .set('Nav-Call-Id', 'call-id-123');
+
+        expect(response.statusCode).toEqual(200);
+        proxy.close();
+    });
 });
