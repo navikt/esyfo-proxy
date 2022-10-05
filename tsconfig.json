@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "build",
     "rootDir": "src",
-    "module": "nodenext",
+    "module": "NodeNext",
     "target": "es2017",
     "lib": ["es7"],
     "sourceMap": true,
