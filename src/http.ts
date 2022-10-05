@@ -10,7 +10,12 @@ interface ProxyOpts {
 
 export function proxyHttpCall(url: string, opts?: ProxyOpts) {
     return async (req: Request, res: Response) => {
-        const token = req.cookies[config.NAV_COOKIE_NAME];
+        const token = req.cookies && req.cookies[config.NAV_COOKIE_NAME];
+
+        if (!token) {
+            return res.status(401).end();
+        }
+
         try {
             const { data } = await axios(url, {
                 method: opts?.overrideMethod || req.method,
@@ -24,11 +29,11 @@ export function proxyHttpCall(url: string, opts?: ProxyOpts) {
                 },
                 responseType: 'stream',
             });
-            data.pipe(res);
+            return data.pipe(res);
         } catch (err) {
             log.error(err);
             const status = (err as AxiosError).response?.status || 500;
-            res.status(status).send((err as Error).message);
+            return res.status(status).send((err as Error).message);
         }
     };
 }
