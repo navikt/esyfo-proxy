@@ -38,6 +38,8 @@ spec:
       value: https://pto-proxy.dev.intern.nav.no/proxy
     - name: UNLEASH_API_URL
       value: https://unleash.nais.io/api/
+    - name: DAGPENGER_INNSYN_URL
+      value: http://dp-innsyn.teamdagpenger.svc.cluster.local
   resources:
     limits:
       cpu: "3"

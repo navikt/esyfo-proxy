@@ -3,8 +3,7 @@ import config from '../config';
 import { Auth } from '../tokenx/dagpengerTokenDings';
 import { proxyHttpCall } from '../http';
 
-const DAGPENGER_INNSYN_URL = 'http://dp-innsyn.teamdagpenger.svc.cluster.local';
-const SOKNAD_URL = `${DAGPENGER_INNSYN_URL}/soknad`;
+const SOKNAD_URL = `${config.DAGPENGER_INNSYN_URL}/soknad`;
 // const VEDTAK_URL = `${DAGPENGER_INNSYN_URL}/vedtak`;
 // const PABEGYNTE_SOKNADER_URL = `${DAGPENGER_INNSYN_URL}/paabegynte`;
 
