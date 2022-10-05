@@ -8,7 +8,8 @@
     "test:ci": "npm run lint && jest --passWithNoTests",
     "lint": "eslint --ext .ts src/**",
     "prettier": "prettier --write 'src/**/*.ts'",
-    "refresh": "rm -rf node_modules && rm package-lock.json && npm i"
+    "refresh": "rm -rf node_modules && rm package-lock.json && npm i",
+    "prepare": "husky install"
   },
   "dependencies": {
     "axios": "0.27.2",
