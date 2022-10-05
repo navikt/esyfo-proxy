@@ -1,7 +1,7 @@
 import express from 'express';
 import request from 'supertest';
-import ptoproxy from '../../src/api/ptoproxy';
 import cookieParser from 'cookie-parser';
+import ptoproxy from '../../src/api/ptoproxy';
 
 describe('ptoproxy api', () => {
     it('gir 401 hvis request uten selvbetjening-id cookie', (done) => {
