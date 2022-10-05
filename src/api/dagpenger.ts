@@ -28,7 +28,15 @@ function dagpengerRoutes(createDagpengerTokenDings: Auth, dagpengerInnsynUrl = c
             }
         };
     };
-
+    /**
+     * @openapi
+     * /dagpenger/soknad:
+     *   get:
+     *     description: Welcome to swagger-jsdoc!
+     *     responses:
+     *       200:
+     *         description: Returns a mysterious string.
+     */
     router.get('/dagpenger/soknad', dagpengerCall(SOKNAD_URL));
     router.get('/dagpenger/vedtak', dagpengerCall(VEDTAK_URL));
     router.get('/dagpenger/paabegynte', dagpengerCall(PABEGYNTE_SOKNADER_URL));
