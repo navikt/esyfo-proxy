@@ -4,7 +4,7 @@ import axios, { AxiosError } from 'axios';
 import log from './logger';
 
 interface ProxyOpts {
-    headers?: Record<string, string>;
+    headers?: Record<string, string | null>;
     overrideMethod?: string;
 }
 

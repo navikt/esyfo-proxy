@@ -39,7 +39,9 @@ spec:
     - name: CORS_ALLOWED_SCHEMES
       value: https
     - name: MELDEKORT_APP_NAME
-      value: "meldekort-api"
+      value: meldekort-api
+    - name: MEDEKORT_URL
+      value: http://meldekort-api.meldekort.svc.cluster.local/meldekort/meldekort-api/api/person
     - name: PTO_PROXY_URL
       value: https://pto-proxy.intern.nav.no/proxy
     - name: UNLEASH_API_URL

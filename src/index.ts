@@ -9,6 +9,7 @@ import healhApi from './api/health';
 import unleashApi from './api/unleash';
 import ptoProxyApi from './api/ptoproxy';
 import dagpengerApi from './api/dagpenger';
+import meldekortApi from './api/meldekort';
 import swaggerDocs from './api/swagger';
 import bodyParser from 'body-parser';
 import createDependencies from './tokenx/deps';
@@ -26,13 +27,14 @@ app.use(helmet());
 app.use(cors());
 
 async function setUpRoutes() {
-    const { dagpengerTokenDings } = createDependencies();
+    const { tokenDings } = createDependencies();
 
     router.use(healhApi());
     router.use(unleashApi());
     router.use(ptoProxyApi());
     router.use(swaggerDocs());
-    router.use(dagpengerApi(await dagpengerTokenDings));
+    router.use(dagpengerApi(await tokenDings));
+    router.use(meldekortApi(await tokenDings));
     app.use(config.BASE_PATH || '', router);
 }
 

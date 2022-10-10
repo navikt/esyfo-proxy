@@ -8,6 +8,8 @@ export interface IEnvironmentVariables {
     PTO_PROXY_URL: string;
     NAIS_CLUSTER_NAME: string;
     BASE_PATH: string;
+    MELDEKORT_APP_NAME: string;
+    MELDEKORT_URL: string;
 }
 
 const env = process.env as unknown as IEnvironmentVariables;

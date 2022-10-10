@@ -1,13 +1,13 @@
-import createDagpengerTokenDings, { Auth } from './tokenDings';
+import createTokenDings, { Auth } from './tokenDings';
 import config from '../config';
 
 export interface Dependencies {
-    dagpengerTokenDings: Promise<Auth>;
+    tokenDings: Promise<Auth>;
 }
 
 function createDependencies(): Dependencies {
     return {
-        dagpengerTokenDings: createDagpengerTokenDings({
+        tokenDings: createTokenDings({
             tokenXWellKnownUrl: config.TOKEN_X_WELL_KNOWN_URL!,
             tokenXClientId: config.TOKEN_X_CLIENT_ID!,
             tokenXTokenEndpoint: config.TOKEN_X_TOKEN_ENDPOINT!,
