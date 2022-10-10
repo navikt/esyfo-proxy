@@ -2,7 +2,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import swaggerUi from 'swagger-ui-express';
 import helmet from 'helmet';
 import cors from 'cors';
 import { pinoHttp } from 'pino-http';
@@ -10,10 +9,10 @@ import healhApi from './api/health';
 import unleashApi from './api/unleash';
 import ptoProxyApi from './api/ptoproxy';
 import dagpengerApi from './api/dagpenger';
+import swaggerDocs from './api/swagger';
 import bodyParser from 'body-parser';
 import createDependencies from './tokenx/deps';
 import logger from './logger';
-import swaggerDocument from './config/swagger';
 import config from './config';
 
 const PORT = 3000;
@@ -25,7 +24,6 @@ app.use(bodyParser.json());
 app.use(pinoHttp({ logger }));
 app.use(helmet());
 app.use(cors());
-router.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 async function setUpRoutes() {
     const { dagpengerTokenDings } = createDependencies();
@@ -33,6 +31,7 @@ async function setUpRoutes() {
     router.use(healhApi());
     router.use(unleashApi());
     router.use(ptoProxyApi());
+    router.use(swaggerDocs());
     router.use(dagpengerApi(await dagpengerTokenDings));
     app.use(config.BASE_PATH || '', router);
 }
