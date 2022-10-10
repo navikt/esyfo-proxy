@@ -7,6 +7,7 @@ export interface IEnvironmentVariables {
     DAGPENGER_INNSYN_URL: string;
     PTO_PROXY_URL: string;
     NAIS_CLUSTER_NAME: string;
+    BASE_PATH: string;
 }
 
 const env = process.env as unknown as IEnvironmentVariables;

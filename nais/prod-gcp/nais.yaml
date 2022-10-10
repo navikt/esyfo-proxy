@@ -12,10 +12,10 @@ spec:
   image: {{image}}
   port: 3000
   liveness:
-    path: /internal/isAlive
+    path: /aia-backend/internal/isAlive
     initialDelay: 10
   readiness:
-    path: /internal/isReady
+    path: /aia-backend/internal/isReady
     initialDelay: 10
   prometheus:
     enabled: false
@@ -32,6 +32,8 @@ spec:
   envFrom:
     - configmap: loginservice-idporten
   env:
+    - name: BASE_PATH
+      value: /aia-backend
     - name: CORS_ALLOWED_ORIGINS
       value: www.nav.no
     - name: CORS_ALLOWED_SCHEMES

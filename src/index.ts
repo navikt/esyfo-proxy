@@ -14,24 +14,28 @@ import bodyParser from 'body-parser';
 import createDependencies from './tokenx/deps';
 import logger from './logger';
 import swaggerDocument from './config/swagger';
+import config from './config';
 
 const PORT = 3000;
 const app = express();
+const router = express.Router();
 
+app.set('base', config.BASE_PATH);
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(pinoHttp({ logger }));
 app.use(helmet());
 app.use(cors());
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+router.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 async function setUpRoutes() {
     const { dagpengerTokenDings } = createDependencies();
 
-    app.use(healhApi());
-    app.use(unleashApi());
-    app.use(ptoProxyApi());
-    app.use(dagpengerApi(await dagpengerTokenDings));
+    router.use(healhApi());
+    router.use(unleashApi());
+    router.use(ptoProxyApi());
+    router.use(dagpengerApi(await dagpengerTokenDings));
+    app.use(config.BASE_PATH || '', router);
 }
 
 const startServer = async () => {
