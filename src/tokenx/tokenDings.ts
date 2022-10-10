@@ -28,7 +28,7 @@ async function createClientAssertion(options: DagpengerTokenDingsOptions): Promi
         {
             sub: tokenXClientId,
             aud: tokenXTokenEndpoint,
-            iss: tokenXPrivateJwk,
+            iss: tokenXClientId,
             exp: now + 60, // max 120
             iat: now,
             jti: ulid(),

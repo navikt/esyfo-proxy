@@ -16,8 +16,6 @@ function dagpengerRoutes(tokenDings: Auth, dagpengerInnsynUrl = config.DAGPENGER
         const idPortenToken = req.cookies[config.NAV_COOKIE_NAME];
         const tokenSet = await tokenDings.exchangeIDPortenToken(idPortenToken, DP_INNSYN_CLIENT_ID);
         const token = tokenSet.access_token;
-        // TODO: Skal fjernes
-        logger.info(`TOKEN: ${token}`);
         return { Authorization: `Bearer ${token}`, TokenXAuthorization: `Bearer ${token}` };
     };
 
