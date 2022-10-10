@@ -1,4 +1,4 @@
-import createDagpengerTokenDings, { Auth } from './dagpengerTokenDings';
+import createDagpengerTokenDings, { Auth } from './tokenDings';
 import config from '../config';
 
 export interface Dependencies {
@@ -12,7 +12,6 @@ function createDependencies(): Dependencies {
             tokenXClientId: config.TOKEN_X_CLIENT_ID!,
             tokenXTokenEndpoint: config.TOKEN_X_TOKEN_ENDPOINT!,
             tokenXPrivateJwk: config.TOKEN_X_PRIVATE_JWK!,
-            tokenXAudience: config.TOKEN_X_AUDIENCE,
         }),
     };
 }

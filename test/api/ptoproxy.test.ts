@@ -25,12 +25,14 @@ describe('ptoproxy api', () => {
         app.use(cookieParser());
         app.use(ptoproxy('http://localhost:6666'));
 
-        const response = await request(app).get('/oppfolging').set('Cookie', ['selvbetjening-idtoken=token123;']);
+        try {
+            const response = await request(app).get('/oppfolging').set('Cookie', ['selvbetjening-idtoken=token123;']);
 
-        expect(response.statusCode).toEqual(200);
-        expect(response.text).toBe('ok');
-
-        proxy.close();
+            expect(response.statusCode).toEqual(200);
+            expect(response.text).toBe('ok');
+        } finally {
+            proxy.close();
+        }
     });
 
     it('sender med call-id', async () => {
@@ -47,12 +49,15 @@ describe('ptoproxy api', () => {
         app.use(cookieParser());
         app.use(ptoproxy('http://localhost:6665'));
 
-        const response = await request(app)
-            .get('/oppfolging')
-            .set('Cookie', ['selvbetjening-idtoken=token123;'])
-            .set('Nav-Call-Id', 'call-id-123');
+        try {
+            const response = await request(app)
+                .get('/oppfolging')
+                .set('Cookie', ['selvbetjening-idtoken=token123;'])
+                .set('Nav-Call-Id', 'call-id-123');
 
-        expect(response.statusCode).toEqual(200);
-        proxy.close();
+            expect(response.statusCode).toEqual(200);
+        } finally {
+            proxy.close();
+        }
     });
 });

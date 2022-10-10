@@ -1,18 +1,19 @@
 import { Request, Response, Router } from 'express';
 import config from '../config';
-import { Auth } from '../tokenx/dagpengerTokenDings';
+import { Auth } from '../tokenx/tokenDings';
 import { proxyHttpCall } from '../http';
 
-function dagpengerRoutes(createDagpengerTokenDings: Auth, dagpengerInnsynUrl = config.DAGPENGER_INNSYN_URL) {
+function dagpengerRoutes(tokenDings: Auth, dagpengerInnsynUrl = config.DAGPENGER_INNSYN_URL) {
     const SOKNAD_URL = `${dagpengerInnsynUrl}/soknad`;
     const VEDTAK_URL = `${dagpengerInnsynUrl}/vedtak`;
     const PABEGYNTE_SOKNADER_URL = `${dagpengerInnsynUrl}/paabegynte`;
+    const DP_INNSYN_CLIENT_ID = `${config.NAIS_CLUSTER_NAME}:teamdagpenger:dp-innsyn`;
 
     const router = Router();
 
     const getTokenXHeaders = async (req: Request) => {
         const idPortenToken = req.cookies[config.NAV_COOKIE_NAME];
-        const tokenSet = await createDagpengerTokenDings.exchangeIDPortenToken(idPortenToken);
+        const tokenSet = await tokenDings.exchangeIDPortenToken(idPortenToken, DP_INNSYN_CLIENT_ID);
         const token = tokenSet.access_token;
         return { Authorization: `Bearer ${token}`, TokenXAuthorization: `Bearer ${token}` };
     };

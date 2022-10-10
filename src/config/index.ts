@@ -15,7 +15,6 @@ const env = process.env as unknown as IEnvironmentVariables;
 export default {
     NAV_COOKIE_NAME: 'selvbetjening-idtoken',
     CONSUMER_ID_HEADER_NAME: 'Nav-Consumer-Id',
-    CONSUMER_ID_HEADER_VALUE: 'paw:bakveientilarbeid',
-    TOKEN_X_AUDIENCE: `${env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-innsyn`,
+    CONSUMER_ID_HEADER_VALUE: 'paw:aia-backend',
     ...env,
 };

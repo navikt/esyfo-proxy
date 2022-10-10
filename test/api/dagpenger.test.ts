@@ -3,9 +3,17 @@ import request from 'supertest';
 import cookieParser from 'cookie-parser';
 import dagpenger from '../../src/api/dagpenger';
 
+jest.mock('../../src/config', () => {
+    const config = jest.requireActual('../../src/config');
+    return {
+        ...config.default,
+        NAIS_CLUSTER_NAME: 'test',
+    };
+});
+
 describe('dagpenger api', () => {
     it('kaller dagpenger-api med token-x i header', async () => {
-        const dagpengerTokenDings = {
+        const tokenDings = {
             exchangeIDPortenToken: jest.fn().mockReturnValue(Promise.resolve({ access_token: 'tokenX-123' })),
         };
 
@@ -24,14 +32,18 @@ describe('dagpenger api', () => {
 
         const app = express();
         app.use(cookieParser());
-        app.use(dagpenger(dagpengerTokenDings, 'http://localhost:6667'));
+        app.use(dagpenger(tokenDings, 'http://localhost:6667'));
 
-        const response = await request(app).get('/dagpenger/soknad').set('Cookie', ['selvbetjening-idtoken=token123;']);
+        try {
+            const response = await request(app)
+                .get('/dagpenger/soknad')
+                .set('Cookie', ['selvbetjening-idtoken=token123;']);
 
-        expect(dagpengerTokenDings.exchangeIDPortenToken).toBeCalledWith('token123');
-        expect(response.statusCode).toEqual(200);
-        expect(response.text).toBe('ok');
-
-        proxy.close();
+            expect(tokenDings.exchangeIDPortenToken).toBeCalledWith('token123', 'test:teamdagpenger:dp-innsyn');
+            expect(response.statusCode).toEqual(200);
+            expect(response.text).toBe('ok');
+        } finally {
+            proxy.close();
+        }
     });
 });

@@ -5,7 +5,7 @@ import { ulid } from 'ulid';
 import log from '../logger';
 
 export interface ExchangeToken {
-    (idPortenToken: string): Promise<TokenSet>;
+    (idPortenToken: string, targetApp: string): Promise<TokenSet>;
 }
 
 export interface Auth {
@@ -17,7 +17,6 @@ export interface DagpengerTokenDingsOptions {
     tokenXClientId: string;
     tokenXTokenEndpoint: string;
     tokenXPrivateJwk: string;
-    tokenXAudience: string;
 }
 
 async function createClientAssertion(options: DagpengerTokenDingsOptions): Promise<string> {
@@ -41,7 +40,7 @@ async function createClientAssertion(options: DagpengerTokenDingsOptions): Promi
 }
 
 const createDagpengerTokenDings = async (options: DagpengerTokenDingsOptions): Promise<Auth> => {
-    const { tokenXWellKnownUrl, tokenXClientId, tokenXAudience } = options;
+    const { tokenXWellKnownUrl, tokenXClientId } = options;
     const tokenXIssuer = await Issuer.discover(tokenXWellKnownUrl);
     const tokenXClient = new tokenXIssuer.Client({
         client_id: tokenXClientId,
@@ -49,13 +48,13 @@ const createDagpengerTokenDings = async (options: DagpengerTokenDingsOptions): P
     });
 
     return {
-        async exchangeIDPortenToken(idPortenToken: string) {
+        async exchangeIDPortenToken(idPortenToken: string, targetApp: string) {
             const clientAssertion = await createClientAssertion(options);
 
             try {
                 return tokenXClient.grant({
                     grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
-                    audience: tokenXAudience,
+                    audience: targetApp,
                     client_assertion: clientAssertion,
                     client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
                     subject_token: idPortenToken,
