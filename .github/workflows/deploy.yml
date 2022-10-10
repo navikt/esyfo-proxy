@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  IMAGE_BASE: ghcr.io/${{github.repository}}/aia-backend
+  IMAGE_BASE: ghcr.io/${{github.repository}}/${{github.event.repository.name}}
 
 jobs:
   test-build-and-push:
