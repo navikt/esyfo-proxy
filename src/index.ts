@@ -22,7 +22,7 @@ const router = express.Router();
 
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(pinoHttp({ logger }));
+app.use(pinoHttp({ logger, autoLogging: false }));
 app.use(helmet());
 app.use(cors());
 
