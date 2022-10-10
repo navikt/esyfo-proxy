@@ -29,11 +29,15 @@ For å stoppe: `docker-compose rm -f && docker-compose stop`
 2. Finn cookien `selvbetjening-idtoken`
 3. Kopier verdien, og sett den inn i requesten under
 4. Kjør `curl` i terminalen eller bruk en REST-klient:
+
 ```
 curl -vvv 'http://localhost:3000/<endepunkt>' \
   -H $'Cookie: selvbetjening-idtoken=<TOKEN>'
 ```
 
+## Dokumentasjon
+
+Se swagger dokumentasjon på https://www.dev.nav.no/aia-backend/docs/
 
 # Henvendelser
 

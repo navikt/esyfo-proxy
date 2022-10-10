@@ -26,7 +26,29 @@ function meldekortRoutes(tokenDings: Auth, meldekortUrl: string = config.MELDEKO
         };
     };
 
+    /**
+     * @openapi
+     * /meldekort:
+     *   get:
+     *     description:
+     *     responses:
+     *       200:
+     *         description: Vellykket forespørsel.
+     *       401:
+     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     */
     router.get('/meldekort', meldekortCall(`${meldekortUrl}/meldekort`));
+    /**
+     * @openapi
+     * /meldekort/status:
+     *   get:
+     *     description:
+     *     responses:
+     *       200:
+     *         description: Vellykket forespørsel.
+     *       401:
+     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     */
     router.get('/meldekort/status', meldekortCall(`${meldekortUrl}/meldekortstatus`));
 
     return router;

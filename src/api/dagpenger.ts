@@ -35,13 +35,37 @@ function dagpengerRoutes(tokenDings: Auth, dagpengerInnsynUrl = config.DAGPENGER
      * @openapi
      * /dagpenger/soknad:
      *   get:
-     *     description: Welcome to swagger-jsdoc!
+     *     description:
      *     responses:
      *       200:
-     *         description: Returns a mysterious string.
+     *         description: Vellykket forespørsel.
+     *       401:
+     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
      */
     router.get('/dagpenger/soknad', dagpengerCall(SOKNAD_URL));
+    /**
+     * @openapi
+     * /dagpenger/vedtak:
+     *   get:
+     *     description:
+     *     responses:
+     *       200:
+     *         description: Vellykket forespørsel.
+     *       401:
+     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     */
     router.get('/dagpenger/vedtak', dagpengerCall(VEDTAK_URL));
+    /**
+     * @openapi
+     * /dagpenger/paabegynte:
+     *   get:
+     *     description:
+     *     responses:
+     *       200:
+     *         description: Vellykket forespørsel.
+     *       401:
+     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     */
     router.get('/dagpenger/paabegynte', dagpengerCall(PABEGYNTE_SOKNADER_URL));
 
     return router;
