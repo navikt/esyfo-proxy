@@ -20,7 +20,6 @@ const PORT = 3000;
 const app = express();
 const router = express.Router();
 
-app.set('base', config.BASE_PATH);
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(pinoHttp({ logger }));
