@@ -50,7 +50,7 @@ spec:
       value: http://dp-innsyn.teamdagpenger.svc.cluster.local
   resources:
     limits:
-      cpu: 3
+      cpu: "3"
       memory: 1536Mi
     requests:
       cpu: 100m
