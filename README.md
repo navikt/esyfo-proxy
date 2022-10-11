@@ -31,9 +31,31 @@ For å stoppe: `docker-compose rm -f && docker-compose stop`
 3. Kopier verdien, og sett den inn i requesten under
 4. Kjør `curl` i terminalen eller bruk en REST-klient:
 
-```
+```sh
 curl -vvv 'http://localhost:3000/<endepunkt>' \
   -H $'Cookie: selvbetjening-idtoken=<TOKEN>'
+```
+
+## Database
+
+[Prisma](https://www.prisma.io/docs/) blir benyttet for migrasjoner og ORM.
+
+Database kjøres opp med:
+
+```sh
+docker-compose up -d database
+```
+
+Hvis du har gjort endringer i [prisma/schema.prisma](prisma/schema.prisma) kjør:
+
+```sh
+npx prisma migrate dev
+```
+
+For å legge inn seed-data:
+
+```sh
+npx prisma db seed
 ```
 
 ## Dokumentasjon
