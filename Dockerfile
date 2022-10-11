@@ -4,11 +4,15 @@ ADD / /src
 ENV CI=true
 WORKDIR /src
 
+RUN chmod +x /src/entrypoint.sh
+
 RUN npm ci
 RUN npm run build
 
 USER node
+
 ENV NODE_ENV="production"
-ENTRYPOINT /start.sh
+
+ENTRYPOINT ["/src/entrypoint.sh"]
 
 EXPOSE 3000
