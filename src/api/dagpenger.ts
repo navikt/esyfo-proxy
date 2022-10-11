@@ -26,7 +26,7 @@ function dagpengerRoutes(tokenDings: Auth, dagpengerInnsynUrl = config.DAGPENGER
                     headers: await getTokenXHeaders(req),
                 })(req, res);
             } catch (err) {
-                logger.error(`Feil med dagpenger kall: ${(err as Error).message}`);
+                logger.error(`Feil med dagpenger kall: ${err}`);
                 res.status(500).end();
             }
         };
