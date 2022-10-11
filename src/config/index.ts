@@ -15,8 +15,6 @@ export interface IEnvironmentVariables {
 
 const env = process.env as unknown as IEnvironmentVariables;
 
-if (env['NAIS_DATABASE_AIA_BACKEND_PROFIL_URL']) process.env.DATABASE_URL = env['NAIS_DATABASE_AIA_BACKEND_PROFIL_URL'];
-
 export default {
     NAV_COOKIE_NAME: 'selvbetjening-idtoken',
     CONSUMER_ID_HEADER_NAME: 'Nav-Consumer-Id',

@@ -9,6 +9,6 @@ RUN npm run build
 
 USER node
 ENV NODE_ENV="production"
-CMD ["node", "./build/index.js"]
+ENTRYPOINT /start.sh
 
 EXPOSE 3000
