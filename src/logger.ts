@@ -1,12 +1,7 @@
 import pino from 'pino';
+import ecsFormat from '@elastic/ecs-pino-format';
 
-const logger = pino({
-    timestamp: pino.stdTimeFunctions.isoTime,
-    formatters: {
-        level: (label) => {
-            return { level: label.toUpperCase() };
-        },
-    },
-});
+const isProduction = process.env.NODE_ENV === 'production';
+const logger = pino(isProduction ? ecsFormat() : undefined);
 
 export default logger;
