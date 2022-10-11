@@ -1,5 +1,5 @@
-apiVersion: "nais.io/v1alpha1"
-kind: "Application"
+apiVersion: nais.io/v1alpha1
+kind: Application
 metadata:
   name: aia-backend
   namespace: paw
@@ -22,9 +22,9 @@ spec:
   tokenx:
     enabled: true
   ingresses:
-    - "https://www.dev.nav.no/aia-backend"
-    - "https://arbeid.dev.nav.no/aia-backend"
-    - "https://aia-backend.dev.intern.nav.no/aia-backend"
+    - https://www.dev.nav.no/aia-backend
+    - https://arbeid.dev.nav.no/aia-backend
+    - https://aia-backend.dev.intern.nav.no/aia-backend
   envFrom:
     - configmap: loginservice-idporten
   env:
@@ -46,10 +46,10 @@ spec:
       value: http://dp-innsyn.teamdagpenger.svc.cluster.local
   resources:
     limits:
-      cpu: "3"
+      cpu: 3
       memory: 768Mi
     requests:
-      cpu: "500m"
+      cpu: 500m
       memory: 580Mi
   accessPolicy:
     inbound:
@@ -65,4 +65,4 @@ spec:
 #    sqlInstances:
 #      - type: POSTGRES_14
 #        databases:
-#          - name: bakveientilarbeid-dev
+#          - name: profil

@@ -20,7 +20,7 @@ describe('meldekort api', () => {
 
         const proxyServer = express();
         proxyServer.get('/meldekort', (req, res) => {
-            if (req.header('Authorization') && req.header('TokenXAuthorization') === 'Bearer tokenX-123') {
+            if (!req.header('Authorization') && req.header('TokenXAuthorization') === 'Bearer tokenX-123') {
                 res.status(200).send('ok');
             } else {
                 res.status(400).end();

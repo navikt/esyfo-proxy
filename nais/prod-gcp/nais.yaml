@@ -1,13 +1,13 @@
-apiVersion: "nais.io/v1alpha1"
-kind: "Application"
+apiVersion: nais.io/v1alpha1
+kind: Application
 metadata:
   name: aia-backend
   namespace: paw
   labels:
     team: paw
   annotations:
-    config.linkerd.io/proxy-memory-limit: "512Mi"
-    config.linkerd.io/proxy-memory-request: "128Mi"
+    config.linkerd.io/proxy-memory-limit: 512Mi
+    config.linkerd.io/proxy-memory-request: 128Mi
 spec:
   image: {{image}}
   port: 3000
@@ -26,9 +26,9 @@ spec:
     enabled: true
   webproxy: true
   ingresses:
-    - "https://www.nav.no/aia-backend"
-    - "https://www.intern.nav.no/aia-backend"
-    - "https://aia-backend.intern.nav.no/aia-backend"
+    - https://www.nav.no/aia-backend
+    - https://www.intern.nav.no/aia-backend
+    - https://aia-backend.intern.nav.no/aia-backend
   envFrom:
     - configmap: loginservice-idporten
   env:
@@ -50,10 +50,10 @@ spec:
       value: http://dp-innsyn.teamdagpenger.svc.cluster.local
   resources:
     limits:
-      cpu: "3"
+      cpu: 3
       memory: 1536Mi
     requests:
-      cpu: "100m"
+      cpu: 100m
       memory: 580Mi
   accessPolicy:
     inbound:
@@ -69,4 +69,4 @@ spec:
 #    sqlInstances:
 #      - type: POSTGRES_14
 #        databases:
-#          - name: bakveientilarbeid
+#          - name: profil

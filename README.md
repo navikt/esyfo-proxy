@@ -11,6 +11,7 @@ F.eks. `nvm install 16.17.1 && nvm use 16.17.1`
 
 -   klon repo
 -   installer avhengigheter `npm i`
+-   start database: `docker-compose up -d database`
 -   sett miljøvariabler i `.env`: `cp .env-example .env`
 -   start utviklingsserver `npm start`
 -   åpne nettleseren på `http://localhost:3000`
