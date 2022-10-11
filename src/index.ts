@@ -25,7 +25,14 @@ const router = express.Router();
 
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(pinoHttp({ logger, autoLogging: false }));
+app.use(
+    pinoHttp({
+        logger,
+        customSuccessMessage: function (req, res) {
+            return `${req.method} ${req.url} completed ${res.statusCode} ${res.statusMessage}`;
+        },
+    })
+);
 app.use(helmet());
 app.use(cors());
 

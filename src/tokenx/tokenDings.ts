@@ -12,14 +12,14 @@ export interface Auth {
     exchangeIDPortenToken: ExchangeToken;
 }
 
-export interface DagpengerTokenDingsOptions {
+export interface TokenDingsOptions {
     tokenXWellKnownUrl: string;
     tokenXClientId: string;
     tokenXTokenEndpoint: string;
     tokenXPrivateJwk: string;
 }
 
-async function createClientAssertion(options: DagpengerTokenDingsOptions): Promise<string> {
+async function createClientAssertion(options: TokenDingsOptions): Promise<string> {
     const { tokenXPrivateJwk, tokenXClientId, tokenXTokenEndpoint } = options;
 
     const now = Math.floor(Date.now() / 1000);
@@ -39,7 +39,7 @@ async function createClientAssertion(options: DagpengerTokenDingsOptions): Promi
     );
 }
 
-const createDagpengerTokenDings = async (options: DagpengerTokenDingsOptions): Promise<Auth> => {
+const createTokenDings = async (options: TokenDingsOptions): Promise<Auth> => {
     const { tokenXWellKnownUrl, tokenXClientId } = options;
     const tokenXIssuer = await Issuer.discover(tokenXWellKnownUrl);
     const tokenXClient = new tokenXIssuer.Client({
@@ -69,4 +69,4 @@ const createDagpengerTokenDings = async (options: DagpengerTokenDingsOptions): P
     };
 };
 
-export default createDagpengerTokenDings;
+export default createTokenDings;
