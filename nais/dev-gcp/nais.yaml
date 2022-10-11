@@ -61,8 +61,8 @@ spec:
           namespace: teamdagpenger
         - application: meldekort-api-q1
           namespace: meldekort
- gcp:
-   sqlInstances:
-     - type: POSTGRES_14
-       databases:
-         - name: profil
+  gcp:
+    sqlInstances:
+      - type: POSTGRES_14
+        databases:
+          - name: profil
