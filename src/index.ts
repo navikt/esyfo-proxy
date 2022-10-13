@@ -12,6 +12,7 @@ import ptoProxyApi from './api/ptoproxy';
 import dagpengerApi from './api/dagpenger';
 import meldekortApi from './api/meldekort';
 import profilApi from './api/profil';
+import arbeidssokerApi from './api/arbeidssoker';
 import swaggerDocs from './api/swagger';
 import bodyParser from 'body-parser';
 import createDependencies from './tokenx/deps';
@@ -45,6 +46,7 @@ async function setUpRoutes() {
     router.use(swaggerDocs());
     router.use(dagpengerApi(await tokenDings));
     router.use(meldekortApi(await tokenDings));
+    router.use(arbeidssokerApi());
     router.use(profilApi(prisma));
     app.use(config.BASE_PATH || '', router);
 }

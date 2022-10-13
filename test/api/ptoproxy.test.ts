@@ -6,6 +6,7 @@ import ptoproxy from '../../src/api/ptoproxy';
 describe('ptoproxy api', () => {
     it('gir 401 hvis request uten selvbetjening-id cookie', (done) => {
         const app = express();
+        app.use(cookieParser());
         app.use(ptoproxy('http://localhost:6666'));
 
         request(app).get('/oppfolging').expect(401, done);
