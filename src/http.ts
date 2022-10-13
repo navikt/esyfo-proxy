@@ -17,7 +17,7 @@ export function proxyHttpCall(url: string, opts?: ProxyOpts) {
         }
 
         try {
-            const { data } = await axios(url, {
+            const { data, status } = await axios(url, {
                 method: opts?.overrideMethod || req.method,
                 data: req.method === 'POST' ? req.body : undefined,
                 params: req.params,
@@ -30,6 +30,11 @@ export function proxyHttpCall(url: string, opts?: ProxyOpts) {
                 },
                 responseType: 'stream',
             });
+
+            if (status === 204) {
+                return res.status(status).end();
+            }
+
             return data.pipe(res);
         } catch (err) {
             log.error(err);
