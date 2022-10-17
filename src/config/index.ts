@@ -7,7 +7,6 @@ export interface IEnvironmentVariables {
     DAGPENGER_INNSYN_URL: string;
     PTO_PROXY_URL: string;
     NAIS_CLUSTER_NAME: string;
-    NAIS_DATABASE_AIA_BACKEND_PROFIL_URL: string;
     BASE_PATH: string;
     MELDEKORT_APP_NAME: string;
     MELDEKORT_URL: string;
