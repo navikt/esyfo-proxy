@@ -73,7 +73,7 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
           RESOURCE: nais/prod-gcp/nais.yaml
-          DRY_RUN: true
+          DRY_RUN: false
 
   release:
     if: github.ref == 'refs/heads/main'
