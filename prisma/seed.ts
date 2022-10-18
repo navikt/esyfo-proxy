@@ -5,6 +5,7 @@ async function main() {
     const testProfil = await prisma.profil.create({
         data: {
             bruker_id: 'test',
+            profil: {},
         },
     });
     console.log({ testProfil });
