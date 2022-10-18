@@ -2,6 +2,7 @@ import { Auth } from '../tokenx/tokenDings';
 import config from '../config';
 import { Request, Response, Router } from 'express';
 import { proxyHttpCall } from '../http';
+import logger from '../logger';
 
 function meldekortRoutes(tokenDings: Auth, meldekortUrl: string = config.MELDEKORT_URL) {
     const router = Router();
@@ -21,6 +22,7 @@ function meldekortRoutes(tokenDings: Auth, meldekortUrl: string = config.MELDEKO
                     headers: await getTokenXHeaders(req),
                 })(req, res);
             } catch (err) {
+                logger.error(`Feil med meldekort kall: ${err}`);
                 res.status(500).end();
             }
         };

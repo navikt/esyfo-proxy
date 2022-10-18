@@ -15,10 +15,11 @@ export function proxyHttpCall(url: string, opts?: ProxyOpts) {
         if (!token) {
             return res.status(401).end();
         }
+        const method = opts?.overrideMethod || req.method;
 
         try {
             const { data, status } = await axios(url, {
-                method: opts?.overrideMethod || req.method,
+                method,
                 data: req.method === 'POST' ? req.body : undefined,
                 params: req.params,
                 headers: {
@@ -37,8 +38,9 @@ export function proxyHttpCall(url: string, opts?: ProxyOpts) {
 
             return data.pipe(res);
         } catch (err) {
-            log.error(err);
-            const status = (err as AxiosError).response?.status || 500;
+            const e = err as AxiosError;
+            const status = e.response?.status || 500;
+            log.error(`${method} ${url}: ${status} ${e.response?.statusText}`);
             return res.status(status).send((err as Error).message);
         }
     };
