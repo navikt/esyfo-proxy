@@ -60,7 +60,7 @@ npx prisma db seed
 
 ## Deploye kun til dev
 
-Ved å prefikse branch-navn med `dev/`, så vil branchen deployes i dev.
+Ved å prefikse branch-navn med `dev/`, så vil branchen kun deployes i dev.
 
 ```
 git checkout -b dev/<navn på branch>
