@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import config from '../config';
-import { Auth } from '../tokenx/tokenDings';
+import { Auth } from '../auth/tokenDings';
 import { proxyHttpCall } from '../http';
 import logger from '../logger';
 

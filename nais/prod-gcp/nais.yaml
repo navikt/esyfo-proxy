@@ -24,6 +24,8 @@ spec:
     max: 4
   tokenx:
     enabled: true
+  idporten:
+    enabled: true
   webproxy: true
   ingresses:
     - https://www.nav.no/aia-backend

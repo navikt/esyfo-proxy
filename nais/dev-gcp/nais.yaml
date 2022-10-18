@@ -21,6 +21,8 @@ spec:
     max: 4
   tokenx:
     enabled: true
+  idporten:
+    enabled: true
   ingresses:
     - https://www.dev.nav.no/aia-backend
     - https://arbeid.dev.nav.no/aia-backend

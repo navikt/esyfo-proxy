@@ -1,4 +1,4 @@
-import { Auth } from '../tokenx/tokenDings';
+import { Auth } from '../auth/tokenDings';
 import config from '../config';
 import { Request, Response, Router } from 'express';
 import { proxyHttpCall } from '../http';

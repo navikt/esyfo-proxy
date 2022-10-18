@@ -10,6 +10,8 @@ export interface IEnvironmentVariables {
     BASE_PATH: string;
     MELDEKORT_APP_NAME: string;
     MELDEKORT_URL: string;
+    IDPORTEN_JWKS_URI: string;
+    IDPORTEN_CLIENT_ID: string;
 }
 
 const env = process.env as unknown as IEnvironmentVariables;
