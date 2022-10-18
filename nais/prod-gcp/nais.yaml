@@ -29,8 +29,6 @@ spec:
   webproxy: true
   ingresses:
     - https://www.nav.no/aia-backend
-    - https://www.intern.nav.no/aia-backend
-    - https://aia-backend.intern.nav.no/aia-backend
   envFrom:
     - configmap: loginservice-idporten
   env:

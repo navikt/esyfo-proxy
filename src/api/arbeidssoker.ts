@@ -3,6 +3,7 @@ import config from '../config';
 import log from '../logger';
 import axios, { AxiosError } from 'axios';
 import { ParsedQs } from 'qs';
+import { getTokenFromCookie } from '../auth/tokenDings';
 
 interface Arbeidssokerperioder {
     status: number;
@@ -29,7 +30,7 @@ function arbeidssokerRoutes(ptoProxyUrl = config.PTO_PROXY_URL) {
      *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
      */
     router.get('/arbeidssoker', async (req, res) => {
-        const token = req.cookies && req.cookies[config.NAV_COOKIE_NAME];
+        const token = getTokenFromCookie(req);
 
         if (!token) {
             return res.status(401).end();
@@ -56,7 +57,7 @@ function arbeidssokerRoutes(ptoProxyUrl = config.PTO_PROXY_URL) {
      *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
      */
     router.get('/er-arbeidssoker', async (req, res) => {
-        const token = req.cookies && req.cookies[config.NAV_COOKIE_NAME];
+        const token = getTokenFromCookie(req);
 
         if (!token) {
             return res.status(401).end();

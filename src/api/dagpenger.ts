@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import config from '../config';
-import { Auth } from '../auth/tokenDings';
+import { Auth, getTokenFromCookie } from '../auth/tokenDings';
 import { proxyHttpCall } from '../http';
 import logger from '../logger';
 
@@ -13,7 +13,7 @@ function dagpengerRoutes(tokenDings: Auth, dagpengerInnsynUrl = config.DAGPENGER
     const router = Router();
 
     const getTokenXHeaders = async (req: Request) => {
-        const idPortenToken = req.cookies[config.NAV_COOKIE_NAME];
+        const idPortenToken = getTokenFromCookie(req);
         const tokenSet = await tokenDings.exchangeIDPortenToken(idPortenToken, DP_INNSYN_CLIENT_ID);
         const token = tokenSet.access_token;
         return { Authorization: `Bearer ${token}`, TokenXAuthorization: `Bearer ${token}` };

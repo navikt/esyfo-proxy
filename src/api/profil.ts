@@ -1,8 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { Router } from 'express';
-import jwt from 'jsonwebtoken';
-import config from '../config';
 import log from '../logger';
+import { getPidFromToken } from '../auth/tokenDings';
 
 function profilRoutes(prismaClient: PrismaClient) {
     const router = Router();
@@ -19,16 +18,13 @@ function profilRoutes(prismaClient: PrismaClient) {
      *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
      */
     router.get('/profil', async (req, res) => {
-        const token = req.cookies && req.cookies[config.NAV_COOKIE_NAME];
-        const decodedToken: any = jwt.decode(token);
-        if (decodedToken && decodedToken.pid) {
-            const ident = decodedToken.pid;
-            log.info(`ident: ${ident}`);
-            const profiler = await prismaClient.profil.findMany();
-            return res.send(profiler);
+        const ident = getPidFromToken(req);
+        if (!ident) {
+            log.error('fikk ikke hentet ident fra token');
+            return res.sendStatus(401);
         }
-        log.error('fikk ikke hentet ident fra token');
-        return res.sendStatus(401);
+        const profil = await prismaClient.profil.findFirst({ where: { bruker_id: ident } });
+        return res.send(profil);
     });
 
     /**

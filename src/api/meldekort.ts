@@ -1,4 +1,4 @@
-import { Auth } from '../auth/tokenDings';
+import { Auth, getTokenFromCookie } from '../auth/tokenDings';
 import config from '../config';
 import { Request, Response, Router } from 'express';
 import { proxyHttpCall } from '../http';
@@ -9,7 +9,7 @@ function meldekortRoutes(tokenDings: Auth, meldekortUrl: string = config.MELDEKO
     const MELDEKORT_CLIENT_ID = `${config.NAIS_CLUSTER_NAME}:meldekort:${config.MELDEKORT_APP_NAME}`;
 
     const getTokenXHeaders = async (req: Request) => {
-        const idPortenToken = req.cookies[config.NAV_COOKIE_NAME];
+        const idPortenToken = getTokenFromCookie(req);
         const tokenSet = await tokenDings.exchangeIDPortenToken(idPortenToken, MELDEKORT_CLIENT_ID);
         const token = tokenSet.access_token;
         return { Authorization: null, TokenXAuthorization: `Bearer ${token}` };

@@ -1,7 +1,7 @@
-import type { RequestHandler } from 'express';
+import type { Request, RequestHandler } from 'express';
 import { Issuer, TokenSet } from 'openid-client';
 import jwt from 'jsonwebtoken';
-import { createRemoteJWKSet, jwtVerify } from 'jose';
+import { createRemoteJWKSet, jwtVerify, decodeJwt } from 'jose';
 import { JWK } from 'node-jose';
 import { ulid } from 'ulid';
 import log from '../logger';
@@ -22,6 +22,16 @@ export interface TokenDingsOptions {
     tokenXTokenEndpoint: string;
     tokenXPrivateJwk: string;
     idportenJwksUri: string;
+}
+
+export function getTokenFromCookie(req: Request) {
+    return req.cookies && req.cookies[config.NAV_COOKIE_NAME];
+}
+
+export function getPidFromToken(req: Request) {
+    const idPortenToken = getTokenFromCookie(req);
+    const decodedToken = decodeJwt(idPortenToken);
+    return decodedToken.pid;
 }
 
 async function createClientAssertion(options: TokenDingsOptions): Promise<string> {
@@ -63,7 +73,7 @@ const createTokenDings = async (options: TokenDingsOptions): Promise<Auth> => {
                 return;
             }
             try {
-                const idPortenToken = req.cookies && req.cookies[config.NAV_COOKIE_NAME];
+                const idPortenToken = getTokenFromCookie(req);
                 if (!idPortenToken) {
                     log.warn('Bearer token mangler');
                     res.sendStatus(401);
