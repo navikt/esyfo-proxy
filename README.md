@@ -58,6 +58,14 @@ For å legge inn seed-data:
 npx prisma db seed
 ```
 
+## Deploye kun til dev
+
+Ved å prefikse branch-navn med `dev/`, så vil branchen deployes i dev.
+
+```
+git checkout -b dev/<navn på branch>
+```
+
 ## Dokumentasjon
 
 Se swagger dokumentasjon på https://www.dev.nav.no/aia-backend/docs/
