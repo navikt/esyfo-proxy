@@ -22,7 +22,6 @@ export interface TokenDingsOptions {
     tokenXTokenEndpoint: string;
     tokenXPrivateJwk: string;
     idportenJwksUri: string;
-    idportenClientId: string;
 }
 
 async function createClientAssertion(options: TokenDingsOptions): Promise<string> {
@@ -46,7 +45,7 @@ async function createClientAssertion(options: TokenDingsOptions): Promise<string
 }
 
 const createTokenDings = async (options: TokenDingsOptions): Promise<Auth> => {
-    const { tokenXWellKnownUrl, tokenXClientId, idportenClientId, idportenJwksUri } = options;
+    const { tokenXWellKnownUrl, tokenXClientId, idportenJwksUri } = options;
     const tokenXIssuer = await Issuer.discover(tokenXWellKnownUrl);
     const tokenXClient = new tokenXIssuer.Client({
         client_id: tokenXClientId,
@@ -73,11 +72,6 @@ const createTokenDings = async (options: TokenDingsOptions): Promise<Auth> => {
                 const result = await jwtVerify(idPortenToken, idPortenJWKSet, {
                     algorithms: ['RS256'],
                 });
-                if (result.payload.client_id !== idportenClientId) {
-                    log.warn(`client_id er ikke riktig, payload.client_id: ${result.payload.client_id}`);
-                    res.sendStatus(401);
-                    return;
-                }
                 if (result.payload.acr !== 'Level4') {
                     log.warn(`acr er ikke riktig, payload.acr: ${result.payload.acr}`);
                     res.sendStatus(403);

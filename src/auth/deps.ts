@@ -13,7 +13,6 @@ function createDependencies(): Dependencies {
             tokenXTokenEndpoint: config.TOKEN_X_TOKEN_ENDPOINT!,
             tokenXPrivateJwk: config.TOKEN_X_PRIVATE_JWK!,
             idportenJwksUri: config.IDPORTEN_JWKS_URI!,
-            idportenClientId: config.IDPORTEN_CLIENT_ID!,
         }),
     };
 }
