@@ -46,7 +46,7 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
             return res.sendStatus(401);
         }
 
-        const oppfolging = req.body;
+        const oppfolging = req.body?.oppfolging;
 
         if (!oppfolging) {
             return res.status(400).end();
