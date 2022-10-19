@@ -12,13 +12,13 @@ import ptoProxyApi from './api/ptoproxy';
 import dagpengerApi from './api/dagpenger';
 import meldekortApi from './api/meldekort';
 import profilApi from './api/profil';
+import behovForVeiledningApi from './api/behovForVeiledning';
 import arbeidssokerApi from './api/arbeidssoker';
 import swaggerDocs from './api/swagger';
 import bodyParser from 'body-parser';
 import logger from './logger';
 import config from './config';
 import createDependencies from './deps';
-import behovForVeiledningRoutes from './api/behovForVeiledning';
 
 const PORT = 3000;
 const app = express();
@@ -49,7 +49,7 @@ async function setUpRoutes() {
     router.use(meldekortApi(await tokenDings));
     router.use(arbeidssokerApi());
     router.use(profilApi(profilRepository));
-    router.use(behovForVeiledningRoutes(behovRepository));
+    router.use(behovForVeiledningApi(behovRepository));
     app.use(config.BASE_PATH || '', router);
 }
 
