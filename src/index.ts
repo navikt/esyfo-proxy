@@ -18,6 +18,7 @@ import bodyParser from 'body-parser';
 import logger from './logger';
 import config from './config';
 import createDependencies from './deps';
+import behovForVeiledningRoutes from './api/behovForVeiledning';
 
 const PORT = 3000;
 const app = express();
@@ -37,7 +38,7 @@ app.use(helmet());
 app.use(cors());
 
 async function setUpRoutes() {
-    const { tokenDings, profilRepository } = createDependencies();
+    const { tokenDings, profilRepository, behovRepository } = createDependencies();
 
     router.use(healhApi());
     router.use(unleashApi());
@@ -48,6 +49,7 @@ async function setUpRoutes() {
     router.use(meldekortApi(await tokenDings));
     router.use(arbeidssokerApi());
     router.use(profilApi(profilRepository));
+    router.use(behovForVeiledningRoutes(behovRepository));
     app.use(config.BASE_PATH || '', router);
 }
 
