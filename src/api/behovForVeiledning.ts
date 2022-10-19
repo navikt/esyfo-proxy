@@ -57,7 +57,7 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
                 bruker: ident,
                 oppfolging: oppfolging,
             });
-            return res.status(201).send(oppfolging);
+            return res.status(201).send({ oppfolging });
         } catch (err) {
             return res.status(500).send(`${(err as Error).message}`);
         }
