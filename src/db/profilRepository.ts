@@ -64,7 +64,7 @@ function createProfilRepository(prismaClient: PrismaClient): ProfilRepository {
                 return profil.profil as ProfilJson;
             } catch (err) {
                 logger.error(`Feil ved henting av profil: ${err}`);
-                return null;
+                throw err;
             }
         },
     };
