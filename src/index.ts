@@ -43,10 +43,10 @@ async function setUpRoutes() {
     router.use(unleashApi());
     router.use(ptoProxyApi());
     router.use(swaggerDocs());
+    router.use(arbeidssokerApi());
     router.use((await tokenDings).verifyIDPortenToken);
     router.use(dagpengerApi(await tokenDings));
     router.use(meldekortApi(await tokenDings));
-    router.use(arbeidssokerApi());
     router.use(profilApi(profilRepository));
     app.use(config.BASE_PATH || '', router);
 }
