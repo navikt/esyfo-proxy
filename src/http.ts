@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import config from './config';
 import axios, { AxiosError } from 'axios';
 import log from './logger';
+import { getTokenFromCookie } from './auth/tokenDings';
 
 interface ProxyOpts {
     headers?: Record<string, string | null>;
@@ -10,7 +11,7 @@ interface ProxyOpts {
 
 export function proxyHttpCall(url: string, opts?: ProxyOpts) {
     return async (req: Request, res: Response) => {
-        const token = req.cookies && req.cookies[config.NAV_COOKIE_NAME];
+        const token = getTokenFromCookie(req);
 
         if (!token) {
             return res.status(401).end();

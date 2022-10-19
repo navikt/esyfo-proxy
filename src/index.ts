@@ -15,7 +15,7 @@ import profilApi from './api/profil';
 import arbeidssokerApi from './api/arbeidssoker';
 import swaggerDocs from './api/swagger';
 import bodyParser from 'body-parser';
-import createDependencies from './tokenx/deps';
+import createDependencies from './auth/deps';
 import logger from './logger';
 import config from './config';
 
@@ -44,6 +44,7 @@ async function setUpRoutes() {
     router.use(unleashApi());
     router.use(ptoProxyApi());
     router.use(swaggerDocs());
+    router.use((await tokenDings).verifyIDPortenToken);
     router.use(dagpengerApi(await tokenDings));
     router.use(meldekortApi(await tokenDings));
     router.use(arbeidssokerApi());

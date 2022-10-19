@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - dev/*
 
 env:
   IMAGE_BASE: ghcr.io/${{github.repository}}/${{github.event.repository.name}}
@@ -31,7 +32,7 @@ jobs:
           docker push ${IMAGE}
 
   deploy-dev:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/dev')
     name: Deploy til dev
     needs: test-build-and-push
     runs-on: ubuntu-latest

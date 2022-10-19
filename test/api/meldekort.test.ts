@@ -16,6 +16,7 @@ describe('meldekort api', () => {
     it('kaller meldekort-api med token-x i header', async () => {
         const tokenDings = {
             exchangeIDPortenToken: jest.fn().mockReturnValue(Promise.resolve({ access_token: 'tokenX-123' })),
+            verifyIDPortenToken: jest.fn().mockReturnValue(Promise.resolve()),
         };
 
         const proxyServer = express();
