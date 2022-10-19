@@ -9,6 +9,14 @@ async function main() {
         },
     });
     console.log({ testProfil });
+
+    const behovForVeiledning = await prisma.behovForVeiledning.create({
+        data: {
+            bruker_id: 'test',
+            oppfolging: 'KLARE_SEG_SELV',
+        },
+    });
+    console.log({ behovForVeiledning });
 }
 main()
     .then(async () => {

@@ -2,10 +2,12 @@ import createTokenDings, { Auth } from './auth/tokenDings';
 import config from './config';
 import createProfilRepository, { ProfilRepository } from './db/profilRepository';
 import { PrismaClient } from '@prisma/client';
+import createBehovRepository, { BehovRepository } from './db/behovForVeiledningRepository';
 
 export interface Dependencies {
     tokenDings: Promise<Auth>;
     profilRepository: ProfilRepository;
+    behovRepository: BehovRepository;
 }
 
 function createDependencies(): Dependencies {
@@ -20,6 +22,7 @@ function createDependencies(): Dependencies {
             idportenJwksUri: config.IDPORTEN_JWKS_URI!,
         }),
         profilRepository: createProfilRepository(prismaClient),
+        behovRepository: createBehovRepository(prismaClient),
     };
 }
 
