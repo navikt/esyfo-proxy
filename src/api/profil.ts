@@ -1,9 +1,9 @@
-import { PrismaClient } from '@prisma/client';
 import { Router } from 'express';
 import log from '../logger';
 import { getPidFromToken } from '../auth/tokenDings';
+import { ProfilRepository } from '../db/profilRepository';
 
-function profilRoutes(prismaClient: PrismaClient) {
+function profilRoutes(profilRepository: ProfilRepository) {
     const router = Router();
 
     /**
@@ -23,7 +23,8 @@ function profilRoutes(prismaClient: PrismaClient) {
             log.error('fikk ikke hentet ident fra token');
             return res.sendStatus(401);
         }
-        const profil = await prismaClient.profil.findFirst({ where: { bruker_id: ident } });
+
+        const profil = await profilRepository.hentProfil(ident as string);
         return res.send(profil);
     });
 

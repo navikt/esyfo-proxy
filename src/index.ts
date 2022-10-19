@@ -1,11 +1,11 @@
 import dotenv from 'dotenv';
 dotenv.config();
+
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import cors from 'cors';
 import { pinoHttp } from 'pino-http';
-import { PrismaClient } from '@prisma/client';
 import healhApi from './api/health';
 import unleashApi from './api/unleash';
 import ptoProxyApi from './api/ptoproxy';
@@ -15,12 +15,11 @@ import profilApi from './api/profil';
 import arbeidssokerApi from './api/arbeidssoker';
 import swaggerDocs from './api/swagger';
 import bodyParser from 'body-parser';
-import createDependencies from './auth/deps';
 import logger from './logger';
 import config from './config';
+import createDependencies from './deps';
 
 const PORT = 3000;
-const prisma = new PrismaClient();
 const app = express();
 const router = express.Router();
 
@@ -38,7 +37,7 @@ app.use(helmet());
 app.use(cors());
 
 async function setUpRoutes() {
-    const { tokenDings } = createDependencies();
+    const { tokenDings, profilRepository } = createDependencies();
 
     router.use(healhApi());
     router.use(unleashApi());
@@ -48,7 +47,7 @@ async function setUpRoutes() {
     router.use(dagpengerApi(await tokenDings));
     router.use(meldekortApi(await tokenDings));
     router.use(arbeidssokerApi());
-    router.use(profilApi(prisma));
+    router.use(profilApi(profilRepository));
     app.use(config.BASE_PATH || '', router);
 }
 
