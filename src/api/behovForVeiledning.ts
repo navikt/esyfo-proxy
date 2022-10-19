@@ -24,8 +24,8 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
             return res.sendStatus(401);
         }
 
-        const behov = await behovForVeiledningRepository.hentBehov(ident as string);
-        return res.send(behov);
+        const oppfolging = await behovForVeiledningRepository.hentBehov(ident as string);
+        return res.send({ oppfolging });
     });
 
     /**
