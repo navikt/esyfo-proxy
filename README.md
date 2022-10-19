@@ -58,12 +58,25 @@ For å legge inn seed-data:
 npx prisma db seed
 ```
 
+Sjekke hvordan databasen ser ut:
+
+```sh
+psql --username admin --dbname aia-backend --host localhost -W
+```
+
 ## Deploye kun til dev
 
 Ved å prefikse branch-navn med `dev/`, så vil branchen kun deployes i dev.
 
 ```
 git checkout -b dev/<navn på branch>
+```
+
+evt. rename branch
+
+```
+git checkout <opprinnlig-branch>
+git branch -m dev/<opprinnlig-branch>
 ```
 
 ## Dokumentasjon
