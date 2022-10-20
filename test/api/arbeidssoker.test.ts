@@ -28,7 +28,7 @@ describe('arbeidssoker api', () => {
         it('returnerer 401 når token mangler', (done) => {
             const app = express();
             app.use(cookieParser());
-            app.use(arbeidssoker('http://localhost:7666'));
+            app.use(arbeidssoker('http://localhost:7666', 'http://localhost:7666'));
 
             request(app).get('/arbeidssoker').expect(401, done);
         });
@@ -40,7 +40,7 @@ describe('arbeidssoker api', () => {
             const app = express();
             app.use(cookieParser());
             app.use(bodyParser.json());
-            app.use(arbeidssoker('http://localhost:7666'));
+            app.use(arbeidssoker('http://localhost:7666', 'http://localhost:7666'));
 
             try {
                 const response = await request(app)
@@ -67,7 +67,7 @@ describe('arbeidssoker api', () => {
         it('returnerer 401 når token mangler', (done) => {
             const app = express();
             app.use(cookieParser());
-            app.use(arbeidssoker('http://localhost:7666'));
+            app.use(arbeidssoker('http://localhost:7666', 'http://localhost:7666'));
 
             request(app).get('/er-arbeidssoker').expect(401, done);
         });
@@ -79,7 +79,7 @@ describe('arbeidssoker api', () => {
             const app = express();
             app.use(cookieParser());
             app.use(bodyParser.json());
-            app.use(arbeidssoker('http://localhost:7666'));
+            app.use(arbeidssoker('http://localhost:7666', 'http://localhost:7666'));
 
             try {
                 const response = await request(app)
@@ -113,7 +113,7 @@ describe('arbeidssoker api', () => {
             const app = express();
             app.use(cookieParser());
             app.use(bodyParser.json());
-            app.use(arbeidssoker('http://localhost:7666'));
+            app.use(arbeidssoker('http://localhost:7666', 'http://localhost:7666'));
 
             try {
                 const response = await request(app)

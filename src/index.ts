@@ -14,6 +14,7 @@ import meldekortApi from './api/meldekort';
 import profilApi from './api/profil';
 import behovForVeiledningApi from './api/behovForVeiledning';
 import arbeidssokerApi from './api/arbeidssoker';
+import veilarbregistreringApi from './api/veilarbregistrering';
 import swaggerDocs from './api/swagger';
 import bodyParser from 'body-parser';
 import logger from './logger';
@@ -43,6 +44,7 @@ async function setUpRoutes() {
     router.use(healhApi());
     router.use(unleashApi());
     router.use(ptoProxyApi());
+    router.use(veilarbregistreringApi());
     router.use(swaggerDocs());
     router.use(arbeidssokerApi());
     router.use((await tokenDings).verifyIDPortenToken);
