@@ -31,7 +31,7 @@ function profilRoutes(profilRepository: ProfilRepository) {
                 return res.sendStatus(204);
             }
 
-            return res.send(profil);
+            return res.send({ ...profil });
         } catch (err) {
             return res.status(500).send((err as Error)?.message);
         }
