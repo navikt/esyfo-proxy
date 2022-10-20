@@ -10,12 +10,16 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
      * @openapi
      * /profil:
      *   get:
-     *     description: Henter lagrede profil innstillinger
+     *     description: Henter brukers svar på behov for veiledning
      *     responses:
+     *       204:
+     *          description: Fant ingen svar for bruker
      *       200:
-     *         description: Vellykket forespørsel.
+     *         description: { oppfolging: SVAR, dato: createdAtDato }
      *       401:
      *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *       500:
+     *         description: Noe gikk galt
      */
     router.get('/behov-for-veiledning', async (req, res) => {
         const ident = getPidFromToken(req);
@@ -24,20 +28,33 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
             return res.sendStatus(401);
         }
 
-        const oppfolging = await behovForVeiledningRepository.hentBehov(ident as string);
-        return res.send({ oppfolging });
+        try {
+            const behov = await behovForVeiledningRepository.hentBehov(ident as string);
+
+            if (!behov) {
+                return res.sendStatus(204);
+            }
+
+            return res.send({ oppfolging: behov.oppfolging, dato: behov.created_at });
+        } catch (err) {
+            return res.status(500).send((err as Error)?.message);
+        }
     });
 
     /**
      * @openapi
      * /profil:
      *   post:
-     *     description: Lagrer profil innstillinger
+     *     description: Lagrer brukers svar på behov for veiledning
      *     responses:
-     *       200:
+     *       201:
      *         description: Vellykket forespørsel.
+     *       400:
+     *         description: Forespørsel mangler i request body
      *       401:
      *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *       500:
+     *          description: Noe gikk galt
      */
     router.post('/behov-for-veiledning', async (req, res) => {
         const ident = getPidFromToken(req) as string;
@@ -53,11 +70,12 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
         }
 
         try {
-            await behovForVeiledningRepository.lagreBehov({
+            const result = await behovForVeiledningRepository.lagreBehov({
                 bruker: ident,
                 oppfolging: oppfolging,
             });
-            return res.status(201).send({ oppfolging });
+
+            return res.status(201).send({ oppfolging: result.oppfolging, dato: result.created_at });
         } catch (err) {
             return res.status(500).send(`${(err as Error).message}`);
         }
