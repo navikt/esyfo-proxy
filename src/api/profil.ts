@@ -24,8 +24,17 @@ function profilRoutes(profilRepository: ProfilRepository) {
             return res.sendStatus(401);
         }
 
-        const profil = await profilRepository.hentProfil(ident as string);
-        return res.send(profil);
+        try {
+            const profil = await profilRepository.hentProfil(ident as string);
+
+            if (!profil) {
+                return res.sendStatus(204);
+            }
+
+            return res.send(profil);
+        } catch (err) {
+            return res.status(500).send((err as Error)?.message);
+        }
     });
 
     /**
