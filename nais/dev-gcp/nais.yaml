@@ -63,6 +63,7 @@ spec:
           namespace: teamdagpenger
         - application: meldekort-api-q1
           namespace: meldekort
+        - application: veilarbregistrering
   gcp:
     sqlInstances:
       - type: POSTGRES_14
