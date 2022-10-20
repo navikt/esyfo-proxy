@@ -12,6 +12,7 @@ import ptoProxyApi from './api/ptoproxy';
 import dagpengerApi from './api/dagpenger';
 import meldekortApi from './api/meldekort';
 import profilApi from './api/profil';
+import behovForVeiledningApi from './api/behovForVeiledning';
 import arbeidssokerApi from './api/arbeidssoker';
 import swaggerDocs from './api/swagger';
 import bodyParser from 'body-parser';
@@ -37,7 +38,7 @@ app.use(helmet());
 app.use(cors());
 
 async function setUpRoutes() {
-    const { tokenDings, profilRepository } = createDependencies();
+    const { tokenDings, profilRepository, behovRepository } = createDependencies();
 
     router.use(healhApi());
     router.use(unleashApi());
@@ -48,6 +49,7 @@ async function setUpRoutes() {
     router.use(dagpengerApi(await tokenDings));
     router.use(meldekortApi(await tokenDings));
     router.use(profilApi(profilRepository));
+    router.use(behovForVeiledningApi(behovRepository));
     app.use(config.BASE_PATH || '', router);
 }
 

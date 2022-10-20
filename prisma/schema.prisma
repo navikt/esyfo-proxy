@@ -10,9 +10,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model BehovForVeiledning {
+  id Int @id @default(autoincrement())
+  bruker_id String
+  created_at DateTime @default(now())
+  oppfolging Oppfolging
+}
+
 model Profil {
   id Int @id @default(autoincrement())
   bruker_id String
   profil Json
   created_at DateTime @default(now())
+}
+
+enum Oppfolging {
+  KLARE_SEG_SELV
+  ONSKER_OPPFOLGING
+  IKKE_BESVART
 }
