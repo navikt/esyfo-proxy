@@ -21,10 +21,11 @@ describe('veilarbregistrering api', () => {
                 res.status(400).end();
             }
         });
-        const proxy = proxyServer.listen(6666);
+        const port = 6676;
+        const proxy = proxyServer.listen(port);
         const app = express();
         app.use(cookieParser());
-        app.use(veilarbregistrering('http://localhost:6666'));
+        app.use(veilarbregistrering(`http://localhost:${port}`));
 
         try {
             const response = await request(app).get('/registrering').set('Cookie', ['selvbetjening-idtoken=token123;']);
@@ -45,10 +46,11 @@ describe('veilarbregistrering api', () => {
                 res.status(400).end();
             }
         });
-        const proxy = proxyServer.listen(6665);
+        const port = 6675;
+        const proxy = proxyServer.listen(port);
         const app = express();
         app.use(cookieParser());
-        app.use(veilarbregistrering('http://localhost:6665'));
+        app.use(veilarbregistrering(`http://localhost:${port}`));
 
         try {
             const response = await request(app)
