@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import log from '../logger';
-import { getPidFromToken } from '../auth/tokenDings';
+import { getSubjectFromToken } from '../auth/tokenDings';
 import { BehovRepository } from '../db/behovForVeiledningRepository';
 
 function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository) {
@@ -22,7 +22,7 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
      *         description: Noe gikk galt
      */
     router.get('/behov-for-veiledning', async (req, res) => {
-        const ident = getPidFromToken(req);
+        const ident = getSubjectFromToken(req);
         if (!ident) {
             log.error('fikk ikke hentet ident fra token');
             return res.sendStatus(401);
@@ -57,7 +57,7 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
      *          description: Noe gikk galt
      */
     router.post('/behov-for-veiledning', async (req, res) => {
-        const ident = getPidFromToken(req) as string;
+        const ident = getSubjectFromToken(req) as string;
         if (!ident) {
             log.error('fikk ikke hentet ident fra token');
             return res.sendStatus(401);

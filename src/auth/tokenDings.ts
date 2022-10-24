@@ -28,10 +28,10 @@ export function getTokenFromCookie(req: Request) {
     return req.cookies && req.cookies[config.NAV_COOKIE_NAME];
 }
 
-export function getPidFromToken(req: Request) {
+export function getSubjectFromToken(req: Request) {
     const idPortenToken = getTokenFromCookie(req);
     const decodedToken = decodeJwt(idPortenToken);
-    return decodedToken.pid;
+    return decodedToken.sub;
 }
 
 async function createClientAssertion(options: TokenDingsOptions): Promise<string> {

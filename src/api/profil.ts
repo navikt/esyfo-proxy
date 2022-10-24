@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import log from '../logger';
-import { getPidFromToken } from '../auth/tokenDings';
+import { getSubjectFromToken } from '../auth/tokenDings';
 import { ProfilRepository } from '../db/profilRepository';
 
 function profilRoutes(profilRepository: ProfilRepository) {
@@ -18,7 +18,7 @@ function profilRoutes(profilRepository: ProfilRepository) {
      *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
      */
     router.get('/profil', async (req, res) => {
-        const ident = getPidFromToken(req);
+        const ident = getSubjectFromToken(req);
         if (!ident) {
             log.error('fikk ikke hentet ident fra token');
             return res.sendStatus(401);
@@ -49,7 +49,7 @@ function profilRoutes(profilRepository: ProfilRepository) {
      *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
      */
     router.post('/profil', async (req, res) => {
-        const ident = getPidFromToken(req) as string;
+        const ident = getSubjectFromToken(req) as string;
         if (!ident) {
             log.error('fikk ikke hentet ident fra token');
             return res.sendStatus(401);
