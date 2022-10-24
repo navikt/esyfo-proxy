@@ -28,9 +28,10 @@ function unleashRoutes() {
 
     router.get('/unleash', (req: Request<any, any, any, FeatureQuery>, res) => {
         const features = ensureArray(req.query.feature).reduce((acc, key) => {
+            const k = encodeURIComponent(key);
             return {
                 ...acc,
-                [key]: isEnabled(key),
+                [k]: isEnabled(key),
             };
         }, {});
 
