@@ -29,6 +29,9 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(
     pinoHttp({
+        autoLogging: {
+            ignore: (req) => (req.url ? /internal/.test(req?.url) : false),
+        },
         logger,
         customSuccessMessage: customRequestLogMessage,
         customErrorMessage: customRequestLogMessage,
