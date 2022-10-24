@@ -2,6 +2,7 @@ import { Router } from 'express';
 import log from '../logger';
 import { getSubjectFromToken } from '../auth/tokenDings';
 import { ProfilRepository } from '../db/profilRepository';
+import logger from '../logger';
 
 function profilRoutes(profilRepository: ProfilRepository) {
     const router = Router();
@@ -62,12 +63,13 @@ function profilRoutes(profilRepository: ProfilRepository) {
         }
 
         try {
-            await profilRepository.lagreProfil({
+            const result = await profilRepository.lagreProfil({
                 bruker: ident,
                 profil,
             });
-            return res.status(201).send(profil);
+            return res.status(201).send(result.profil);
         } catch (err) {
+            logger.error(`Feil ved lagring av profil ${err}`);
             return res.status(500).send(`${(err as Error).message}`);
         }
     });

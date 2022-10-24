@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Profil } from '@prisma/client';
 import logger from '../logger';
 
 interface Feedback {
@@ -35,14 +35,14 @@ interface LagreProfilDto {
 }
 
 export interface ProfilRepository {
-    lagreProfil(data: LagreProfilDto): Promise<void>;
+    lagreProfil(data: LagreProfilDto): Promise<Profil>;
     hentProfil(bruker: string): Promise<ProfilJson | null>;
 }
 
 function createProfilRepository(prismaClient: PrismaClient): ProfilRepository {
     return {
         async lagreProfil(data: LagreProfilDto) {
-            await prismaClient.profil.create({ data: { bruker_id: data.bruker, profil: data.profil as any } });
+            return prismaClient.profil.create({ data: { bruker_id: data.bruker, profil: data.profil as any } });
         },
         async hentProfil(bruker: string): Promise<ProfilJson | null> {
             try {
