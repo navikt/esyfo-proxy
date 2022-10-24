@@ -17,7 +17,7 @@ import arbeidssokerApi from './api/arbeidssoker';
 import veilarbregistreringApi from './api/veilarbregistrering';
 import swaggerDocs from './api/swagger';
 import bodyParser from 'body-parser';
-import logger from './logger';
+import logger, { customRequestLogMessage } from './logger';
 import config from './config';
 import createDependencies from './deps';
 
@@ -30,13 +30,13 @@ app.use(bodyParser.json());
 app.use(
     pinoHttp({
         logger,
-        customSuccessMessage: function (req, res) {
-            return `${req.method} ${req.url} completed ${res.statusCode} ${res.statusMessage}`;
-        },
+        customSuccessMessage: customRequestLogMessage,
+        customErrorMessage: customRequestLogMessage,
     })
 );
 app.use(helmet());
 app.use(cors());
+app.disable('x-powered-by');
 
 async function setUpRoutes() {
     const { tokenDings, profilRepository, behovRepository } = createDependencies();
