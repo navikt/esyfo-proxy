@@ -32,7 +32,7 @@ app.use(
         autoLogging: {
             ignore: (req) => (req.url ? /internal/.test(req.url) : false),
         },
-        customLogLevel: (_, res, err) => (res.statusCode > 204 || err ? 'error' : 'info'),
+        customLogLevel: (_, res, err) => (res.statusCode >= 400 || err ? 'error' : 'info'),
         logger,
         customSuccessMessage: customRequestLogMessage,
         customErrorMessage: customRequestLogMessage,
