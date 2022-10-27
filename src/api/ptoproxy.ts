@@ -42,6 +42,18 @@ function ptoProxy(ptoProxyUrl = config.PTO_PROXY_URL) {
     router.get('/dialog/antallUleste', proxy(`${ptoProxyUrl}/veilarbdialog/api/dialog/antallUleste`));
     /**
      * @openapi
+     * /dialog:
+     *   post:
+     *     description: Oppretter ny dialog i dialogløsningen 
+     *     responses:
+     *       200:
+     *         description: Vellykket forespørsel.
+     *       401:
+     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     */
+     router.post('/dialog', proxy(`${ptoProxyUrl}/veilarbdialog/api/dialog`));
+    /**
+     * @openapi
      * /vedtakinfo/besvarelse:
      *   get:
      *     description:
