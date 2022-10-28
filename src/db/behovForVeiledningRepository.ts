@@ -4,6 +4,7 @@ import logger from '../logger';
 interface LagreBehovDto {
     bruker: string;
     oppfolging: Oppfolging;
+    dialogId?: string;
 }
 
 export interface BehovRepository {
@@ -14,8 +15,8 @@ export interface BehovRepository {
 function createBehovRepository(prismaClient: PrismaClient): BehovRepository {
     return {
         async lagreBehov(data: LagreBehovDto): Promise<BehovForVeiledning> {
-            return await prismaClient.behovForVeiledning.create({
-                data: { bruker_id: data.bruker, oppfolging: data.oppfolging },
+            return prismaClient.behovForVeiledning.create({
+                data: { bruker_id: data.bruker, oppfolging: data.oppfolging, dialog_id: data.dialogId },
             });
         },
         async hentBehov(bruker: string): Promise<BehovForVeiledning | null> {

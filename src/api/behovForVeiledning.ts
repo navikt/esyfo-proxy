@@ -35,8 +35,9 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
                 return res.sendStatus(204);
             }
 
-            return res.send({ oppfolging: behov.oppfolging, dato: behov.created_at });
+            return res.send({ oppfolging: behov.oppfolging, dato: behov.created_at, dialogId: behov.dialog_id });
         } catch (err) {
+            log.error(`Feil ved henting av behov for veiledning: ${err}`);
             return res.status(500).send((err as Error)?.message);
         }
     });
@@ -63,9 +64,10 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
             return res.sendStatus(401);
         }
 
-        const oppfolging = req.body?.oppfolging;
+        const { oppfolging, dialogId } = req.body;
 
         if (!oppfolging) {
+            log.error('mangler "oppfolging" i request body');
             return res.status(400).end();
         }
 
@@ -73,10 +75,14 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
             const result = await behovForVeiledningRepository.lagreBehov({
                 bruker: ident,
                 oppfolging: oppfolging,
+                dialogId,
             });
 
-            return res.status(201).send({ oppfolging: result.oppfolging, dato: result.created_at });
+            return res
+                .status(201)
+                .send({ oppfolging: result.oppfolging, dato: result.created_at, dialogId: result.dialog_id });
         } catch (err) {
+            log.error(`Feil ved oppretting av behov for veiledning ${err}`);
             return res.status(500).send(`${(err as Error).message}`);
         }
     });
