@@ -8,18 +8,51 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
 
     /**
      * @openapi
-     * /profil:
+     * /behov-for-veiledning:
      *   get:
      *     description: Henter brukers svar på behov for veiledning
      *     responses:
+     *       200:
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/Oppfolging'
      *       204:
      *          description: Fant ingen svar for bruker
-     *       200:
-     *         description: { oppfolging: SVAR, dato: createdAtDato }
      *       401:
      *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
      *       500:
      *         description: Noe gikk galt
+     *   post:
+     *     description: Lagrer brukers svar på behov for veiledning
+     *     parameters:
+     *       - in: body
+     *         required: true
+     *         schema:
+     *           $ref: '#/components/schemas/Oppfolging'
+     *     responses:
+     *       201:
+     *         description: Vellykket forespørsel.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/Oppfolging'
+     *       400:
+     *         description: Forespørsel mangler i request body
+     *       401:
+     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *       500:
+     *          description: Noe gikk galt
+     * components:
+     *   schemas:
+     *     Oppfolging:
+     *       type: object
+     *       properties:
+     *         oppfolging:
+     *           type: string
+     *           enum: [STANDARD_INNSATS, SITUASJONSBESTEMT_INNSATS]
+     *         dialogId:
+     *           type: string
      */
     router.get('/behov-for-veiledning', async (req, res) => {
         const ident = getSubjectFromToken(req);
@@ -42,21 +75,6 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
         }
     });
 
-    /**
-     * @openapi
-     * /profil:
-     *   post:
-     *     description: Lagrer brukers svar på behov for veiledning
-     *     responses:
-     *       201:
-     *         description: Vellykket forespørsel.
-     *       400:
-     *         description: Forespørsel mangler i request body
-     *       401:
-     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
-     *       500:
-     *          description: Noe gikk galt
-     */
     router.post('/behov-for-veiledning', async (req, res) => {
         const ident = getSubjectFromToken(req) as string;
         if (!ident) {

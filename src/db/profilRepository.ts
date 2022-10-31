@@ -22,13 +22,6 @@ interface ProfilJson {
     aiaReaktiveringVisning?: JaEllerNei;
 }
 
-// export interface Profil {
-//     id: string;
-//     bruker_id: string;
-//     profil: ProfilJson;
-//     created_at: string;
-// }
-
 interface LagreProfilDto {
     bruker: string;
     profil: ProfilJson;

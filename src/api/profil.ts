@@ -15,8 +15,68 @@ function profilRoutes(profilRepository: ProfilRepository) {
      *     responses:
      *       200:
      *         description: Vellykket forespørsel.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/Profil'
+     *       204:
+     *         description: Fant ikke profil.
      *       401:
      *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *   post:
+     *     description: Lagrer profil innstillinger
+     *     parameters:
+     *       - in: body
+     *         required: true
+     *         schema:
+     *           $ref: '#/components/schemas/Profil'
+     *     responses:
+     *       201:
+     *         description: Vellykket forespørsel.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/Profil'
+     *       400:
+     *         description: Forespørsel mangler i request body
+     *       401:
+     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     * components:
+     *   schemas:
+     *     Profil:
+     *       type: object
+     *       properties:
+     *         aiaFeedbackMeldekortForklaring:
+     *           type: object
+     *           $ref: '#/components/schemas/Feedback'
+     *         aiaFeedbackHjelpOgStotteForklaring:
+     *           type: object
+     *           $ref: '#/components/schemas/Feedback'
+     *         aiaFeedbackHjelpOgStotteForklaringUngdom:
+     *           type: object
+     *           $ref: '#/components/schemas/Feedback'
+     *         aiaAvslaattEgenvurdering:
+     *           type: string
+     *         aiaAvslaattEgenvurderingUke12:
+     *           type: string
+     *         aiaValgtPengestotteVisning:
+     *           type: string
+     *         aiaReaktiveringVisning:
+     *           $ref: '#/components/schemas/JaEllerNei'
+     *     Feedback:
+     *       type: object
+     *       properties:
+     *         updated:
+     *           type: string
+     *         valgt:
+     *           type: string
+     *     JaEllerNei:
+     *       type: object
+     *       properties:
+     *         oppdatert:
+     *           type: string
+     *         valgt:
+     *           type: string
      */
     router.get('/profil', async (req, res) => {
         const ident = getSubjectFromToken(req);
@@ -38,17 +98,6 @@ function profilRoutes(profilRepository: ProfilRepository) {
         }
     });
 
-    /**
-     * @openapi
-     * /profil:
-     *   post:
-     *     description: Lagrer profil innstillinger
-     *     responses:
-     *       200:
-     *         description: Vellykket forespørsel.
-     *       401:
-     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
-     */
     router.post('/profil', async (req, res) => {
         const ident = getSubjectFromToken(req) as string;
         if (!ident) {
