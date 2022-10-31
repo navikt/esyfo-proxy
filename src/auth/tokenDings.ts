@@ -64,14 +64,8 @@ const createTokenDings = async (options: TokenDingsOptions): Promise<Auth> => {
 
     const idPortenJWKSet = createRemoteJWKSet(new URL(idportenJwksUri));
 
-    const noAuthRoutes = ['internal', 'docs', 'unleash'];
-
     return {
         async verifyIDPortenToken(req, res, next) {
-            if (noAuthRoutes.some((route) => req.path.startsWith(`/${route}/`))) {
-                next();
-                return;
-            }
             try {
                 const idPortenToken = getTokenFromCookie(req);
                 if (!idPortenToken) {
