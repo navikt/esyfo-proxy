@@ -24,7 +24,7 @@ describe('behovForVeiledning API', () => {
                 lagreBehov: jest.fn(),
                 hentBehov: jest.fn().mockReturnValue(
                     Promise.resolve({
-                        oppfolging: 'KLARE_SEG_SELV',
+                        oppfolging: 'SITUASJONSBESTEMT_INNSATS',
                         created_at: 'test-dato',
                         dialog_id: 'dialog-id',
                     })
@@ -38,7 +38,11 @@ describe('behovForVeiledning API', () => {
                 .set('Cookie', ['selvbetjening-idtoken=token123;']);
 
             expect(response.statusCode).toEqual(200);
-            expect(response.body).toEqual({ oppfolging: 'KLARE_SEG_SELV', dato: 'test-dato', dialogId: 'dialog-id' });
+            expect(response.body).toEqual({
+                oppfolging: 'SITUASJONSBESTEMT_INNSATS',
+                dato: 'test-dato',
+                dialogId: 'dialog-id',
+            });
         });
 
         it('returnerer 204 når ingen treff i db', async () => {
@@ -63,7 +67,7 @@ describe('behovForVeiledning API', () => {
                 hentBehov: jest.fn(),
                 lagreBehov: jest.fn().mockReturnValue(
                     Promise.resolve({
-                        oppfolging: 'KLARE_SEG_SELV',
+                        oppfolging: 'SITUASJONSBESTEMT_INNSATS',
                         created_at: 'test-dato',
                         dialog_id: 'dialog-id',
                     })
@@ -74,16 +78,20 @@ describe('behovForVeiledning API', () => {
 
             const response = await request(app)
                 .post('/behov-for-veiledning')
-                .send({ oppfolging: 'KLARE_SEG_SELV', dialogId: 'dialog-id-1' })
+                .send({ oppfolging: 'SITUASJONSBESTEMT_INNSATS', dialogId: 'dialog-id-1' })
                 .set('Cookie', ['selvbetjening-idtoken=token123;']);
 
             expect(response.statusCode).toEqual(201);
             expect(behovRepository.lagreBehov).toHaveBeenCalledWith({
                 bruker: 'test-ident',
-                oppfolging: 'KLARE_SEG_SELV',
+                oppfolging: 'SITUASJONSBESTEMT_INNSATS',
                 dialogId: 'dialog-id-1',
             });
-            expect(response.body).toEqual({ oppfolging: 'KLARE_SEG_SELV', dato: 'test-dato', dialogId: 'dialog-id' });
+            expect(response.body).toEqual({
+                oppfolging: 'SITUASJONSBESTEMT_INNSATS',
+                dato: 'test-dato',
+                dialogId: 'dialog-id',
+            });
         });
     });
 });

@@ -13,7 +13,7 @@ async function main() {
     const behovForVeiledning = await prisma.behovForVeiledning.create({
         data: {
             bruker_id: 'test',
-            oppfolging: 'KLARE_SEG_SELV',
+            oppfolging: 'SITUASJONSBESTEMT_INNSATS',
         },
     });
     console.log({ behovForVeiledning });
