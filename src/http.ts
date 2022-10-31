@@ -26,7 +26,9 @@ export function proxyHttpCall(url: string, opts?: ProxyOpts) {
                 headers: {
                     'Content-Type': req.header('Content-Type') || 'application/json',
                     ...(req.header('Nav-Call-Id') ? { 'Nav-Call-Id': req.header('Nav-Call-Id') } : {}),
-                    ...(req.header('NAV_CSRF_PROTECTION') ? { 'NAV_CSRF_PROTECTION': req.header('NAV_CSRF_PROTECTION') } : {}),
+                    ...(req.header('NAV_CSRF_PROTECTION')
+                        ? { NAV_CSRF_PROTECTION: req.header('NAV_CSRF_PROTECTION') }
+                        : {}),
                     Authorization: `Bearer ${token}`,
                     [config.CONSUMER_ID_HEADER_NAME]: config.CONSUMER_ID_HEADER_VALUE,
                     ...opts?.headers,
