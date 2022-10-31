@@ -2,7 +2,10 @@ import { proxyHttpCall as proxy } from '../http';
 import config from '../config';
 import { Router } from 'express';
 
-function veilarbregistrering(veilarbregistreringUrl = config.VEILARBREGISTRERING_URL): Router {
+function veilarbregistrering(
+    veilarbregistreringUrl = config.VEILARBREGISTRERING_URL,
+    veilarbregistreringGcpUrl = config.VEILARBREGISTRERING_GCP_URL
+): Router {
     const router = Router();
 
     /**
@@ -64,7 +67,7 @@ function veilarbregistrering(veilarbregistreringUrl = config.VEILARBREGISTRERING
      */
     router.get(
         '/arbeidssoker/perioder',
-        proxy(`${veilarbregistreringUrl}/veilarbregistrering/api/arbeidssoker/perioder`, { overrideMethod: 'POST' })
+        proxy(`${veilarbregistreringGcpUrl}/veilarbregistrering/api/arbeidssoker/perioder`, { overrideMethod: 'POST' })
     );
     /**
      * @openapi

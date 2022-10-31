@@ -17,7 +17,7 @@ interface UnderOppfolging {
 
 function arbeidssokerRoutes(
     ptoProxyUrl = config.PTO_PROXY_URL,
-    veilarbregistreringUrl = config.VEILARBREGISTRERING_URL
+    veilarbregistreringGcpUrl = config.VEILARBREGISTRERING_GCP_URL
 ) {
     const router = Router();
 
@@ -76,7 +76,7 @@ function arbeidssokerRoutes(
     async function hentArbeidssokerPerioder(token: string, query: ParsedQs): Promise<Arbeidssokerperioder> {
         const fraOgMed = query.fraOgMed;
         const tilOgMed = query.tilOgMed;
-        const url = `${veilarbregistreringUrl}/veilarbregistrering/api/arbeidssoker/perioder/niva3?fraOgMed=${fraOgMed}${
+        const url = `${veilarbregistreringGcpUrl}/veilarbregistrering/api/arbeidssoker/perioder/niva3?fraOgMed=${fraOgMed}${
             tilOgMed ? `&tilOgMed=${tilOgMed}` : ''
         }`;
 
