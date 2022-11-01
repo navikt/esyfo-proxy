@@ -31,38 +31,97 @@ function dagpengerRoutes(tokenDings: Auth, dagpengerInnsynUrl = config.DAGPENGER
             }
         };
     };
+
     /**
      * @openapi
      * /dagpenger/soknad:
      *   get:
-     *     description:
+     *     description: Returnerer en liste med søknader
      *     responses:
      *       200:
-     *         $ref: '#/components/schemas/Ok'
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 type: object
+     *                 properties:
+     *                   søknadId:
+     *                     type: string
+     *                   journalpostId:
+     *                     type: string
+     *                   skjemaKode:
+     *                     type: string
+     *                   søknadsType:
+     *                     type: string
+     *                     enum: [NySøknad,Gjenopptak]
+     *                   kanal:
+     *                     type: string
+     *                     enum: [Papir,Digital]
+     *                   datoInnsendt:
+     *                     type: string
+     *                     format: date-time
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/dagpenger/soknad', dagpengerCall(SOKNAD_URL));
+
     /**
      * @openapi
      * /dagpenger/vedtak:
      *   get:
-     *     description:
+     *     description: Returnerer en liste med vedtak
      *     responses:
      *       200:
-     *         $ref: '#/components/schemas/Ok'
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 type: object
+     *                 properties:
+     *                   vedtakId:
+     *                     type: string
+     *                   fagsakId:
+     *                     type: string
+     *                   status:
+     *                     type: string
+     *                     enum: [INNVILGET,AVSLÅTT,STANS,ENDRING]
+     *                   datoFattet:
+     *                     type: string
+     *                     format: date-time
+     *                   fraDato:
+     *                     type: string
+     *                     format: date-time
+     *                   tilDato:
+     *                     type: string
+     *                     format: date-time
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/dagpenger/vedtak', dagpengerCall(VEDTAK_URL));
+
     /**
      * @openapi
      * /dagpenger/paabegynte:
      *   get:
-     *     description:
+     *     description: Returnerer liste med påbegynte søknader
      *     responses:
      *       200:
-     *         $ref: '#/components/schemas/Ok'
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 type: object
+     *                 properties:
+     *                   behandlingsId:
+     *                     type: string
+     *                   hovedskjemaKodeverkId:
+     *                     type: string
+     *                   sistEndret:
+     *                     type: string
+     *                     format: date-time
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */

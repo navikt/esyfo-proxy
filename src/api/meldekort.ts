@@ -36,10 +36,15 @@ function meldekortRoutes(tokenDings: Auth, meldekortUrl: string = config.MELDEKO
      *     responses:
      *       200:
      *         description: Vellykket forespørsel.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/Person'
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/meldekort', meldekortCall(`${meldekortUrl}/meldekort`));
+
     /**
      * @openapi
      * /meldekort/status:
@@ -48,6 +53,10 @@ function meldekortRoutes(tokenDings: Auth, meldekortUrl: string = config.MELDEKO
      *     responses:
      *       200:
      *         description: Vellykket forespørsel.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/PersonStatus'
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */

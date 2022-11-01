@@ -13,6 +13,7 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
      *     description: Henter brukers svar på behov for veiledning
      *     responses:
      *       200:
+     *         description: Vellykket forespørsel.
      *         content:
      *           application/json:
      *             schema:
