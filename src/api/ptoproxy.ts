@@ -11,9 +11,9 @@ function ptoProxy(ptoProxyUrl = config.PTO_PROXY_URL) {
      *     description:
      *     responses:
      *       200:
-     *         description: Vellykket forespørsel.
+     *         $ref: '#/components/schemas/Ok'
      *       401:
-     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/oppfolging', proxy(`${ptoProxyUrl}/veilarboppfolging/api/oppfolging`));
     /**
@@ -23,9 +23,9 @@ function ptoProxy(ptoProxyUrl = config.PTO_PROXY_URL) {
      *     description:
      *     responses:
      *       200:
-     *         description: Vellykket forespørsel.
+     *         $ref: '#/components/schemas/Ok'
      *       401:
-     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/underoppfolging', proxy(`${ptoProxyUrl}/veilarboppfolging/api/niva3/underoppfolging`));
     /**
@@ -35,9 +35,9 @@ function ptoProxy(ptoProxyUrl = config.PTO_PROXY_URL) {
      *     description:
      *     responses:
      *       200:
-     *         description: Vellykket forespørsel.
+     *         $ref: '#/components/schemas/Ok'
      *       401:
-     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/dialog/antallUleste', proxy(`${ptoProxyUrl}/veilarbdialog/api/dialog/antallUleste`));
     /**
@@ -47,9 +47,9 @@ function ptoProxy(ptoProxyUrl = config.PTO_PROXY_URL) {
      *     description: Oppretter ny dialog i dialogløsningen
      *     responses:
      *       200:
-     *         description: Vellykket forespørsel.
+     *         $ref: '#/components/schemas/Ok'
      *       401:
-     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *         $ref: '#/components/schemas/Unauthorized'
      */
     router.post('/dialog', proxy(`${ptoProxyUrl}/veilarbdialog/api/dialog`));
     /**
@@ -59,9 +59,9 @@ function ptoProxy(ptoProxyUrl = config.PTO_PROXY_URL) {
      *     description:
      *     responses:
      *       200:
-     *         description: Vellykket forespørsel.
+     *         $ref: '#/components/schemas/Ok'
      *       401:
-     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/vedtakinfo/besvarelse', proxy(`${ptoProxyUrl}/veilarbvedtakinfo/api/behovsvurdering/besvarelse`));
     /**
@@ -71,9 +71,9 @@ function ptoProxy(ptoProxyUrl = config.PTO_PROXY_URL) {
      *     description:
      *     responses:
      *       200:
-     *         description: Vellykket forespørsel.
+     *         $ref: '#/components/schemas/Ok'
      *       401:
-     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/vedtakinfo/motestotte', proxy(`${ptoProxyUrl}/veilarbvedtakinfo/api/motestotte`));
 

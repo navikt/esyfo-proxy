@@ -22,7 +22,9 @@ function profilRoutes(profilRepository: ProfilRepository) {
      *       204:
      *         description: Fant ikke profil.
      *       401:
-     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *         $ref: '#/components/schemas/Unauthorized'
+     *       500:
+     *         $ref: '#/components/schemas/Error'
      *   post:
      *     description: Lagrer profil innstillinger
      *     parameters:
@@ -40,7 +42,9 @@ function profilRoutes(profilRepository: ProfilRepository) {
      *       400:
      *         description: Forespørsel mangler i request body
      *       401:
-     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *         $ref: '#/components/schemas/Unauthorized'
+     *       500:
+     *         $ref: '#/components/schemas/Error'
      * components:
      *   schemas:
      *     Profil:

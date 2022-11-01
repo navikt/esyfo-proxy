@@ -18,6 +18,18 @@ const options = {
                     name: config.NAV_COOKIE_NAME,
                 },
             },
+            schemas: {
+                Unauthorized: {
+                    description:
+                        'Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie. Token kan være gått ut.',
+                },
+                Ok: {
+                    description: 'Vellykket forespørsel.',
+                },
+                Error: {
+                    description: 'Noe gikk galt',
+                },
+            },
         },
         security: [
             {

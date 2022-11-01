@@ -25,12 +25,46 @@ function arbeidssokerRoutes(
      * @openapi
      * /arbeidssoker:
      *   get:
+     *     parameters:
+     *       - in: query
+     *         name: fraOgMed
+     *         required: true
+     *         format: date
+     *         type: string
+     *         description: Dato YYYY-MM-DD
+     *       - in: query
+     *         name: tilOgMed
+     *         format: date
+     *         type: string
+     *         description: Dato YYYY-MM-DD
      *     description:
      *     responses:
      *       200:
-     *         description: Vellykket forespørsel.
+     *         description: Vellykket forespørsel
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/Arbeidssokerperioder'
      *       401:
-     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *         $ref: '#/components/schemas/Unauthorized'
+     * components:
+     *   schemas:
+     *     Arbeidssokerperioder:
+     *       type: object
+     *       properties:
+     *         arbeidssokerperioder:
+     *           type: array
+     *           items:
+     *             type: object
+     *             properties:
+     *               fraOgMedDato:
+     *                 type: string
+     *                 example: 2020-01-01
+     *               tilOgMedDato:
+     *                 type: string
+     *                 example: 2021-01-01
+     *         underoppfolging:
+     *           type: boolean
      */
     router.get('/arbeidssoker', async (req, res) => {
         const token = getTokenFromCookie(req);
@@ -52,12 +86,20 @@ function arbeidssokerRoutes(
      * @openapi
      * /er-arbeidssoker:
      *   get:
-     *     description:
+     *     parameters:
+     *     description: Henter alle perioder hvor bruker er registrert som arbeidssøker.
      *     responses:
      *       200:
-     *         description: Vellykket forespørsel.
+     *         description: Vellykket forespørsel
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 erArbeidssoker:
+     *                   type: boolean
      *       401:
-     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/er-arbeidssoker', async (req, res) => {
         const token = getTokenFromCookie(req);

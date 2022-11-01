@@ -37,7 +37,7 @@ function meldekortRoutes(tokenDings: Auth, meldekortUrl: string = config.MELDEKO
      *       200:
      *         description: Vellykket forespørsel.
      *       401:
-     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/meldekort', meldekortCall(`${meldekortUrl}/meldekort`));
     /**
@@ -49,7 +49,7 @@ function meldekortRoutes(tokenDings: Auth, meldekortUrl: string = config.MELDEKO
      *       200:
      *         description: Vellykket forespørsel.
      *       401:
-     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/meldekort/status', meldekortCall(`${meldekortUrl}/meldekortstatus`));
 

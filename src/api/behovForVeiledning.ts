@@ -20,9 +20,9 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
      *       204:
      *          description: Fant ingen svar for bruker
      *       401:
-     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *         $ref: '#/components/schemas/Unauthorized'
      *       500:
-     *         description: Noe gikk galt
+     *         $ref: '#/components/schemas/Error'
      *   post:
      *     description: Lagrer brukers svar på behov for veiledning
      *     parameters:
@@ -40,7 +40,7 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
      *       400:
      *         description: Forespørsel mangler i request body
      *       401:
-     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *         $ref: '#/components/schemas/Unauthorized'
      *       500:
      *          description: Noe gikk galt
      * components:

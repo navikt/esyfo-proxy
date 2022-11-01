@@ -15,9 +15,9 @@ function veilarbregistrering(
      *     description:
      *     responses:
      *       200:
-     *         description: Vellykket forespørsel.
+     *         $ref: '#/components/schemas/Ok'
      *       401:
-     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/startregistrering', proxy(`${veilarbregistreringUrl}/veilarbregistrering/api/startregistrering`));
     /**
@@ -27,9 +27,9 @@ function veilarbregistrering(
      *     description:
      *     responses:
      *       200:
-     *         description: Vellykket forespørsel.
+     *         $ref: '#/components/schemas/Ok'
      *       401:
-     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/registrering', proxy(`${veilarbregistreringUrl}/veilarbregistrering/api/registrering`));
     /**
@@ -39,9 +39,9 @@ function veilarbregistrering(
      *     description:
      *     responses:
      *       200:
-     *         description: Vellykket forespørsel.
+     *         $ref: '#/components/schemas/Ok'
      *       401:
-     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get(
         '/standard-innsats',
@@ -61,9 +61,9 @@ function veilarbregistrering(
      *     description:
      *     responses:
      *       200:
-     *         description: Vellykket forespørsel.
+     *         $ref: '#/components/schemas/Ok'
      *       401:
-     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get(
         '/arbeidssoker/perioder',
@@ -83,16 +83,16 @@ function veilarbregistrering(
      *     description:
      *     responses:
      *       200:
-     *         description: Vellykket forespørsel.
+     *         $ref: '#/components/schemas/Ok'
      *       401:
-     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *         $ref: '#/components/schemas/Unauthorized'
      *   get:
      *     description:
      *     responses:
      *       200:
-     *         description: Vellykket forespørsel.
+     *         $ref: '#/components/schemas/Ok'
      *       401:
-     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/gjelderfra', proxy(`${veilarbregistreringUrl}/veilarbregistrering/api/registrering/gjelderfra`));
     router.post('/gjelderfra', proxy(`${veilarbregistreringUrl}/veilarbregistrering/api/registrering/gjelderfra`));

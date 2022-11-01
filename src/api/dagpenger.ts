@@ -38,9 +38,9 @@ function dagpengerRoutes(tokenDings: Auth, dagpengerInnsynUrl = config.DAGPENGER
      *     description:
      *     responses:
      *       200:
-     *         description: Vellykket forespørsel.
+     *         $ref: '#/components/schemas/Ok'
      *       401:
-     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/dagpenger/soknad', dagpengerCall(SOKNAD_URL));
     /**
@@ -50,9 +50,9 @@ function dagpengerRoutes(tokenDings: Auth, dagpengerInnsynUrl = config.DAGPENGER
      *     description:
      *     responses:
      *       200:
-     *         description: Vellykket forespørsel.
+     *         $ref: '#/components/schemas/Ok'
      *       401:
-     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/dagpenger/vedtak', dagpengerCall(VEDTAK_URL));
     /**
@@ -62,9 +62,9 @@ function dagpengerRoutes(tokenDings: Auth, dagpengerInnsynUrl = config.DAGPENGER
      *     description:
      *     responses:
      *       200:
-     *         description: Vellykket forespørsel.
+     *         $ref: '#/components/schemas/Ok'
      *       401:
-     *         description: Uautentisert forespørsel. Må være autentisert med selvbetjening-cookie.
+     *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/dagpenger/paabegynte', dagpengerCall(PABEGYNTE_SOKNADER_URL));
 
