@@ -16,6 +16,7 @@ function ptoProxy(ptoProxyUrl = config.PTO_PROXY_URL) {
      *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/oppfolging', proxy(`${ptoProxyUrl}/veilarboppfolging/api/oppfolging`));
+
     /**
      * @openapi
      * /underoppfolging:
@@ -28,6 +29,7 @@ function ptoProxy(ptoProxyUrl = config.PTO_PROXY_URL) {
      *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/underoppfolging', proxy(`${ptoProxyUrl}/veilarboppfolging/api/niva3/underoppfolging`));
+
     /**
      * @openapi
      * /dialog/antallUleste:
@@ -40,6 +42,7 @@ function ptoProxy(ptoProxyUrl = config.PTO_PROXY_URL) {
      *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/dialog/antallUleste', proxy(`${ptoProxyUrl}/veilarbdialog/api/dialog/antallUleste`));
+
     /**
      * @openapi
      * /dialog:
@@ -52,6 +55,7 @@ function ptoProxy(ptoProxyUrl = config.PTO_PROXY_URL) {
      *         $ref: '#/components/schemas/Unauthorized'
      */
     router.post('/dialog', proxy(`${ptoProxyUrl}/veilarbdialog/api/dialog`));
+
     /**
      * @openapi
      * /vedtakinfo/besvarelse:
@@ -63,7 +67,9 @@ function ptoProxy(ptoProxyUrl = config.PTO_PROXY_URL) {
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
+
     router.get('/vedtakinfo/besvarelse', proxy(`${ptoProxyUrl}/veilarbvedtakinfo/api/behovsvurdering/besvarelse`));
+
     /**
      * @openapi
      * /vedtakinfo/motestotte:

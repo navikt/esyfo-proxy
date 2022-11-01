@@ -12,26 +12,34 @@ function veilarbregistrering(
      * @openapi
      * /startregistrering:
      *   get:
-     *     description:
+     *     description: Henter oppfølgingsinformasjon om arbeidssøker.
      *     responses:
      *       200:
-     *         $ref: '#/components/schemas/Ok'
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/StartRegistreringStatusDto'
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/startregistrering', proxy(`${veilarbregistreringUrl}/veilarbregistrering/api/startregistrering`));
+
     /**
      * @openapi
      * /registrering:
      *   get:
-     *     description:
+     *     description: Henter siste registrering av bruker.
      *     responses:
      *       200:
-     *         $ref: '#/components/schemas/Ok'
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/brukerregistreringwrapper'
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/registrering', proxy(`${veilarbregistreringUrl}/veilarbregistrering/api/registrering`));
+
     /**
      * @openapi
      * /standard-innsats:
@@ -39,7 +47,10 @@ function veilarbregistrering(
      *     description:
      *     responses:
      *       200:
-     *         $ref: '#/components/schemas/Ok'
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: boolean
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
@@ -47,6 +58,7 @@ function veilarbregistrering(
         '/standard-innsats',
         proxy(`${veilarbregistreringUrl}/veilarbregistrering/api/profilering/standard-innsats`)
     );
+
     /**
      * @openapi
      * /arbeidssoker/perioder:
@@ -58,10 +70,19 @@ function veilarbregistrering(
      *         format: date
      *         type: string
      *         description: Dato YYYY-MM-DD
-     *     description:
+     *       - in: query
+     *         name: tilOgMed
+     *         required: false
+     *         format: date
+     *         type: string
+     *         description: Dato YYYY-MM-DD
+     *     description: Henter alle perioder hvor bruker er registrert som arbeidssøker.
      *     responses:
      *       200:
-     *         $ref: '#/components/schemas/Ok'
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/ArbeidssokerperioderDto'
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
@@ -69,6 +90,7 @@ function veilarbregistrering(
         '/arbeidssoker/perioder',
         proxy(`${veilarbregistreringGcpUrl}/veilarbregistrering/api/arbeidssoker/perioder`, { overrideMethod: 'POST' })
     );
+
     /**
      * @openapi
      * /gjelderfra:
@@ -94,6 +116,7 @@ function veilarbregistrering(
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
+    // TODO: Disse er fjernet fra veilarbregistrering
     router.get('/gjelderfra', proxy(`${veilarbregistreringUrl}/veilarbregistrering/api/registrering/gjelderfra`));
     router.post('/gjelderfra', proxy(`${veilarbregistreringUrl}/veilarbregistrering/api/registrering/gjelderfra`));
 

@@ -123,6 +123,97 @@ const options = {
                             format: 'int32',
                         },
                     },
+                    BrukerRegistrering: {
+                        type: 'object',
+                        properties: {
+                            id: {
+                                type: 'integer',
+                                format: 'int64',
+                            },
+                            manueltRegistrertAv: {
+                                $ref: '#/components/schemas/Veileder',
+                            },
+                        },
+                    },
+                },
+                BrukerRegistreringWrapper: {
+                    type: 'object',
+                    properties: {
+                        registrering: {
+                            $ref: '#/components/schemas/BrukerRegistrering',
+                        },
+                        type: {
+                            type: 'string',
+                            enum: ['ORDINAER', 'SYKMELDT'],
+                        },
+                    },
+                },
+                StartRegistreringStatusDto: {
+                    type: 'object',
+                    properties: {
+                        maksDato: {
+                            type: 'string',
+                        },
+                        underOppfolging: {
+                            type: 'boolean',
+                        },
+                        erSykmeldtMedArbeidsgiver: {
+                            type: 'boolean',
+                        },
+                        jobbetSeksAvTolvSisteManeder: {
+                            type: 'boolean',
+                        },
+                        registreringType: {
+                            type: 'string',
+                            enum: [
+                                'REAKTIVERING',
+                                'ALLEREDE_REGISTRERT',
+                                'SYKMELDT_REGISTRERING',
+                                'ORDINAER_REGISTRERING',
+                            ],
+                        },
+                        harIgangsattRegistreringSomKanGjenopptas: {
+                            type: 'boolean',
+                        },
+                        formidlingsgruppe: {
+                            type: 'string',
+                        },
+                        servicegruppe: {
+                            type: 'string',
+                        },
+                        rettighetsgruppe: {
+                            type: 'string',
+                        },
+                        geografiskTilknytning: {
+                            type: 'string',
+                        },
+                        alder: {
+                            type: 'integer',
+                            format: 'int32',
+                        },
+                    },
+                },
+                ArbeidssokerperiodeDto: {
+                    type: 'object',
+                    properties: {
+                        fraOgMedDato: {
+                            type: 'string',
+                        },
+                        tilOgMedDato: {
+                            type: 'string',
+                        },
+                    },
+                },
+                ArbeidssokerperioderDto: {
+                    type: 'object',
+                    properties: {
+                        arbeidssokerperioder: {
+                            type: 'array',
+                            items: {
+                                $ref: '#/components/schemas/ArbeidssokerperiodeDto',
+                            },
+                        },
+                    },
                 },
             },
         },
