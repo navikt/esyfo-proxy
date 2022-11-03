@@ -1,10 +1,19 @@
 import { Request, Router } from 'express';
-import { initialize, isEnabled } from 'unleash-client';
+import { Context, initialize, isEnabled, Strategy } from 'unleash-client';
 import config from '../config';
+
+class ByEnvironmentStrategy extends Strategy {
+    isEnabled(parameters: { [key: string]: string }, context: Context): boolean {
+        const environmentList: string[] = parameters['miljø']?.split(',') || [];
+        return environmentList.includes(context.environment!);
+    }
+}
 
 initialize({
     appName: 'aia-backend',
     url: config.UNLEASH_API_URL,
+    environment: config.UNLEASH_ENVIRONMENT,
+    strategies: [new ByEnvironmentStrategy('byEnvironment')],
 });
 
 function ensureArray(features?: string | Array<string>) {

@@ -46,6 +46,8 @@ spec:
       value: http://veilarbregistrering
     - name: UNLEASH_API_URL
       value: https://unleash.nais.io/api/
+    - name: UNLEASH_ENVIRONMENT
+      value: dev
     - name: DAGPENGER_INNSYN_URL
       value: http://dp-innsyn.teamdagpenger.svc.cluster.local
   resources:
