@@ -50,8 +50,8 @@ jobs:
                   tags: |
                       ${{ env.IMAGE_BASE }}:latest
                       ${{ needs.set-vars.outputs.image }}
-                  cache-from: type=registry,ref=${{ env.IMAGE_BASE }}:latest
-                  cache-to: type=inline
+                  cache-from: type=gha
+                  cache-to: type=gha,mode=max
 
     deploy-dev:
         if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/dev')
