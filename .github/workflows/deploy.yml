@@ -15,7 +15,7 @@ jobs:
         runs-on: ubuntu-latest
         outputs:
             tag: ${{ steps.tag.outputs.tag }}
-            image: ${{ steps.image.outputs.image }}
+            image: ${{ env.IMAGE_BASE }}:${{ steps.tag.outputs.tag }}
         steps:
             - name: Checkout
               uses: actions/checkout@v3
@@ -23,10 +23,6 @@ jobs:
             - name: Lag tag for image
               id: tag
               run: echo "tag=$(git log -1 --pretty='%ad_%h' --date=format:'%Y%m%d%H%M%S')" >> ${GITHUB_OUTPUT}
-
-            - name: Lag full docker image referanse
-              id: image
-              run: echo "image=${{ env.IMAGE_BASE }}:$tag" >> ${GITHUB_OUTPUT}
 
     test-build-and-push:
         name: Test, build and push
