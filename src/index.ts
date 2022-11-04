@@ -36,6 +36,11 @@ app.use(
         logger,
         customSuccessMessage: customRequestLogMessage,
         customErrorMessage: customRequestLogMessage,
+        customAttributeKeys: {
+            req: 'http.request',
+            res: 'http.response',
+            responseTime: 'event.duration',
+        },
     })
 );
 app.use(helmet());
