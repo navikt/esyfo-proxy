@@ -17,6 +17,9 @@ jobs:
             tag: ${{ steps.tag.outputs.tag }}
             image: ${{ steps.image.outputs.image }}
         steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
             - name: Lag tag for image
               id: tag
               run: echo "tag=$(git log -1 --pretty='%ad_%h' --date=format:'%Y%m%d%H%M%S')" >> ${GITHUB_OUTPUT}
@@ -105,4 +108,3 @@ jobs:
                   tag_name: release/prod@${{ needs.set-vars.outputs.tag }}
                   release_name: Release ${{ needs.set-vars.outputs.tag }} to prod
                   prerelease: false
-
