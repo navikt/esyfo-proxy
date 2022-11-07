@@ -38,7 +38,7 @@ app.use(
         customSuccessMessage: customRequestLogMessage,
         customErrorMessage: customRequestLogMessage,
         customProps: (req) => ({
-            x_callId: req.headers['NAV_Call_Id'],
+            x_callId: req.headers['NAV-Call-Id'],
             x_consumerId: req.headers[Config.CONSUMER_ID_HEADER_NAME],
         }),
     })
