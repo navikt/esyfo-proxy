@@ -37,27 +37,10 @@ app.use(
         logger,
         customSuccessMessage: customRequestLogMessage,
         customErrorMessage: customRequestLogMessage,
-        customAttributeKeys: {
-            req: 'http.request',
-            res: 'http.response',
-            responseTime: 'event.duration',
-        },
-        serializers: {
-            'http.response': (object) => {
-                const { statusCode, ...response } = object;
-                return {
-                    ...response,
-                    status_code: statusCode,
-                };
-            },
-            'http.request': (object) => {
-                return {
-                    ...object,
-                    x_callId: object.headers['NAV_Call_Id'],
-                    x_consumerId: object.headers[Config.CONSUMER_ID_HEADER_NAME],
-                };
-            },
-        },
+        customProps: (req) => ({
+            x_callId: req.headers['NAV_Call_Id'],
+            x_consumerId: req.headers[Config.CONSUMER_ID_HEADER_NAME],
+        }),
     })
 );
 app.use(helmet());
