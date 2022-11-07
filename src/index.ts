@@ -41,6 +41,22 @@ app.use(
             res: 'http.response',
             responseTime: 'event.duration',
         },
+        serializers: {
+            'http.response': (object) => {
+                const { statusCode, ...response } = object;
+                return {
+                    ...response,
+                    status_code: statusCode,
+                };
+            },
+            'http.request': (object) => {
+                return {
+                    ...object,
+                    x_callId: object.headers['Nav_Call_Id'],
+                    x_consumerId: object.headers['Nav-Consumer-Id'],
+                };
+            },
+        },
     })
 );
 app.use(helmet());
