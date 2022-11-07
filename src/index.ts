@@ -20,6 +20,7 @@ import bodyParser from 'body-parser';
 import logger, { customRequestLogMessage } from './logger';
 import config from './config';
 import createDependencies from './deps';
+import Config from './config';
 
 const PORT = 3000;
 const app = express();
@@ -52,8 +53,8 @@ app.use(
             'http.request': (object) => {
                 return {
                     ...object,
-                    x_callId: object.headers['Nav_Call_Id'],
-                    x_consumerId: object.headers['Nav-Consumer-Id'],
+                    x_callId: object.headers['NAV_Call_Id'],
+                    x_consumerId: object.headers[Config.CONSUMER_ID_HEADER_NAME],
                 };
             },
         },
