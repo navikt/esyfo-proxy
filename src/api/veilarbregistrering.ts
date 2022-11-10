@@ -22,7 +22,7 @@ function veilarbregistrering(
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
-    router.get('/startregistrering', proxy(`${veilarbregistreringUrl}/veilarbregistrering/api/startregistrering`));
+    router.get('/startregistrering', proxy(`${veilarbregistreringGcpUrl}/veilarbregistrering/api/startregistrering`));
 
     /**
      * @openapi
