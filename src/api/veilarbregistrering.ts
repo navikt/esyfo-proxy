@@ -107,7 +107,10 @@ function veilarbregistrering(
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
-    router.get('/meldeplikt/siste', proxy(`${veilarbregistreringGcpUrl}/veilarbregistrering/api/meldekort/siste`));
+    router.get(
+        '/meldeplikt/siste',
+        proxy(`${veilarbregistreringGcpUrl}/veilarbregistrering/api/arbeidssoker/meldekort/siste`)
+    );
     /**
      * @openapi
      * /meldeplikt:
@@ -122,7 +125,7 @@ function veilarbregistrering(
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
-    router.get('/meldeplikt', proxy(`${veilarbregistreringGcpUrl}/veilarbregistrering/api/meldekort`));
+    router.get('/meldeplikt', proxy(`${veilarbregistreringGcpUrl}/veilarbregistrering/api/arbeidssoker/meldekort`));
     return router;
 }
 
