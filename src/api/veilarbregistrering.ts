@@ -102,6 +102,8 @@ function veilarbregistrering(
      *           application/json:
      *             schema:
      *               $ref: '#/components/schemas/MeldekortDto'
+     *       204:
+     *         description: Ingen meldekort funnet.
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
