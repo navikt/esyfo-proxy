@@ -91,35 +91,6 @@ function veilarbregistrering(
         proxy(`${veilarbregistreringGcpUrl}/veilarbregistrering/api/arbeidssoker/perioder`, { overrideMethod: 'POST' })
     );
 
-    /**
-     * @openapi
-     * /gjelderfra:
-     *   post:
-     *     parameters:
-     *       - in: body
-     *         name: dato
-     *         required: true
-     *         format: date
-     *         type: string
-     *         description: Dato YYYY-MM-DD
-     *     description:
-     *     responses:
-     *       200:
-     *         $ref: '#/components/schemas/Ok'
-     *       401:
-     *         $ref: '#/components/schemas/Unauthorized'
-     *   get:
-     *     description:
-     *     responses:
-     *       200:
-     *         $ref: '#/components/schemas/Ok'
-     *       401:
-     *         $ref: '#/components/schemas/Unauthorized'
-     */
-    // TODO: Disse er fjernet fra veilarbregistrering
-    router.get('/gjelderfra', proxy(`${veilarbregistreringUrl}/veilarbregistrering/api/registrering/gjelderfra`));
-    router.post('/gjelderfra', proxy(`${veilarbregistreringUrl}/veilarbregistrering/api/registrering/gjelderfra`));
-
     return router;
 }
 
