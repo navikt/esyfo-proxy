@@ -125,14 +125,9 @@ const options = {
                     },
                 },
                 MeldekortDtoListe: {
-                    type: 'object',
-                    properties: {
-                        meldekort: {
-                            type: 'array',
-                            items: {
-                                $ref: '#/components/schemas/MeldekortDto',
-                            },
-                        },
+                    type: 'array',
+                    items: {
+                        $ref: '#/components/schemas/MeldekortDto',
                     },
                 },
                 Fravaer: {

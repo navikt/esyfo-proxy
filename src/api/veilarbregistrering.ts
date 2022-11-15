@@ -93,22 +93,22 @@ function veilarbregistrering(
 
     /**
      * @openapi
-     * /meldekort/siste:
+     * /meldeplikt/siste:
      *   get:
      *     description: Henter siste meldekort for bruker.
      *     responses:
      *       200:
      *         content:
-     *         application/json:
+     *           application/json:
      *             schema:
      *               $ref: '#/components/schemas/MeldekortDto'
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
-    router.get('/meldekort/siste', proxy(`${veilarbregistreringGcpUrl}/veilarbregistrering/api/meldekort/siste`));
+    router.get('/meldeplikt/siste', proxy(`${veilarbregistreringGcpUrl}/veilarbregistrering/api/meldekort/siste`));
     /**
      * @openapi
-     * /meldekort:
+     * /meldeplikt:
      *   get:
      *     description: Henter meldekortliste for bruker.
      *     responses:
@@ -120,7 +120,7 @@ function veilarbregistrering(
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
-    router.get('/meldekort', proxy(`${veilarbregistreringGcpUrl}/veilarbregistrering/api/meldekort`));
+    router.get('/meldeplikt', proxy(`${veilarbregistreringGcpUrl}/veilarbregistrering/api/meldekort`));
     return router;
 }
 
