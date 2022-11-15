@@ -90,6 +90,46 @@ const options = {
                         korrigerbart: { type: 'boolean' },
                     },
                 },
+                MeldekortDto: {
+                    type: 'object',
+                    properties: {
+                        erArbeidssokerNestePeriode: {
+                            type: 'boolean',
+                        },
+                        periodeFra: {
+                            type: 'string',
+                            format: 'date',
+                        },
+                        periodeTil: {
+                            type: 'string',
+                            format: 'date',
+                        },
+                        meldekorttype: {
+                            type: 'string',
+                            enum: [
+                                'ORDINAER',
+                                'ERSTATNING',
+                                'RETUR',
+                                'ELEKTRONISK',
+                                'AAP',
+                                'ORDINAER_MANUELL',
+                                'MASKINELT_OPPDATERT',
+                                'MANUELL_ARENA',
+                                'KORRIGERT_ELEKTRONISK',
+                            ],
+                        },
+                        eventOpprettet: {
+                            type: 'string',
+                            format: 'date-time',
+                        },
+                    },
+                },
+                MeldekortDtoListe: {
+                    type: 'array',
+                    items: {
+                        $ref: '#/components/schemas/MeldekortDto',
+                    },
+                },
                 Fravaer: {
                     required: ['fraDato', 'tilDato', 'type'],
                     type: 'object',

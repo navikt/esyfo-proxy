@@ -100,10 +100,32 @@ function veilarbregistrering(
      *       200:
      *         content:
      *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/MeldekortDto'
+     *       204:
+     *         description: Ingen meldekort funnet.
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
-    router.get('/meldeplikt/siste', proxy(`${veilarbregistreringGcpUrl}/veilarbregistrering/api/meldekort/siste`));
+    router.get(
+        '/meldeplikt/siste',
+        proxy(`${veilarbregistreringGcpUrl}/veilarbregistrering/api/arbeidssoker/meldekort/siste`)
+    );
+    /**
+     * @openapi
+     * /meldeplikt:
+     *   get:
+     *     description: Henter meldekortliste for bruker.
+     *     responses:
+     *       200:
+     *         content:
+     *          application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/MeldekortDtoListe'
+     *       401:
+     *         $ref: '#/components/schemas/Unauthorized'
+     */
+    router.get('/meldeplikt', proxy(`${veilarbregistreringGcpUrl}/veilarbregistrering/api/arbeidssoker/meldekort`));
     return router;
 }
 
