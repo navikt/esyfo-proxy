@@ -91,6 +91,19 @@ function veilarbregistrering(
         proxy(`${veilarbregistreringGcpUrl}/veilarbregistrering/api/arbeidssoker/perioder`, { overrideMethod: 'POST' })
     );
 
+    /**
+     * @openapi
+     * /meldeplikt/siste:
+     *   get:
+     *     description: Henter siste meldekort for bruker.
+     *     responses:
+     *       200:
+     *         content:
+     *           application/json:
+     *       401:
+     *         $ref: '#/components/schemas/Unauthorized'
+     */
+    router.get('/meldeplikt/siste', proxy(`${veilarbregistreringGcpUrl}/veilarbregistrering/api/meldekort/siste`));
     return router;
 }
 
