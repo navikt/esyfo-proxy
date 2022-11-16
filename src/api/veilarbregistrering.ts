@@ -34,7 +34,7 @@ function veilarbregistrering(
      *         content:
      *           application/json:
      *             schema:
-     *               $ref: '#/components/schemas/brukerregistreringwrapper'
+     *               $ref: '#/components/schemas/BrukerRegistreringWrapper'
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
