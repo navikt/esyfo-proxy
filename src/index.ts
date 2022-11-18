@@ -16,6 +16,7 @@ import behovForVeiledningApi from './api/behovForVeiledning';
 import arbeidssokerApi from './api/arbeidssoker';
 import veilarbregistreringApi from './api/veilarbregistrering';
 import swaggerDocs from './api/swagger';
+import dagpengerStatusApi from './api/data/dagpengerStatus';
 import bodyParser from 'body-parser';
 import logger, { customRequestLogMessage } from './logger';
 import config from './config';
@@ -61,6 +62,7 @@ async function setUpRoutes() {
     router.use(meldekortApi(await tokenDings));
     router.use(profilApi(profilRepository));
     router.use(behovForVeiledningApi(behovRepository));
+    router.use(dagpengerStatusApi(await tokenDings));
     app.use(config.BASE_PATH || '', router);
 }
 
