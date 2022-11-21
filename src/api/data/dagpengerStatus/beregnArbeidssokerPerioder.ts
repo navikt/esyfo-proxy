@@ -1,4 +1,5 @@
 import ukerFraDato from '@alheimsins/uker-fra-dato';
+import { BeregnedePerioder } from './typer';
 
 function dagerFraDato(from: Date, to?: Date): number {
     const todate = to || new Date();
@@ -12,14 +13,6 @@ function dagerFraDato(from: Date, to?: Date): number {
 export interface Periode {
     fraOgMed: string;
     tilOgMed?: string;
-}
-
-export interface BeregnedePerioder {
-    harAktivArbeidssokerperiode: 'INGEN_DATA' | 'N/A' | 'Ja' | 'Nei';
-    aktivPeriodeStart: 'INGEN_DATA' | 'N/A' | string | 'Ingen aktive perioder';
-    antallDagerSidenSisteArbeidssokerperiode: number | 'Ikke avsluttet' | 'INGEN_DATA' | 'N/A';
-    antallUkerSidenSisteArbeidssokerperiode: number | 'Ikke avsluttet' | 'INGEN_DATA' | 'N/A';
-    antallUkerMellomSisteArbeidssokerperioder: number | 'INGEN_DATA' | 'N/A' | 'Første periode';
 }
 
 interface Props {

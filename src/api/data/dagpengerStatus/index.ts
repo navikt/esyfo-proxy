@@ -1,11 +1,11 @@
 import { Request, Router } from 'express';
-import config from '../../config';
+import config from '../../../config';
 import axios from 'axios';
-import { hentArbeidssokerPerioder } from '../arbeidssoker';
-import { Auth, getTokenFromCookie } from '../../auth/tokenDings';
+import { hentArbeidssokerPerioder } from '../../arbeidssoker';
+import { Auth, getTokenFromCookie } from '../../../auth/tokenDings';
 import beregnDagpengeStatus from './beregnDagpengeStatus';
 import beregnArbeidssokerperioder from './beregnArbeidssokerPerioder';
-import logger from '../../logger';
+import logger from '../../../logger';
 
 function dagpengerStatus(
     tokenDings: Auth,
