@@ -1,7 +1,7 @@
 import ukerFraDato from '@alheimsins/uker-fra-dato';
 import { BeregnedePerioder } from './typer';
 
-function dagerFraDato(from: Date, to?: Date): number {
+export function dagerFraDato(from: Date, to?: Date): number {
     const todate = to || new Date();
     const start = new Date(from.toISOString().substr(0, 10));
     const end = new Date(todate.toISOString().substr(0, 10));
@@ -25,15 +25,15 @@ function sorterArbeidssokerperioderSisteForst(a: Periode, b: Periode) {
 
 function harAktivArbeidssokerperiode(perioder: Periode[]) {
     const sistePeriode = perioder[0];
-    return sistePeriode.tilOgMed === null;
+    return sistePeriode.tilOgMed === null || sistePeriode.tilOgMed === undefined;
 }
 
-function beregnAntallDagerSidenSisteArbeidssokerperiode(dato: string) {
-    return dagerFraDato(new Date(dato));
+function beregnAntallDagerSidenSisteArbeidssokerperiode(dato: string | null) {
+    return dagerFraDato(dato ? new Date(dato) : new Date());
 }
 
-function beregnAntallUkerSidenSisteArbeidssokerperiode(dato: string) {
-    return ukerFraDato(new Date(dato));
+function beregnAntallUkerSidenSisteArbeidssokerperiode(dato: string | null) {
+    return ukerFraDato(dato ? new Date(dato) : new Date());
 }
 
 function beregnAntallUkerMellomSisteArbeidssokerperioder(perioder: Periode[]) {
@@ -68,7 +68,7 @@ function beregnArbeidssokerperioder(props: Props | null | undefined): BeregnedeP
     arbeidssokerperioder.sort(sorterArbeidssokerperioderSisteForst);
 
     const aktivArbeidssokerperiode = harAktivArbeidssokerperiode(arbeidssokerperioder);
-    const sluttDatoSistePeriode = arbeidssokerperioder[0].tilOgMed ?? '';
+    const sluttDatoSistePeriode = arbeidssokerperioder[0].tilOgMed ?? null;
     const harMerEnnEnPeriode = arbeidssokerperioder.length > 1;
 
     return {
