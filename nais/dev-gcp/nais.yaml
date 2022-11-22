@@ -15,7 +15,8 @@ spec:
     path: /aia-backend/internal/isReady
     initialDelay: 10
   prometheus:
-    enabled: false
+    enabled: true
+    path: /aia-backend/internal/prometheus
   replicas:
     min: 1
     max: 1
