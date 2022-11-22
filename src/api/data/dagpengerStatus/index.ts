@@ -14,10 +14,14 @@ function dagpengerStatus(
     veilarbregistreringGcpUrl = config.VEILARBREGISTRERING_GCP_URL
 ) {
     const router = Router();
+    const DP_INNSYN_CLIENT_ID = `${config.NAIS_CLUSTER_NAME}:teamdagpenger:dp-innsyn`;
 
     router.get('/dagpenger-status', async (req, res) => {
         const token = getTokenFromCookie(req);
-        const DP_INNSYN_CLIENT_ID = `${config.NAIS_CLUSTER_NAME}:teamdagpenger:dp-innsyn`;
+
+        if (!token) {
+            return res.status(401).end();
+        }
 
         const getTokenXHeaders = async (req: Request) => {
             const idPortenToken = getTokenFromCookie(req);
@@ -67,10 +71,10 @@ function dagpengerStatus(
                 arbeidssokerperioder,
             });
 
-            res.status(200).send({ dagpengerStatus });
+            return res.status(200).send({ dagpengerStatus });
         } catch (err) {
             logger.error(err);
-            res.status(500).end();
+            return res.status(500).end();
         }
     });
 
