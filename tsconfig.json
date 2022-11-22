@@ -21,9 +21,7 @@
         "strict": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
-        "noFallthroughCasesInSwitch": true,
-        "resolveJsonModule": true,
-        "esModuleInterop": true
+        "noFallthroughCasesInSwitch": true
     },
     "exclude": ["node_modules", "src/test/**/*", "src/**/*.test.*", "build"],
     "include": ["src", "types"]
