@@ -6,6 +6,7 @@ import { Auth, getTokenFromCookie } from '../../../auth/tokenDings';
 import beregnDagpengeStatus from './beregnDagpengeStatus';
 import beregnArbeidssokerperioder from './beregnArbeidssokerPerioder';
 import logger from '../../../logger';
+import beregnAntallDagerSidenDagpengerStanset from './beregnAntallDagerSidenDagpengerStanset';
 
 function dagpengerStatus(
     tokenDings: Auth,
@@ -74,7 +75,13 @@ function dagpengerStatus(
                 arbeidssokerperioder,
             });
 
-            return res.status(200).send({ dagpengerStatus });
+            const antallDagerSidenDagpengerStanset =
+                beregnAntallDagerSidenDagpengerStanset(dagpengerStatus, dagpengeVedtak) || 'N/A';
+
+            return res.status(200).send({
+                dagpengerStatus,
+                antallDagerSidenDagpengerStanset,
+            });
         } catch (err) {
             logger.error(`Feil med /dagpenger-status kall: ${err}`);
             return res.status(500).end();
