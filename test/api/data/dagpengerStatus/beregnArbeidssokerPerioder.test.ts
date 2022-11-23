@@ -38,7 +38,7 @@ describe('tester funksjonen beregnArbeidssokerperioder', () => {
         const data = {
             arbeidssokerperioder: [
                 {
-                    fraOgMed: '2020-01-01',
+                    fraOgMedDato: '2020-01-01',
                 },
             ],
         };
@@ -48,11 +48,11 @@ describe('tester funksjonen beregnArbeidssokerperioder', () => {
         expect(verdi.harAktivArbeidssokerperiode).toEqual(forventetVerdi);
     });
 
-    test('Vi får aktivPeriodeStart lik fraOgMed perioden ikke er avsluttet', () => {
+    test('Vi får aktivPeriodeStart lik fraOgMedDato perioden ikke er avsluttet', () => {
         const data = {
             arbeidssokerperioder: [
                 {
-                    fraOgMed: '2020-01-01',
+                    fraOgMedDato: '2020-01-01',
                 },
             ],
         };
@@ -66,8 +66,8 @@ describe('tester funksjonen beregnArbeidssokerperioder', () => {
         const data = {
             arbeidssokerperioder: [
                 {
-                    fraOgMed: '2020-01-01',
-                    tilOgMed: '2020-05-05',
+                    fraOgMedDato: '2020-01-01',
+                    tilOgMedDato: '2020-05-05',
                 },
             ],
         };
@@ -81,8 +81,8 @@ describe('tester funksjonen beregnArbeidssokerperioder', () => {
         const data = {
             arbeidssokerperioder: [
                 {
-                    fraOgMed: '2020-01-01',
-                    tilOgMed: '2020-02-01',
+                    fraOgMedDato: '2020-01-01',
+                    tilOgMedDato: '2020-02-01',
                 },
             ],
         };
@@ -96,11 +96,11 @@ describe('tester funksjonen beregnArbeidssokerperioder', () => {
         const data = {
             arbeidssokerperioder: [
                 {
-                    fraOgMed: '2020-01-01',
-                    tilOgMed: '2020-02-01',
+                    fraOgMedDato: '2020-01-01',
+                    tilOgMedDato: '2020-02-01',
                 },
                 {
-                    fraOgMed: '2021-01-01',
+                    fraOgMedDato: '2021-01-01',
                 },
             ],
         };
@@ -114,12 +114,12 @@ describe('tester funksjonen beregnArbeidssokerperioder', () => {
         const data = {
             arbeidssokerperioder: [
                 {
-                    fraOgMed: '2020-01-01',
-                    tilOgMed: '2020-02-01',
+                    fraOgMedDato: '2020-01-01',
+                    tilOgMedDato: '2020-02-01',
                 },
                 {
-                    fraOgMed: '2020-02-01',
-                    tilOgMed: '2020-03-01',
+                    fraOgMedDato: '2020-02-01',
+                    tilOgMedDato: '2020-03-01',
                 },
             ],
         };
@@ -133,11 +133,11 @@ describe('tester funksjonen beregnArbeidssokerperioder', () => {
         const data = {
             arbeidssokerperioder: [
                 {
-                    fraOgMed: '2020-01-01',
-                    tilOgMed: '2020-02-01',
+                    fraOgMedDato: '2020-01-01',
+                    tilOgMedDato: '2020-02-01',
                 },
                 {
-                    fraOgMed: '2021-01-01',
+                    fraOgMedDato: '2021-01-01',
                 },
             ],
         };
@@ -152,12 +152,12 @@ describe('tester funksjonen beregnArbeidssokerperioder', () => {
         const data = {
             arbeidssokerperioder: [
                 {
-                    fraOgMed: '2020-01-01',
-                    tilOgMed: '2020-02-01',
+                    fraOgMedDato: '2020-01-01',
+                    tilOgMedDato: '2020-02-01',
                 },
             ],
         };
-        const forventetVerdi = dagerFraDato(new Date(data.arbeidssokerperioder[0].tilOgMed));
+        const forventetVerdi = dagerFraDato(new Date(data.arbeidssokerperioder[0].tilOgMedDato));
         const verdi = beregnArbeidssokerperioder(data);
 
         expect(verdi.antallDagerSidenSisteArbeidssokerperiode).toEqual(forventetVerdi);
@@ -167,8 +167,8 @@ describe('tester funksjonen beregnArbeidssokerperioder', () => {
         const data = {
             arbeidssokerperioder: [
                 {
-                    fraOgMed: '2020-01-01',
-                    tilOgMed: '2020-02-01',
+                    fraOgMedDato: '2020-01-01',
+                    tilOgMedDato: '2020-02-01',
                 },
             ],
         };
@@ -182,11 +182,11 @@ describe('tester funksjonen beregnArbeidssokerperioder', () => {
         const data = {
             arbeidssokerperioder: [
                 {
-                    fraOgMed: '2020-01-01',
-                    tilOgMed: '2020-02-01',
+                    fraOgMedDato: '2020-01-01',
+                    tilOgMedDato: '2020-02-01',
                 },
                 {
-                    fraOgMed: '2020-03-01',
+                    fraOgMedDato: '2020-03-01',
                 },
             ],
         };

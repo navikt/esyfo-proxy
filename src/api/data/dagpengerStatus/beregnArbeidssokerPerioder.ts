@@ -11,8 +11,8 @@ export function dagerFraDato(from: Date, to?: Date): number {
 }
 
 export interface Periode {
-    fraOgMed: string;
-    tilOgMed?: string;
+    fraOgMedDato: string;
+    tilOgMedDato?: string | null;
 }
 
 interface Props {
@@ -20,12 +20,12 @@ interface Props {
 }
 
 function sorterArbeidssokerperioderSisteForst(a: Periode, b: Periode) {
-    return new Date(b.fraOgMed).getTime() - new Date(a.fraOgMed).getTime();
+    return new Date(b.fraOgMedDato).getTime() - new Date(a.fraOgMedDato).getTime();
 }
 
 function harAktivArbeidssokerperiode(perioder: Periode[]) {
     const sistePeriode = perioder[0];
-    return sistePeriode.tilOgMed === null || sistePeriode.tilOgMed === undefined;
+    return sistePeriode.tilOgMedDato === null || sistePeriode.tilOgMedDato === undefined;
 }
 
 function beregnAntallDagerSidenSisteArbeidssokerperiode(dato: string | null) {
@@ -39,7 +39,7 @@ function beregnAntallUkerSidenSisteArbeidssokerperiode(dato: string | null) {
 function beregnAntallUkerMellomSisteArbeidssokerperioder(perioder: Periode[]) {
     const sistePeriode = perioder[0];
     const nestSistePeriode = perioder[1];
-    return ukerFraDato(new Date(nestSistePeriode?.tilOgMed || '2020-01-01'), new Date(sistePeriode.fraOgMed));
+    return ukerFraDato(new Date(nestSistePeriode?.tilOgMedDato || '2020-01-01'), new Date(sistePeriode.fraOgMedDato));
 }
 
 function beregnArbeidssokerperioder(props: Props | null | undefined): BeregnedePerioder {
@@ -68,13 +68,13 @@ function beregnArbeidssokerperioder(props: Props | null | undefined): BeregnedeP
     arbeidssokerperioder.sort(sorterArbeidssokerperioderSisteForst);
 
     const aktivArbeidssokerperiode = harAktivArbeidssokerperiode(arbeidssokerperioder);
-    const sluttDatoSistePeriode = arbeidssokerperioder[0].tilOgMed ?? null;
+    const sluttDatoSistePeriode = arbeidssokerperioder[0].tilOgMedDato ?? null;
     const harMerEnnEnPeriode = arbeidssokerperioder.length > 1;
 
     return {
         harAktivArbeidssokerperiode: aktivArbeidssokerperiode ? 'Ja' : 'Nei',
         aktivPeriodeStart: aktivArbeidssokerperiode
-            ? new Date(arbeidssokerperioder[0].fraOgMed).toISOString().substring(0, 10)
+            ? new Date(arbeidssokerperioder[0].fraOgMedDato).toISOString().substring(0, 10)
             : 'Ingen aktive perioder',
         antallDagerSidenSisteArbeidssokerperiode: aktivArbeidssokerperiode
             ? 'Ikke avsluttet'

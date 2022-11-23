@@ -7,7 +7,7 @@ import { getTokenFromCookie } from '../auth/tokenDings';
 
 interface Arbeidssokerperioder {
     status: number;
-    arbeidssokerperioder: [{ fraOgMed: string; tilOgMed?: string }] | [];
+    arbeidssokerperioder: [{ fraOgMedDato: string; tilOgMedDato?: string | null }] | [];
 }
 
 interface UnderOppfolging {
