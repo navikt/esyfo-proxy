@@ -1,4 +1,4 @@
-import { Request, Router } from 'express';
+import { Router } from 'express';
 import config from '../../../config';
 import axios from 'axios';
 import { hentArbeidssokerPerioder } from '../../arbeidssoker';
@@ -23,11 +23,10 @@ function dagpengerStatus(
             return res.status(401).end();
         }
 
-        const getTokenXHeaders = async (req: Request) => {
-            const idPortenToken = getTokenFromCookie(req);
-            const tokenSet = await tokenDings.exchangeIDPortenToken(idPortenToken, DP_INNSYN_CLIENT_ID);
-            const token = tokenSet.access_token;
-            return { Authorization: `Bearer ${token}`, TokenXAuthorization: `Bearer ${token}` };
+        const getTokenXHeaders = async () => {
+            const tokenSet = await tokenDings.exchangeIDPortenToken(token, DP_INNSYN_CLIENT_ID);
+            const accessToken = tokenSet.access_token;
+            return { Authorization: `Bearer ${accessToken}`, TokenXAuthorization: `Bearer ${accessToken}` };
         };
 
         try {
@@ -38,8 +37,12 @@ function dagpengerStatus(
                     [config.CONSUMER_ID_HEADER_NAME]: config.CONSUMER_ID_HEADER_VALUE,
                 },
             };
+
             const tokenXHeaders = {
-                headers: await getTokenXHeaders(req),
+                headers: {
+                    ...headers.headers,
+                    ...(await getTokenXHeaders()),
+                },
             };
 
             const requests = await Promise.all([
@@ -73,7 +76,7 @@ function dagpengerStatus(
 
             return res.status(200).send({ dagpengerStatus });
         } catch (err) {
-            logger.error(err);
+            logger.error(`Feil med /dagpenger-status kall: ${err}`);
             return res.status(500).end();
         }
     });
