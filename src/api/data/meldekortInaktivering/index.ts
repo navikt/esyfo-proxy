@@ -4,10 +4,7 @@ import axios from 'axios';
 import config from '../../../config';
 import logger from '../../../logger';
 import { MeldekortDto } from './typer';
-
-const sorterEtterNyestePeriodeFra = (a: MeldekortDto, b: MeldekortDto) => {
-    return new Date(b.periodeFra).getTime() - new Date(b.periodeFra).getTime();
-};
+import { beregnMeldekortStatus, grupperMeldekort } from './beregnMeldekortStatus';
 
 function meldekortInaktivering(veilarbregistreringGcpUrl = config.VEILARBREGISTRERING_GCP_URL) {
     const router = Router();
@@ -31,15 +28,10 @@ function meldekortInaktivering(veilarbregistreringGcpUrl = config.VEILARBREGISTR
                 }
             );
 
-            /* TODO:
-          1. sortere på periodeFra
-          2. filtrer ut alle hendelser eldre enn 8 uker
-          3. Gruppere hendelser i meldekort
-          4. Søk etter årsak: INGEN_INNSENDT,SVART_NEI, MANGLER_INNSENDING, FOR_SEN_INNSENDING, N/A
-       */
-            meldekort.sort(sorterEtterNyestePeriodeFra);
+            const grupperteMeldekort = grupperMeldekort(meldekort);
+            const meldekortStatus = beregnMeldekortStatus(grupperteMeldekort);
 
-            return res.status(204).end();
+            return res.status(200).send({ meldekortStatus });
         } catch (err) {
             logger.error(`Feil i /meldekort-inaktivering: ${err}`);
             return res.status(500).end();

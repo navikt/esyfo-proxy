@@ -16,3 +16,5 @@ export interface MeldekortDto {
     meldekorttype: MeldekortType;
     eventOpprettet: string;
 }
+
+export type MeldekortStatus = 'INGEN_INNSENDT' | 'SVART_NEI' | 'MANGLER_INNSENDING' | 'FOR_SEN_INNSENDING' | 'N/A';
