@@ -17,7 +17,7 @@ function meldekortInaktivering(veilarbregistreringGcpUrl = config.VEILARBREGISTR
         }
 
         try {
-            const meldekort: MeldekortDto[] = await axios(
+            const meldekort = await axios<MeldekortDto[]>(
                 `${veilarbregistreringGcpUrl}/veilarbregistrering/api/arbeidssoker/meldekort`,
                 {
                     headers: {
@@ -28,7 +28,7 @@ function meldekortInaktivering(veilarbregistreringGcpUrl = config.VEILARBREGISTR
                 }
             );
 
-            const grupperteMeldekort = grupperMeldekort(meldekort);
+            const grupperteMeldekort = grupperMeldekort(meldekort.data);
             const meldekortStatus = beregnMeldekortStatus(grupperteMeldekort);
 
             return res.status(200).send({ meldekortStatus });
