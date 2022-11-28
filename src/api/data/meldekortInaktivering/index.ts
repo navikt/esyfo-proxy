@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { getTokenFromCookie } from '../../../auth/tokenDings';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import config from '../../../config';
-import logger from '../../../logger';
+import { axiosLogError } from '../../../logger';
 import { MeldekortDto } from './typer';
 import { beregnMeldekortStatus, grupperMeldekort } from './beregnMeldekortStatus';
 
@@ -33,8 +33,10 @@ function meldekortInaktivering(veilarbregistreringGcpUrl = config.VEILARBREGISTR
 
             return res.status(200).send({ meldekortStatus });
         } catch (err) {
-            logger.error(`Feil i /meldekort-inaktivering: ${err}`);
-            return res.status(500).end();
+            const axiosError = err as AxiosError;
+            const status = axiosError.response?.status || 500;
+            axiosLogError(axiosError);
+            return res.status(status).end();
         }
     });
 

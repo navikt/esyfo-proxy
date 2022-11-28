@@ -3,6 +3,7 @@ import { pinoHttp } from 'pino-http';
 import ecsFormat from '@elastic/ecs-pino-format';
 import { IncomingMessage, ServerResponse } from 'http';
 import Config from './config';
+import { AxiosError } from 'axios';
 
 const logger = pino({
     ...ecsFormat({ apmIntegration: false }),
@@ -35,6 +36,12 @@ export function pinoHttpMiddleware() {
             x_consumerId: req.headers[Config.CONSUMER_ID_HEADER_NAME],
         }),
     });
+}
+
+export function axiosLogError(err: AxiosError) {
+    const status = err.response?.status || 500;
+    const logLevel = getLogLevel(status);
+    logger[logLevel](`${err.request?.method} ${err.config?.url}: ${status} ${err.response?.statusText}`);
 }
 
 export default logger;

@@ -2,7 +2,7 @@ import { Auth, getTokenFromCookie } from '../auth/tokenDings';
 import config from '../config';
 import { Request, Response, Router } from 'express';
 import { proxyHttpCall } from '../http';
-import logger, { getLogLevel } from '../logger';
+import { axiosLogError } from '../logger';
 import { AxiosError } from 'axios';
 
 function meldekortRoutes(tokenDings: Auth, meldekortUrl: string = config.MELDEKORT_URL) {
@@ -23,10 +23,9 @@ function meldekortRoutes(tokenDings: Auth, meldekortUrl: string = config.MELDEKO
                     headers: await getTokenXHeaders(req),
                 })(req, res);
             } catch (err) {
-                const e = err as AxiosError;
-                const status = e.response?.status || 500;
-                const logLevel = getLogLevel(status);
-                logger[logLevel](`${e.request?.method} ${e.config?.url}: ${status} ${e.response?.statusText}`);
+                const axiosError = err as AxiosError;
+                const status = axiosError.response?.status || 500;
+                axiosLogError(axiosError);
                 res.status(status).end();
             }
         };

@@ -2,7 +2,7 @@ import { Request, Response, Router } from 'express';
 import config from '../config';
 import { Auth, getTokenFromCookie } from '../auth/tokenDings';
 import { proxyHttpCall } from '../http';
-import logger, { getLogLevel } from '../logger';
+import { axiosLogError } from '../logger';
 import { AxiosError } from 'axios';
 
 function dagpengerRoutes(tokenDings: Auth, dagpengerInnsynUrl = config.DAGPENGER_INNSYN_URL) {
@@ -27,10 +27,9 @@ function dagpengerRoutes(tokenDings: Auth, dagpengerInnsynUrl = config.DAGPENGER
                     headers: await getTokenXHeaders(req),
                 })(req, res);
             } catch (err) {
-                const e = err as AxiosError;
-                const status = e.response?.status || 500;
-                const logLevel = getLogLevel(status);
-                logger[logLevel](`${e.request?.method} ${e.config?.url}: ${status} ${e.response?.statusText}`);
+                const axiosError = err as AxiosError;
+                const status = axiosError.response?.status || 500;
+                axiosLogError(axiosError);
                 res.status(status).end();
             }
         };
