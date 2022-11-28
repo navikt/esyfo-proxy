@@ -5,7 +5,6 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import cors from 'cors';
-import { pinoHttp } from 'pino-http';
 import healhApi from './api/health';
 import unleashApi from './api/unleash';
 import ptoProxyApi from './api/ptoproxy';
@@ -18,10 +17,9 @@ import veilarbregistreringApi from './api/veilarbregistrering';
 import swaggerDocs from './api/swagger';
 import dagpengerStatusApi from './api/data/dagpengerStatus';
 import bodyParser from 'body-parser';
-import logger, { customRequestLogMessage } from './logger';
+import logger, { pinoHttpMiddleware } from './logger';
 import config from './config';
 import createDependencies from './deps';
-import Config from './config';
 
 const PORT = 3000;
 const app = express();
@@ -29,21 +27,7 @@ const router = express.Router();
 
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(
-    pinoHttp({
-        autoLogging: {
-            ignore: (req) => (req.url ? /internal/.test(req.url) : false),
-        },
-        customLogLevel: (_, res, err) => (res.statusCode >= 400 || err ? 'error' : 'info'),
-        logger,
-        customSuccessMessage: customRequestLogMessage,
-        customErrorMessage: customRequestLogMessage,
-        customProps: (req) => ({
-            x_callId: req.headers['nav-call-id'],
-            x_consumerId: req.headers[Config.CONSUMER_ID_HEADER_NAME],
-        }),
-    })
-);
+app.use(pinoHttpMiddleware());
 app.use(helmet());
 app.use(cors());
 app.disable('x-powered-by');
@@ -51,11 +35,13 @@ app.disable('x-powered-by');
 async function setUpRoutes() {
     const { tokenDings, profilRepository, behovRepository } = createDependencies();
 
+    // Public routes
+    router.use(swaggerDocs());
     router.use(healhApi());
     router.use(unleashApi());
+
     router.use(ptoProxyApi());
     router.use(veilarbregistreringApi());
-    router.use(swaggerDocs());
     router.use(arbeidssokerApi());
     router.use((await tokenDings).verifyIDPortenToken);
     router.use(dagpengerApi(await tokenDings));
