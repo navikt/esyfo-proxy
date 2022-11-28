@@ -84,7 +84,7 @@ const createTokenDings = async (options: TokenDingsOptions): Promise<Auth> => {
 
                 next();
             } catch (err: unknown) {
-                log.error(`Verifisering av token feilet: ${err}`);
+                log.warn(`Verifisering av token feilet: ${err}`);
                 res.sendStatus(401);
             }
         },
