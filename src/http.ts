@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import config from './config';
 import axios, { AxiosError } from 'axios';
-import log from './logger';
+import log, { getLogLevel } from './logger';
 import { getTokenFromCookie } from './auth/tokenDings';
 
 interface ProxyOpts {
@@ -44,7 +44,8 @@ export function proxyHttpCall(url: string, opts?: ProxyOpts) {
         } catch (err) {
             const e = err as AxiosError;
             const status = e.response?.status || 500;
-            log.error(`${method} ${url}: ${status} ${e.response?.statusText}`);
+            const logLevel = getLogLevel(status);
+            log[logLevel](`${method} ${url}: ${status} ${e.response?.statusText}`);
             return res.status(status).send((err as Error).message);
         }
     };

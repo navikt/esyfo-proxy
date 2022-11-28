@@ -15,7 +15,7 @@ export function customRequestLogMessage(req: IncomingMessage, res: ServerRespons
     return `${req.method} ${req.url} completed ${res.statusCode} ${res.statusMessage}`;
 }
 
-function getLogLevel(statusCode: number, err: Error): pino.Level {
+export function getLogLevel(statusCode: number, err?: Error): pino.Level {
     if (statusCode === 401 || statusCode === 403) return 'warn';
     if (statusCode >= 400 || err) return 'error';
     return 'info';
