@@ -39,9 +39,10 @@ export async function hentArbeidssokerPerioder(
             ...data,
         };
     } catch (err) {
-        const status = (err as AxiosError).response?.status || 500;
+        const e = err as AxiosError;
+        const status = e.response?.status || 500;
         const logLevel = getLogLevel(status);
-        log[logLevel](err);
+        log[logLevel](`${e.request?.method} ${e.config?.url}: ${status} ${e.response?.statusText}`);
         return {
             status,
             arbeidssokerperioder: [],
@@ -163,9 +164,10 @@ function arbeidssokerRoutes(
                 underoppfolging: Boolean(data.underOppfolging),
             };
         } catch (err) {
-            const status = (err as AxiosError).response?.status || 500;
+            const e = err as AxiosError;
+            const status = e.response?.status || 500;
             const logLevel = getLogLevel(status);
-            log[logLevel](err);
+            log[logLevel](`${e.request?.method} ${e.config?.url}: ${status} ${e.response?.statusText}`);
             return {
                 status,
                 underoppfolging: false,
