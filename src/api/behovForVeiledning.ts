@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import log from '../logger';
+import logger from '../logger';
 import { getSubjectFromToken } from '../auth/tokenDings';
 import { BehovRepository } from '../db/behovForVeiledningRepository';
 
@@ -58,7 +58,7 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
     router.get('/behov-for-veiledning', async (req, res) => {
         const ident = getSubjectFromToken(req);
         if (!ident) {
-            log.error('fikk ikke hentet ident fra token');
+            logger.error('fikk ikke hentet ident fra token');
             return res.sendStatus(401);
         }
 
@@ -71,7 +71,7 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
 
             return res.send({ oppfolging: behov.oppfolging, dato: behov.created_at, dialogId: behov.dialog_id });
         } catch (err) {
-            log.error(`Feil ved henting av behov for veiledning: ${err}`);
+            logger.error(`Feil ved henting av behov for veiledning: ${err}`);
             return res.status(500).send((err as Error)?.message);
         }
     });
@@ -79,14 +79,14 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
     router.post('/behov-for-veiledning', async (req, res) => {
         const ident = getSubjectFromToken(req) as string;
         if (!ident) {
-            log.error('fikk ikke hentet ident fra token');
+            logger.error('fikk ikke hentet ident fra token');
             return res.sendStatus(401);
         }
 
         const { oppfolging, dialogId } = req.body;
 
         if (!oppfolging) {
-            log.error('mangler "oppfolging" i request body');
+            logger.error('mangler "oppfolging" i request body');
             return res.status(400).end();
         }
 
@@ -101,7 +101,7 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
                 .status(201)
                 .send({ oppfolging: result.oppfolging, dato: result.created_at, dialogId: result.dialog_id });
         } catch (err) {
-            log.error(`Feil ved oppretting av behov for veiledning ${err}`);
+            logger.error(`Feil ved oppretting av behov for veiledning ${err}`);
             return res.status(500).send(`${(err as Error).message}`);
         }
     });

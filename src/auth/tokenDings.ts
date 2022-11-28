@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { createRemoteJWKSet, jwtVerify, decodeJwt } from 'jose';
 import { JWK } from 'node-jose';
 import { ulid } from 'ulid';
-import log from '../logger';
+import logger from '../logger';
 import config from '../config';
 
 export interface ExchangeToken {
@@ -69,7 +69,7 @@ const createTokenDings = async (options: TokenDingsOptions): Promise<Auth> => {
             try {
                 const idPortenToken = getTokenFromCookie(req);
                 if (!idPortenToken) {
-                    log.warn('Bearer token mangler');
+                    logger.warn('Bearer token mangler');
                     res.sendStatus(401);
                     return;
                 }
@@ -77,14 +77,14 @@ const createTokenDings = async (options: TokenDingsOptions): Promise<Auth> => {
                     algorithms: ['RS256'],
                 });
                 if (result.payload.acr !== 'Level4') {
-                    log.warn(`acr er ikke riktig, payload.acr: ${result.payload.acr}`);
+                    logger.warn(`acr er ikke riktig, payload.acr: ${result.payload.acr}`);
                     res.sendStatus(403);
                     return;
                 }
 
                 next();
             } catch (err: unknown) {
-                log.warn(`Verifisering av token feilet: ${err}`);
+                logger.warn(`Verifisering av token feilet: ${err}`);
                 res.sendStatus(401);
             }
         },
@@ -102,7 +102,7 @@ const createTokenDings = async (options: TokenDingsOptions): Promise<Auth> => {
                     token_endpoint_auth_method: 'private_key_jwt',
                 });
             } catch (err: unknown) {
-                log.error(`Feil under token exchange: ${err}`);
+                logger.error(`Feil under token exchange: ${err}`);
                 return Promise.reject(err);
             }
         },

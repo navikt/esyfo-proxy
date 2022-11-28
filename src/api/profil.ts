@@ -1,8 +1,7 @@
 import { Router } from 'express';
-import log from '../logger';
+import logger from '../logger';
 import { getSubjectFromToken } from '../auth/tokenDings';
 import { ProfilRepository } from '../db/profilRepository';
-import logger from '../logger';
 
 function profilRoutes(profilRepository: ProfilRepository) {
     const router = Router();
@@ -85,7 +84,7 @@ function profilRoutes(profilRepository: ProfilRepository) {
     router.get('/profil', async (req, res) => {
         const ident = getSubjectFromToken(req);
         if (!ident) {
-            log.error('fikk ikke hentet ident fra token');
+            logger.error('fikk ikke hentet ident fra token');
             return res.sendStatus(401);
         }
 
@@ -105,7 +104,7 @@ function profilRoutes(profilRepository: ProfilRepository) {
     router.post('/profil', async (req, res) => {
         const ident = getSubjectFromToken(req) as string;
         if (!ident) {
-            log.error('fikk ikke hentet ident fra token');
+            logger.error('fikk ikke hentet ident fra token');
             return res.sendStatus(401);
         }
 

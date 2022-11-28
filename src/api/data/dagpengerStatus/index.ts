@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import config from '../../../config';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { hentArbeidssokerPerioder } from '../../arbeidssoker';
 import { Auth, getTokenFromCookie } from '../../../auth/tokenDings';
 import beregnDagpengeStatus from './beregnDagpengeStatus';
 import beregnArbeidssokerperioder from './beregnArbeidssokerPerioder';
-import logger from '../../../logger';
+import logger, { getLogLevel } from '../../../logger';
 import beregnAntallDagerSidenDagpengerStanset from './beregnAntallDagerSidenDagpengerStanset';
 
 function dagpengerStatus(
@@ -83,7 +83,11 @@ function dagpengerStatus(
                 antallDagerSidenDagpengerStanset,
             });
         } catch (err) {
-            logger.error(`Feil med /dagpenger-status kall: ${err}`);
+            const e = err as AxiosError;
+            const status = e.response?.status || 500;
+            const logLevel = getLogLevel(status);
+            logger[logLevel](`${e.request?.method} ${e.config?.url}: ${status} ${e.response?.statusText}`);
+            res.status(status).end();
             return res.status(500).end();
         }
     });

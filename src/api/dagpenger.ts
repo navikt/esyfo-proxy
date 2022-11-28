@@ -2,7 +2,8 @@ import { Request, Response, Router } from 'express';
 import config from '../config';
 import { Auth, getTokenFromCookie } from '../auth/tokenDings';
 import { proxyHttpCall } from '../http';
-import logger from '../logger';
+import logger, { getLogLevel } from '../logger';
+import { AxiosError } from 'axios';
 
 function dagpengerRoutes(tokenDings: Auth, dagpengerInnsynUrl = config.DAGPENGER_INNSYN_URL) {
     const SOKNAD_URL = `${dagpengerInnsynUrl}/soknad`;
@@ -26,8 +27,11 @@ function dagpengerRoutes(tokenDings: Auth, dagpengerInnsynUrl = config.DAGPENGER
                     headers: await getTokenXHeaders(req),
                 })(req, res);
             } catch (err) {
-                logger.error(`Feil med dagpenger kall: ${err}`);
-                res.status(500).end();
+                const e = err as AxiosError;
+                const status = e.response?.status || 500;
+                const logLevel = getLogLevel(status);
+                logger[logLevel](`${e.request?.method} ${e.config?.url}: ${status} ${e.response?.statusText}`);
+                res.status(status).end();
             }
         };
     };

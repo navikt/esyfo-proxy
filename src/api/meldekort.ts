@@ -2,7 +2,8 @@ import { Auth, getTokenFromCookie } from '../auth/tokenDings';
 import config from '../config';
 import { Request, Response, Router } from 'express';
 import { proxyHttpCall } from '../http';
-import logger from '../logger';
+import logger, { getLogLevel } from '../logger';
+import { AxiosError } from 'axios';
 
 function meldekortRoutes(tokenDings: Auth, meldekortUrl: string = config.MELDEKORT_URL) {
     const router = Router();
@@ -22,8 +23,11 @@ function meldekortRoutes(tokenDings: Auth, meldekortUrl: string = config.MELDEKO
                     headers: await getTokenXHeaders(req),
                 })(req, res);
             } catch (err) {
-                logger.error(`Feil med meldekort kall: ${err}`);
-                res.status(500).end();
+                const e = err as AxiosError;
+                const status = e.response?.status || 500;
+                const logLevel = getLogLevel(status);
+                logger[logLevel](`${e.request?.method} ${e.config?.url}: ${status} ${e.response?.statusText}`);
+                res.status(status).end();
             }
         };
     };
