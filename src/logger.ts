@@ -41,7 +41,10 @@ export function pinoHttpMiddleware() {
 export function axiosLogError(err: AxiosError) {
     const status = err.response?.status || 500;
     const logLevel = getLogLevel(status);
-    logger[logLevel](`${err.request?.method} ${err.config?.url}: ${status} ${err.response?.statusText}`);
+    const method = err.request?.method || 'Unknown method';
+    const url = err.config?.url || 'unknown URL';
+    const statusText = err.response?.statusText || '';
+    logger[logLevel](`${method} ${url}: ${status} ${statusText}`);
 }
 
 export default logger;
