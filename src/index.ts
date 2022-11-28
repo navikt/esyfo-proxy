@@ -20,6 +20,7 @@ import bodyParser from 'body-parser';
 import logger, { pinoHttpMiddleware } from './logger';
 import config from './config';
 import createDependencies from './deps';
+import meldekortInaktivering from './api/data/meldekortInaktivering';
 
 const PORT = 3000;
 const app = express();
@@ -49,6 +50,7 @@ async function setUpRoutes() {
     router.use(profilApi(profilRepository));
     router.use(behovForVeiledningApi(behovRepository));
     router.use(dagpengerStatusApi(await tokenDings));
+    router.use(meldekortInaktivering());
     app.use(config.BASE_PATH || '', router);
 }
 
