@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import config from '../config';
-import log from '../logger';
+import log, { getLogLevel } from '../logger';
 import axios, { AxiosError } from 'axios';
 import { ParsedQs } from 'qs';
 import { getTokenFromCookie } from '../auth/tokenDings';
@@ -39,9 +39,11 @@ export async function hentArbeidssokerPerioder(
             ...data,
         };
     } catch (err) {
-        log.error(err);
+        const status = (err as AxiosError).response?.status || 500;
+        const logLevel = getLogLevel(status);
+        log[logLevel](err);
         return {
-            status: (err as AxiosError).response?.status || 500,
+            status,
             arbeidssokerperioder: [],
         };
     }
@@ -161,9 +163,11 @@ function arbeidssokerRoutes(
                 underoppfolging: Boolean(data.underOppfolging),
             };
         } catch (err) {
-            log.error(err);
+            const status = (err as AxiosError).response?.status || 500;
+            const logLevel = getLogLevel(status);
+            log[logLevel](err);
             return {
-                status: (err as AxiosError).response?.status || 500,
+                status,
                 underoppfolging: false,
             };
         }
