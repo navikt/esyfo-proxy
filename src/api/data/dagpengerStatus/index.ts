@@ -89,7 +89,7 @@ function dagpengerStatus(
                 status = axiosError.response?.status || 500;
                 axiosLogError(axiosError);
             }
-            logger.error('Feil ved kall til /dagpenger-status ${err}');
+            logger.error(`Feil ved kall til /dagpenger-status ${err}`);
             return res.status(status).end();
         }
     });
