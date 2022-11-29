@@ -109,19 +109,19 @@ describe('beregnMeldekortStatus', () => {
                 [
                     {
                         erArbeidssokerNestePeriode: true,
-                        periodeFra: '2022-11-01',
-                        periodeTil: '2022-11-02',
+                        periodeFra: '2022-10-31',
+                        periodeTil: '2022-11-13',
                         meldekorttype: 'KORRIGERT_ELEKTRONISK',
-                        eventOpprettet: '2022-11-03',
+                        eventOpprettet: '2022-11-14',
                     },
                 ],
                 [
                     {
                         erArbeidssokerNestePeriode: false,
-                        periodeFra: '2022-10-01',
-                        periodeTil: '2022-11-01',
+                        periodeFra: '2022-11-14',
+                        periodeTil: '2022-11-27',
                         meldekorttype: 'KORRIGERT_ELEKTRONISK',
-                        eventOpprettet: '2022-11-02',
+                        eventOpprettet: '2022-11-28',
                     },
                 ],
             ];
@@ -134,32 +134,56 @@ describe('beregnMeldekortStatus', () => {
                 [
                     {
                         erArbeidssokerNestePeriode: true,
-                        periodeFra: '2022-11-01',
-                        periodeTil: '2022-11-02',
+                        periodeFra: '2022-11-07',
+                        periodeTil: '2022-11-20',
                         meldekorttype: 'KORRIGERT_ELEKTRONISK',
-                        eventOpprettet: '2022-11-03',
+                        eventOpprettet: '2022-11-21',
                     },
                 ],
                 [
                     {
                         erArbeidssokerNestePeriode: true,
-                        periodeFra: '2022-10-01',
-                        periodeTil: '2022-11-01',
+                        periodeFra: '2022-10-24',
+                        periodeTil: '2022-11-06',
                         meldekorttype: 'KORRIGERT_ELEKTRONISK',
-                        eventOpprettet: '2022-11-02',
+                        eventOpprettet: '2022-11-06',
                     },
                 ],
                 [
                     {
                         erArbeidssokerNestePeriode: true,
-                        periodeFra: '2022-08-01',
-                        periodeTil: '2022-09-01',
+                        periodeFra: '2022-09-26',
+                        periodeTil: '2022-10-09',
                         meldekorttype: 'KORRIGERT_ELEKTRONISK',
-                        eventOpprettet: '2022-11-02',
+                        eventOpprettet: '2022-10-09',
                     },
                 ],
             ];
             expect(beregnMeldekortStatus(meldekortGruppe)).toEqual('MANGLER_INNSENDING');
+        });
+
+        it('returnerer IKKE MANGLER_INNSENDING hvis aktuell periodeFra matcher neste periodeTil', () => {
+            const meldekortGruppe: MeldekortDto[][] = [
+                [
+                    {
+                        erArbeidssokerNestePeriode: true,
+                        periodeFra: '2022-11-14',
+                        periodeTil: '2022-11-27',
+                        meldekorttype: 'KORRIGERT_ELEKTRONISK',
+                        eventOpprettet: '2022-11-28',
+                    },
+                ],
+                [
+                    {
+                        erArbeidssokerNestePeriode: true,
+                        periodeFra: '2022-10-31',
+                        periodeTil: '2022-11-13',
+                        meldekorttype: 'KORRIGERT_ELEKTRONISK',
+                        eventOpprettet: '2022-11-14',
+                    },
+                ],
+            ];
+            expect(beregnMeldekortStatus(meldekortGruppe)).not.toEqual('MANGLER_INNSENDING');
         });
 
         it('returnerer FOR_SEN_INNSENDING hvis eventOpprettet >= 8 dager etter periodeTil', () => {
@@ -167,19 +191,19 @@ describe('beregnMeldekortStatus', () => {
                 [
                     {
                         erArbeidssokerNestePeriode: true,
-                        periodeFra: '2022-11-01',
-                        periodeTil: '2022-11-02',
+                        periodeFra: '2022-11-14',
+                        periodeTil: '2022-11-27',
                         meldekorttype: 'KORRIGERT_ELEKTRONISK',
-                        eventOpprettet: '2022-11-03',
+                        eventOpprettet: '2022-12-08',
                     },
                 ],
                 [
                     {
                         erArbeidssokerNestePeriode: true,
-                        periodeFra: '2022-10-01',
-                        periodeTil: '2022-11-01',
+                        periodeFra: '2022-10-31',
+                        periodeTil: '2022-11-13',
                         meldekorttype: 'KORRIGERT_ELEKTRONISK',
-                        eventOpprettet: '2022-11-09',
+                        eventOpprettet: '2022-11-14',
                     },
                 ],
             ];

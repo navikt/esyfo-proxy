@@ -8,6 +8,12 @@ const filtrerUtEldreEnn = (dato: Date) => (meldekort: MeldekortDto) => {
     return new Date(meldekort.periodeTil) > dato;
 };
 
+function dagerFraDato(fradato: string, tildato: string): number {
+    const dagIms = 24 * 60 * 60 * 1000;
+    const dagerIms = new Date(tildato).getTime() - new Date(fradato).getTime();
+    return Math.ceil(dagerIms / dagIms);
+}
+
 const ATTE_UKER_I_MS = 8 * 7 * 24 * 60 * 60 * 1000;
 
 export function grupperMeldekort(meldekort: MeldekortDto[], filtrerPaaDato?: Date): MeldekortDto[][] {
@@ -40,7 +46,11 @@ function manglerInnsending(grupperteMeldekort: MeldekortDto[][]) {
     return grupperteMeldekort.some((meldekortGruppe, index) => {
         const forrigeMeldekortGruppe = grupperteMeldekort[index + 1];
         if (forrigeMeldekortGruppe) {
-            return meldekortGruppe[0].periodeFra !== forrigeMeldekortGruppe[0].periodeTil;
+            const dagerMellomPerioder = dagerFraDato(
+                forrigeMeldekortGruppe[0].periodeTil,
+                meldekortGruppe[0].periodeFra
+            );
+            return dagerMellomPerioder > 2;
         }
         return false;
     });
