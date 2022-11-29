@@ -5,7 +5,7 @@ import { hentArbeidssokerPerioder } from '../../arbeidssoker';
 import { Auth, getTokenFromCookie } from '../../../auth/tokenDings';
 import beregnDagpengeStatus from './beregnDagpengeStatus';
 import beregnArbeidssokerperioder from './beregnArbeidssokerPerioder';
-import { axiosLogError } from '../../../logger';
+import logger, { axiosLogError } from '../../../logger';
 import beregnAntallDagerSidenDagpengerStanset from './beregnAntallDagerSidenDagpengerStanset';
 
 function dagpengerStatus(
@@ -83,9 +83,13 @@ function dagpengerStatus(
                 antallDagerSidenDagpengerStanset,
             });
         } catch (err) {
-            const axiosError = err as AxiosError;
-            const status = axiosError.response?.status || 500;
-            axiosLogError(axiosError);
+            let status = 500;
+            if (axios.isAxiosError(err)) {
+                const axiosError = err as AxiosError;
+                status = axiosError.response?.status || 500;
+                axiosLogError(axiosError);
+            }
+            logger.error('Feil ved kall til /dagpenger-status', err);
             return res.status(status).end();
         }
     });
