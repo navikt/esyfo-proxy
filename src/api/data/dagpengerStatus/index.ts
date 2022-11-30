@@ -7,6 +7,7 @@ import beregnDagpengeStatus from './beregnDagpengeStatus';
 import beregnArbeidssokerperioder from './beregnArbeidssokerPerioder';
 import logger, { axiosLogError } from '../../../logger';
 import beregnAntallDagerSidenDagpengerStanset from './beregnAntallDagerSidenDagpengerStanset';
+import { getDefaultHeaders } from '../../../http';
 
 function dagpengerStatus(
     tokenDings: Auth,
@@ -32,11 +33,7 @@ function dagpengerStatus(
 
         try {
             const headers = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                    [config.CONSUMER_ID_HEADER_NAME]: config.CONSUMER_ID_HEADER_VALUE,
-                },
+                headers: getDefaultHeaders(req),
             };
 
             const tokenXHeaders = {
@@ -49,7 +46,7 @@ function dagpengerStatus(
             const requests = await Promise.all([
                 axios(`${veilarbregistreringGcpUrl}/veilarbregistrering/api/startregistrering`, headers),
                 axios(`${veilarbregistreringUrl}/veilarbregistrering/api/registrering`, headers),
-                hentArbeidssokerPerioder(veilarbregistreringGcpUrl, token, { fraOgMed: '2020-01-01' }),
+                hentArbeidssokerPerioder(veilarbregistreringGcpUrl, headers.headers, { fraOgMed: '2020-01-01' }),
                 axios(`${dagpengerInnsynUrl}/paabegynte`, tokenXHeaders),
                 axios(`${dagpengerInnsynUrl}/soknad`, tokenXHeaders),
                 axios(`${dagpengerInnsynUrl}/vedtak`, tokenXHeaders),

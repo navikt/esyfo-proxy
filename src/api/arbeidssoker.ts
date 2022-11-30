@@ -1,9 +1,10 @@
 import { Router } from 'express';
 import config from '../config';
 import { axiosLogError } from '../logger';
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, RawAxiosRequestHeaders } from 'axios';
 import { ParsedQs } from 'qs';
 import { getTokenFromCookie } from '../auth/tokenDings';
+import { getDefaultHeaders } from '../http';
 
 interface Arbeidssokerperioder {
     status: number;
@@ -17,7 +18,7 @@ interface UnderOppfolging {
 
 export async function hentArbeidssokerPerioder(
     veilarbregistreringGcpUrl: string,
-    token: string,
+    headers: RawAxiosRequestHeaders,
     query: ParsedQs
 ): Promise<Arbeidssokerperioder> {
     const fraOgMed = query.fraOgMed;
@@ -28,11 +29,7 @@ export async function hentArbeidssokerPerioder(
 
     try {
         const { data, status } = await axios(url, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-                [config.CONSUMER_ID_HEADER_NAME]: config.CONSUMER_ID_HEADER_VALUE,
-            },
+            headers,
         });
         return {
             status,
@@ -107,8 +104,12 @@ function arbeidssokerRoutes(
             return res.status(401).end();
         }
 
-        const arbeidssokerperioder = await hentArbeidssokerPerioder(veilarbregistreringGcpUrl, token, req.query);
-        const underoppfolging = await hentUnderOppfolging(token);
+        const arbeidssokerperioder = await hentArbeidssokerPerioder(
+            veilarbregistreringGcpUrl,
+            getDefaultHeaders(req),
+            req.query
+        );
+        const underoppfolging = await hentUnderOppfolging(getDefaultHeaders(req));
 
         return res.send({
             underoppfolging,
@@ -142,21 +143,19 @@ function arbeidssokerRoutes(
             return res.status(401).end();
         }
 
-        const perioder = await hentArbeidssokerPerioder(veilarbregistreringGcpUrl, token, { fraOgMed: '2020-01-01' });
-        const underOppfolging = await hentUnderOppfolging(token);
+        const perioder = await hentArbeidssokerPerioder(veilarbregistreringGcpUrl, getDefaultHeaders(req), {
+            fraOgMed: '2020-01-01',
+        });
+        const underOppfolging = await hentUnderOppfolging(getDefaultHeaders(req));
         const erUnderOppfolging = underOppfolging.underoppfolging;
         const erArbeidssoker = erUnderOppfolging || perioder.arbeidssokerperioder.length > 0;
         return res.send({ erArbeidssoker });
     });
 
-    async function hentUnderOppfolging(token: string): Promise<UnderOppfolging> {
+    async function hentUnderOppfolging(headers: RawAxiosRequestHeaders): Promise<UnderOppfolging> {
         try {
             const { data, status } = await axios(`${ptoProxyUrl}/veilarboppfolging/api/niva3/underoppfolging`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                    [config.CONSUMER_ID_HEADER_NAME]: config.CONSUMER_ID_HEADER_VALUE,
-                },
+                headers,
             });
             return {
                 status,

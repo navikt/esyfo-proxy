@@ -8,7 +8,16 @@ interface ProxyOpts {
     headers?: Record<string, string | null>;
     overrideMethod?: string;
 }
-
+export function getDefaultHeaders(req: Request) {
+    const token = getTokenFromCookie(req);
+    return {
+        'Content-Type': req.header('Content-Type') || 'application/json',
+        ...(req.header('Nav-Call-Id') ? { 'Nav-Call-Id': req.header('Nav-Call-Id') } : {}),
+        ...(req.header('NAV_CSRF_PROTECTION') ? { NAV_CSRF_PROTECTION: req.header('NAV_CSRF_PROTECTION') } : {}),
+        [config.CONSUMER_ID_HEADER_NAME]: config.CONSUMER_ID_HEADER_VALUE,
+        Authorization: `Bearer ${token}`,
+    };
+}
 export function proxyHttpCall(url: string, opts?: ProxyOpts) {
     return async (req: Request, res: Response) => {
         const token = getTokenFromCookie(req);
@@ -24,13 +33,7 @@ export function proxyHttpCall(url: string, opts?: ProxyOpts) {
                 data: req.method === 'POST' ? req.body : undefined,
                 params: req.params,
                 headers: {
-                    'Content-Type': req.header('Content-Type') || 'application/json',
-                    ...(req.header('Nav-Call-Id') ? { 'Nav-Call-Id': req.header('Nav-Call-Id') } : {}),
-                    ...(req.header('NAV_CSRF_PROTECTION')
-                        ? { NAV_CSRF_PROTECTION: req.header('NAV_CSRF_PROTECTION') }
-                        : {}),
-                    Authorization: `Bearer ${token}`,
-                    [config.CONSUMER_ID_HEADER_NAME]: config.CONSUMER_ID_HEADER_VALUE,
+                    ...getDefaultHeaders(req),
                     ...opts?.headers,
                 },
                 responseType: 'stream',

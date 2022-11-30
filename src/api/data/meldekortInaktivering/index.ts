@@ -5,6 +5,7 @@ import config from '../../../config';
 import { axiosLogError } from '../../../logger';
 import { MeldekortDto } from './typer';
 import { beregnMeldekortStatus, grupperMeldekort } from './beregnMeldekortStatus';
+import { getDefaultHeaders } from '../../../http';
 
 function meldekortInaktivering(veilarbregistreringGcpUrl = config.VEILARBREGISTRERING_GCP_URL) {
     const router = Router();
@@ -20,11 +21,7 @@ function meldekortInaktivering(veilarbregistreringGcpUrl = config.VEILARBREGISTR
             const meldekort = await axios<MeldekortDto[]>(
                 `${veilarbregistreringGcpUrl}/veilarbregistrering/api/arbeidssoker/meldekort`,
                 {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${token}`,
-                        [config.CONSUMER_ID_HEADER_NAME]: config.CONSUMER_ID_HEADER_VALUE,
-                    },
+                    headers: getDefaultHeaders(req),
                 }
             );
 
