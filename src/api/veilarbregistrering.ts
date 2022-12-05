@@ -42,6 +42,21 @@ function veilarbregistrering(
 
     /**
      * @openapi
+     * /fullfoerreaktivering:
+     *   post:
+     *     description: Gjennomfører enkel reaktivering av en bruker.
+     *     responses:
+     *       204: Bruker er reaktivert
+     *       401:
+     *         $ref: '#/components/schemas/Unauthorized'
+     */
+    router.post(
+        '/fullfoerreaktivering',
+        proxy(`${veilarbregistreringUrl}/veilarbregistrering/api/fullfoerreaktivering`)
+    );
+
+    /**
+     * @openapi
      * /standard-innsats:
      *   get:
      *     description:
