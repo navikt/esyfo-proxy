@@ -31,6 +31,13 @@ export function pinoHttpMiddleware() {
         logger,
         customSuccessMessage: customRequestLogMessage,
         customErrorMessage: customRequestLogMessage,
+        customErrorObject: (req, res, error, val = {}) => {
+            return {
+                ...val,
+                x_callId: req.headers['nav-call-id'],
+                x_consumerId: req.headers[Config.CONSUMER_ID_HEADER_NAME],
+            };
+        },
         customProps: (req) => ({
             x_callId: req.headers['nav-call-id'],
             x_consumerId: req.headers[Config.CONSUMER_ID_HEADER_NAME],
