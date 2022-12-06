@@ -26,7 +26,7 @@ export function getDefaultHeaders(req: Request) {
 
 const defaultOpts: ProxyOpts = {
     skipRetry: false,
-    maxRetries: 2,
+    maxRetries: 3,
     retryDelay: 20,
 };
 
@@ -39,6 +39,7 @@ export function proxyHttpCall(url: string, opts: ProxyOpts = defaultOpts) {
         }
 
         const method = opts?.overrideMethod || req.method;
+        const defaultHeaders = getDefaultHeaders(req);
 
         const retry = async (counter: number): Promise<any> => {
             const { skipRetry, retryDelay, maxRetries } = opts;
@@ -53,11 +54,15 @@ export function proxyHttpCall(url: string, opts: ProxyOpts = defaultOpts) {
                     data: req.method === 'POST' ? req.body : undefined,
                     params: req.params,
                     headers: {
-                        ...getDefaultHeaders(req),
+                        ...defaultHeaders,
                         ...opts?.headers,
                     },
                     responseType: 'stream',
                 });
+
+                if (counter > 0) {
+                    console.info(`Vellykket retry etter ${counter} forsøk mot: ${url}`);
+                }
 
                 if (status === 204) {
                     return res.status(status).end();
@@ -68,8 +73,7 @@ export function proxyHttpCall(url: string, opts: ProxyOpts = defaultOpts) {
                 const status = axiosError.response?.status || 500;
 
                 if (shouldRetry(axiosError)) {
-                    // if should retry => sjekk metode, teller etc.
-                    logger.warn(`Retry kall mot ${url}: response ${status}`);
+                    logger.warn(`Retry kall ${counter + 1}} mot ${url}: response ${status}`);
                     return setTimeout(() => retry(counter + 1), retryDelay);
                 }
 
