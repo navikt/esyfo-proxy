@@ -11,6 +11,9 @@ metadata:
 spec:
   image: {{image}}
   port: 3000
+  azure:
+    application:
+      enabled: true
   liveness:
     path: /aia-backend/internal/isAlive
     initialDelay: 10
