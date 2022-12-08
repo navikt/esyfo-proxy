@@ -24,6 +24,8 @@ spec:
     enabled: true
   idporten:
     enabled: true
+  azure:
+    enabled: true
   ingresses:
     - https://www.dev.nav.no/aia-backend
   envFrom:
