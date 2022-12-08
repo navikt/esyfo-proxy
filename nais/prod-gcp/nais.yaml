@@ -65,6 +65,7 @@ spec:
     inbound:
       rules:
         - application: veientilarbeid
+        - application: paw-reaktiver-arbeidssoker
     outbound:
       rules:
         - application: dp-innsyn
