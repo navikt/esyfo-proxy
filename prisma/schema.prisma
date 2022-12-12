@@ -16,6 +16,8 @@ model BehovForVeiledning {
   created_at DateTime @default(now())
   oppfolging Oppfolging
   dialog_id String?
+
+  @@index([bruker_id])
 }
 
 model Profil {
@@ -23,6 +25,8 @@ model Profil {
   bruker_id String
   profil Json
   created_at DateTime @default(now())
+
+  @@index([bruker_id])
 }
 
 enum Oppfolging {
@@ -34,4 +38,6 @@ model AutomatiskReaktivering {
   id Int @id @default(autoincrement())
   bruker_id String
   created_at DateTime @default(now())
+
+  @@index([bruker_id])
 }
