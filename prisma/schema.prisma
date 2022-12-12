@@ -29,3 +29,9 @@ enum Oppfolging {
   STANDARD_INNSATS
   SITUASJONSBESTEMT_INNSATS
 }
+
+model AutomatiskReaktivering {
+  id Int @id @default(autoincrement())
+  bruker_id String
+  created_at DateTime @default(now())
+}
