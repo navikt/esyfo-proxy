@@ -21,6 +21,7 @@ import logger, { pinoHttpMiddleware } from './logger';
 import config from './config';
 import createDependencies from './deps';
 import meldekortInaktivering from './api/data/meldekortInaktivering';
+import automatiskReaktiveringApi from './api/reaktivering/automatiskReaktivering';
 
 const PORT = 3000;
 const app = express();
@@ -40,6 +41,8 @@ async function setUpRoutes() {
     router.use(swaggerDocs());
     router.use(healhApi());
     router.use(unleashApi());
+
+    router.use(automatiskReaktiveringApi());
 
     router.use(ptoProxyApi());
     router.use(veilarbregistreringApi());
