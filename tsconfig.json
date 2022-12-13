@@ -24,5 +24,9 @@
         "noFallthroughCasesInSwitch": true
     },
     "exclude": ["node_modules", "src/test/**/*", "src/**/*.test.*", "build"],
-    "include": ["src", "types"]
+    "include": ["src", "types"],
+    "ts-node": {
+        "files": true
+    },
+    "files": ["types/uker-fra-dato.d.ts"]
 }
