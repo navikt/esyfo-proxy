@@ -3,11 +3,15 @@ import config from './config';
 import createProfilRepository, { ProfilRepository } from './db/profilRepository';
 import { PrismaClient } from '@prisma/client';
 import createBehovRepository, { BehovRepository } from './db/behovForVeiledningRepository';
+import createAutomatiskReaktiveringRepository, {
+    AutomatiskReaktiveringRepository,
+} from './db/automatiskReaktiveringRepository';
 
 export interface Dependencies {
     tokenDings: Promise<Auth>;
     profilRepository: ProfilRepository;
     behovRepository: BehovRepository;
+    automatiskReaktiveringRepository: AutomatiskReaktiveringRepository;
 }
 
 function createDependencies(): Dependencies {
@@ -23,6 +27,7 @@ function createDependencies(): Dependencies {
         }),
         profilRepository: createProfilRepository(prismaClient),
         behovRepository: createBehovRepository(prismaClient),
+        automatiskReaktiveringRepository: createAutomatiskReaktiveringRepository(prismaClient),
     };
 }
 

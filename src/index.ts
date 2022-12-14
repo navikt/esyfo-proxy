@@ -35,14 +35,14 @@ app.use(cors());
 app.disable('x-powered-by');
 
 async function setUpRoutes() {
-    const { tokenDings, profilRepository, behovRepository } = createDependencies();
+    const { tokenDings, profilRepository, behovRepository, automatiskReaktiveringRepository } = createDependencies();
 
     // Public routes
     router.use(swaggerDocs());
     router.use(healhApi());
     router.use(unleashApi());
 
-    router.use(automatiskReaktiveringApi());
+    router.use(automatiskReaktiveringApi(await automatiskReaktiveringRepository));
 
     router.use(ptoProxyApi());
     router.use(veilarbregistreringApi());
