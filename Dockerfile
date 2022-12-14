@@ -7,6 +7,7 @@ WORKDIR /src
 RUN chmod +x /src/entrypoint.sh
 
 RUN npm ci
+RUN npm run prisma:generate
 RUN npm run build
 
 USER node
