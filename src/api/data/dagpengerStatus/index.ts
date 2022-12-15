@@ -20,11 +20,6 @@ function dagpengerStatus(
 
     router.get('/dagpenger-status', async (req, res) => {
         const token = getTokenFromCookie(req);
-
-        if (!token) {
-            return res.status(401).end();
-        }
-
         const getTokenXHeaders = async () => {
             const tokenSet = await tokenDings.exchangeIDPortenToken(token, DP_INNSYN_CLIENT_ID);
             const accessToken = tokenSet.access_token;

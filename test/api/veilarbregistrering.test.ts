@@ -2,11 +2,13 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import request from 'supertest';
 import veilarbregistrering from '../../src/api/veilarbregistrering';
+import idportenAuthentication from '../../src/middleware/idporten-authentication';
 
 describe('veilarbregistrering api', () => {
     it('gir 401 hvis request uten selvbetjening-id cookie', (done) => {
         const app = express();
         app.use(cookieParser());
+        app.use(idportenAuthentication);
         app.use(veilarbregistrering('http://localhost:6666'));
 
         request(app).get('/registrering').expect(401, done);

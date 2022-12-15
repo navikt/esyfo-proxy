@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import logger from '../logger';
-import { getSubjectFromToken } from '../auth/tokenDings';
 import { ProfilRepository } from '../db/profilRepository';
+import { IdPortenRequest } from '../middleware/idporten-authentication';
 
 function profilRoutes(profilRepository: ProfilRepository) {
     const router = Router();
@@ -82,13 +82,8 @@ function profilRoutes(profilRepository: ProfilRepository) {
      *           type: string
      */
     router.get('/profil', async (req, res) => {
-        const ident = getSubjectFromToken(req);
-        if (!ident) {
-            logger.error('fikk ikke hentet ident fra token');
-            return res.sendStatus(401);
-        }
-
         try {
+            const ident = (req as IdPortenRequest).user.ident;
             const profil = await profilRepository.hentProfil(ident as string);
 
             if (!profil) {
@@ -102,12 +97,6 @@ function profilRoutes(profilRepository: ProfilRepository) {
     });
 
     router.post('/profil', async (req, res) => {
-        const ident = getSubjectFromToken(req) as string;
-        if (!ident) {
-            logger.error('fikk ikke hentet ident fra token');
-            return res.sendStatus(401);
-        }
-
         const profil = req.body;
 
         if (!profil) {
@@ -115,6 +104,7 @@ function profilRoutes(profilRepository: ProfilRepository) {
         }
 
         try {
+            const ident = (req as IdPortenRequest).user.ident;
             const result = await profilRepository.lagreProfil({
                 bruker: ident,
                 profil,

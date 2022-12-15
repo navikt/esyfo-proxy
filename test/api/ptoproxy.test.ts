@@ -2,11 +2,13 @@ import express from 'express';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
 import ptoproxy from '../../src/api/ptoproxy';
+import idportenAuthentication from '../../src/middleware/idporten-authentication';
 
 describe('ptoproxy api', () => {
     it('gir 401 hvis request uten selvbetjening-id cookie', (done) => {
         const app = express();
         app.use(cookieParser());
+        app.use(idportenAuthentication);
         app.use(ptoproxy('http://localhost:6666'));
 
         request(app).get('/oppfolging').expect(401, done);

@@ -1,14 +1,18 @@
 import request from 'supertest';
-import express from 'express';
+import express, { RequestHandler } from 'express';
 import cookieParser from 'cookie-parser';
 import behovForVeiledning from '../../src/api/behovForVeiledning';
 import bodyParser from 'body-parser';
+import { IdPortenRequest } from '../../src/middleware/idporten-authentication';
 
-jest.mock('../../src/auth/tokenDings', () => {
-    return {
-        getSubjectFromToken: jest.fn().mockReturnValue('test-ident'),
+const mockAuthMiddleware: RequestHandler = (req, res, next) => {
+    (req as IdPortenRequest).user = {
+        level: 'Level4',
+        ident: 'test-ident',
     };
-});
+    next();
+};
+
 describe('behovForVeiledning API', () => {
     let app: any;
 
@@ -31,6 +35,7 @@ describe('behovForVeiledning API', () => {
                 ),
             };
 
+            app.use(mockAuthMiddleware);
             app.use(behovForVeiledning(behovRepository));
 
             const response = await request(app)
@@ -51,6 +56,7 @@ describe('behovForVeiledning API', () => {
                 hentBehov: jest.fn().mockReturnValue(Promise.resolve(null)),
             };
 
+            app.use(mockAuthMiddleware);
             app.use(behovForVeiledning(behovRepository));
 
             const response = await request(app)
@@ -74,6 +80,7 @@ describe('behovForVeiledning API', () => {
                 ),
             };
 
+            app.use(mockAuthMiddleware);
             app.use(behovForVeiledning(behovRepository));
 
             const response = await request(app)
