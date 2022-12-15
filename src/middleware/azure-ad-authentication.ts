@@ -15,7 +15,10 @@ const azureAdAuthentication: RequestHandler = async (req: Request, res: Response
                 `Feil med azure token-validering: ${validationResult.errorType} ${validationResult.message} (${validationResult.error})`
             );
         }
+    } else {
+        logger.error(`Feil med azure token-validering: ingen token i header`);
     }
+
     res.status(401).end();
 };
 
