@@ -32,12 +32,6 @@ const defaultOpts: ProxyOpts = {
 
 export function proxyHttpCall(url: string, opts: ProxyOpts = defaultOpts) {
     return async (req: Request, res: Response) => {
-        const token = getTokenFromCookie(req);
-
-        if (!token) {
-            return res.status(401).end();
-        }
-
         const method = opts?.overrideMethod || req.method;
         const defaultHeaders = getDefaultHeaders(req);
 

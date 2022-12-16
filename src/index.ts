@@ -22,6 +22,8 @@ import config from './config';
 import createDependencies from './deps';
 import meldekortInaktivering from './api/data/meldekortInaktivering';
 import automatiskReaktiveringApi from './api/reaktivering/automatiskReaktivering';
+import idportenAuthentication from './middleware/idporten-authentication';
+import nivaa4Authentication from './middleware/nivaa4-authentication';
 
 const PORT = 3000;
 const app = express();
@@ -42,12 +44,17 @@ async function setUpRoutes() {
     router.use(healhApi());
     router.use(unleashApi());
 
+    // azure ad
     router.use(automatiskReaktiveringApi(await automatiskReaktiveringRepository));
 
+    // id porten
+    router.use(idportenAuthentication);
     router.use(ptoProxyApi());
     router.use(veilarbregistreringApi());
     router.use(arbeidssokerApi());
-    router.use((await tokenDings).verifyIDPortenToken);
+
+    // level4
+    router.use(nivaa4Authentication);
     router.use(dagpengerApi(await tokenDings));
     router.use(meldekortApi(await tokenDings));
     router.use(profilApi(profilRepository));
