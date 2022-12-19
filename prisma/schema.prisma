@@ -38,6 +38,18 @@ model AutomatiskReaktivering {
   id Int @id @default(autoincrement())
   bruker_id String
   created_at DateTime @default(now())
+  svar AutomatiskReaktiveringSvar?
+
+  @@index([bruker_id])
+}
+
+model AutomatiskReaktiveringSvar {
+  id Int @id @default(autoincrement())
+  bruker_id String
+  created_at DateTime @default(now())
+  automatisk_reaktivering AutomatiskReaktivering @relation(fields: [automatisk_reaktivering_id], references: [id])
+  automatisk_reaktivering_id Int @unique
+  svar String
 
   @@index([bruker_id])
 }
