@@ -5,8 +5,8 @@ import logger from '../../logger';
 import { IdPortenRequest } from '../../middleware/idporten-authentication';
 
 function automatiskReaktiveringSvarRoutes(
-    automatiskReaktiveringRepository: AutomatiskReaktiveringRepository,
-    automatiskReaktiveringSvarRepository: AutomatiskReaktiveringSvarRepository
+    reaktiveringRepository: AutomatiskReaktiveringRepository,
+    svarRepository: AutomatiskReaktiveringSvarRepository
 ) {
     const router = Router();
 
@@ -14,12 +14,12 @@ function automatiskReaktiveringSvarRoutes(
         const ident = (req as IdPortenRequest).user.ident;
 
         try {
-            const automatiskReaktivering = await automatiskReaktiveringRepository.hent(ident);
-            console.log('\n\n\n automatiskReaktivering: ', automatiskReaktivering);
+            const automatiskReaktivering = await reaktiveringRepository.hent(ident);
+
             if (!automatiskReaktivering) {
                 res.status(204).end();
             } else {
-                const svar = await automatiskReaktiveringSvarRepository.hent(ident, automatiskReaktivering.id);
+                const svar = await svarRepository.hent(ident, automatiskReaktivering.id);
 
                 res.send({
                     opprettetDato: automatiskReaktivering.created_at,
@@ -48,7 +48,7 @@ function automatiskReaktiveringSvarRoutes(
         }
 
         try {
-            const reaktivering = await automatiskReaktiveringRepository.hent(ident);
+            const reaktivering = await reaktiveringRepository.hent(ident);
 
             if (!reaktivering) {
                 logger.error(`Feil ved reaktivering-svar: finner ikke reaktivering for bruker`);
@@ -56,7 +56,7 @@ function automatiskReaktiveringSvarRoutes(
                 return;
             }
 
-            const result = await automatiskReaktiveringSvarRepository.lagre({
+            const result = await svarRepository.lagre({
                 brukerId: ident,
                 svar,
                 automatiskReaktiveringId: reaktivering.id,
