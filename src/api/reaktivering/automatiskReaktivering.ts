@@ -8,12 +8,6 @@ function automatiskReaktiveringRoutes(
 ) {
     const router = Router();
 
-    router.get('/m2m/automatisk-reaktivering', authMiddleware, async (req, res) => {
-        // 2. lagre i basen
-        // 3. returner 201 Created
-        res.status(200).end();
-    });
-
     router.post('/azure/automatisk-reaktivering', authMiddleware, async (req, res) => {
         const { fnr } = req.body;
 

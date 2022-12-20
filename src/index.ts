@@ -22,6 +22,7 @@ import config from './config';
 import createDependencies from './deps';
 import meldekortInaktivering from './api/data/meldekortInaktivering';
 import automatiskReaktiveringApi from './api/reaktivering/automatiskReaktivering';
+import reaktiveringApi from './api/reaktivering/automatiskReaktiveringSvar';
 import idportenAuthentication from './middleware/idporten-authentication';
 import nivaa4Authentication from './middleware/nivaa4-authentication';
 
@@ -37,7 +38,13 @@ app.use(cors());
 app.disable('x-powered-by');
 
 async function setUpRoutes() {
-    const { tokenDings, profilRepository, behovRepository, automatiskReaktiveringRepository } = createDependencies();
+    const {
+        tokenDings,
+        profilRepository,
+        behovRepository,
+        automatiskReaktiveringRepository,
+        automatiskReaktiveringSvarRepository,
+    } = createDependencies();
 
     // Public routes
     router.use(swaggerDocs());
@@ -45,7 +52,7 @@ async function setUpRoutes() {
     router.use(unleashApi());
 
     // azure ad
-    router.use(automatiskReaktiveringApi(await automatiskReaktiveringRepository));
+    router.use(automatiskReaktiveringApi(automatiskReaktiveringRepository));
 
     // id porten
     router.use(idportenAuthentication);
@@ -61,6 +68,8 @@ async function setUpRoutes() {
     router.use(behovForVeiledningApi(behovRepository));
     router.use(dagpengerStatusApi(await tokenDings));
     router.use(meldekortInaktivering());
+    router.use(reaktiveringApi(automatiskReaktiveringRepository, automatiskReaktiveringSvarRepository));
+
     app.use(config.BASE_PATH || '', router);
 }
 

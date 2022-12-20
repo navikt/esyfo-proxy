@@ -6,12 +6,16 @@ import createBehovRepository, { BehovRepository } from './db/behovForVeiledningR
 import createAutomatiskReaktiveringRepository, {
     AutomatiskReaktiveringRepository,
 } from './db/automatiskReaktiveringRepository';
+import createAutomatiskReaktiveringSvarRepository, {
+    AutomatiskReaktiveringSvarRepository,
+} from './db/automatiskReaktiveringSvarRepository';
 
 export interface Dependencies {
     tokenDings: Promise<Auth>;
     profilRepository: ProfilRepository;
     behovRepository: BehovRepository;
     automatiskReaktiveringRepository: AutomatiskReaktiveringRepository;
+    automatiskReaktiveringSvarRepository: AutomatiskReaktiveringSvarRepository;
 }
 
 function createDependencies(): Dependencies {
@@ -27,6 +31,7 @@ function createDependencies(): Dependencies {
         profilRepository: createProfilRepository(prismaClient),
         behovRepository: createBehovRepository(prismaClient),
         automatiskReaktiveringRepository: createAutomatiskReaktiveringRepository(prismaClient),
+        automatiskReaktiveringSvarRepository: createAutomatiskReaktiveringSvarRepository(prismaClient),
     };
 }
 
