@@ -9,6 +9,7 @@ const mockAuthMiddleware: RequestHandler = (req, res, next) => {
     (req as IdPortenRequest).user = {
         level: 'Level4',
         ident: 'test-ident',
+        fnr: 'test-fnr',
     };
     next();
 };

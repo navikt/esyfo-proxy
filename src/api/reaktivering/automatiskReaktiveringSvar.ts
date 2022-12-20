@@ -11,15 +11,15 @@ function automatiskReaktiveringSvarRoutes(
     const router = Router();
 
     router.get('/reaktivering', async (req, res) => {
-        const ident = (req as IdPortenRequest).user.ident;
+        const brukerId = (req as IdPortenRequest).user.fnr;
 
         try {
-            const automatiskReaktivering = await reaktiveringRepository.hent(ident);
+            const automatiskReaktivering = await reaktiveringRepository.hent(brukerId);
 
             if (!automatiskReaktivering) {
                 res.status(204).end();
             } else {
-                const svar = await svarRepository.hent(ident, automatiskReaktivering.id);
+                const svar = await svarRepository.hent(brukerId, automatiskReaktivering.id);
 
                 res.send({
                     opprettetDato: automatiskReaktivering.created_at,
@@ -38,7 +38,7 @@ function automatiskReaktiveringSvarRoutes(
     });
 
     router.post('/reaktivering', async (req, res) => {
-        const ident = (req as IdPortenRequest).user.ident;
+        const brukerId = (req as IdPortenRequest).user.fnr;
         const svar = req.body.svar;
 
         if (!svar) {
@@ -48,7 +48,7 @@ function automatiskReaktiveringSvarRoutes(
         }
 
         try {
-            const reaktivering = await reaktiveringRepository.hent(ident);
+            const reaktivering = await reaktiveringRepository.hent(brukerId);
 
             if (!reaktivering) {
                 logger.error(`Feil ved reaktivering-svar: finner ikke reaktivering for bruker`);
@@ -57,7 +57,7 @@ function automatiskReaktiveringSvarRoutes(
             }
 
             const result = await svarRepository.lagre({
-                brukerId: ident,
+                brukerId,
                 svar,
                 automatiskReaktiveringId: reaktivering.id,
             });
