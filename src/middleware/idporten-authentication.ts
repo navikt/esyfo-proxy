@@ -15,7 +15,7 @@ const getIdPortenJwkSet = () => {
 };
 
 export type AuthLevel = 'Level3' | 'Level4';
-export type IdPortenRequest = Request & { user: { level: AuthLevel; ident: string } };
+export type IdPortenRequest = Request & { user: { level: AuthLevel; ident: string; fnr: string } };
 
 const idportenAuthentication: RequestHandler = async (req, res, next) => {
     try {
@@ -33,6 +33,7 @@ const idportenAuthentication: RequestHandler = async (req, res, next) => {
 
         (req as IdPortenRequest).user = {
             ident: result.payload.sub!,
+            fnr: result.payload.pid as string,
             level: result.payload.acr as AuthLevel,
         };
 
