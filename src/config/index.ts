@@ -8,7 +8,6 @@ export interface IEnvironmentVariables {
     DAGPENGER_INNSYN_URL: string;
     PTO_PROXY_URL: string;
     VEILARBREGISTRERING_URL: string;
-    VEILARBREGISTRERING_GCP_URL: string;
     NAIS_CLUSTER_NAME: string;
     BASE_PATH: string;
     MELDEKORT_APP_NAME: string;

@@ -47,7 +47,7 @@ export async function hentArbeidssokerPerioder(
 
 function arbeidssokerRoutes(
     ptoProxyUrl = config.PTO_PROXY_URL,
-    veilarbregistreringUrl = config.VEILARBREGISTRERING_GCP_URL
+    veilarbregistreringUrl = config.VEILARBREGISTRERING_URL
 ) {
     const router = Router();
 
