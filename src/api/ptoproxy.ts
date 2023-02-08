@@ -58,6 +58,19 @@ function ptoProxy(ptoProxyUrl = config.PTO_PROXY_URL) {
 
     /**
      * @openapi
+     * /dialog/egenvurdering:
+     *   post:
+     *     description: Oppretter ny dialog i dialogløsningen og setter den til ferdig behandlet
+     *     responses:
+     *       200:
+     *         $ref: '#/components/schemas/Ok'
+     *       401:
+     *         $ref: '#/components/schemas/Unauthorized'
+     */
+    router.post('/dialog/egenvurdering', proxyHttpCall(`${ptoProxyUrl}/veilarbdialog/api/dialog/egenvurdering`));
+
+    /**
+     * @openapi
      * /vedtakinfo/besvarelse:
      *   get:
      *     description:
