@@ -15,9 +15,14 @@ function automatiskReaktiveringRoutes(
             res.status(400).send('mangler fnr');
             return;
         }
-
-        const result = await repository.lagre(fnr);
-        res.status(201).send(result);
+        try {
+            const result = await repository.lagre(fnr);
+            // kafkaProducer.send(result)
+            res.status(201).send(result);
+        } catch (e) {
+            // log
+            res.status(500).end();
+        }
     });
 
     return router;

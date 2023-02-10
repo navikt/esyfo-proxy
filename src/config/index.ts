@@ -16,6 +16,12 @@ export interface IEnvironmentVariables {
     IDPORTEN_JWKS_URI: string;
     AZURE_APP_WELL_KNOWN_URL: string;
     AZURE_APP_CLIENT_ID: string;
+    APP_NAME: string;
+    KAFKA_TOPIC: string;
+    KAFKA_BROKERS: string;
+    KAFKA_CERTIFICATE: string;
+    KAFKA_CA: string;
+    KAFKA_PRIVATE_KEY: string;
 }
 
 const env = process.env as unknown as IEnvironmentVariables;

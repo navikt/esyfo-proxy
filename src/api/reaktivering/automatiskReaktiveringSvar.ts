@@ -62,6 +62,8 @@ function automatiskReaktiveringSvarRoutes(
                 automatiskReaktiveringId: reaktivering.id,
             });
 
+            // await kafkaProducer.send(result)
+
             res.status(201).send({
                 opprettetDato: reaktivering.created_at,
                 svar: {
