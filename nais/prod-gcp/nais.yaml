@@ -75,6 +75,9 @@ spec:
           namespace: teamdagpenger
         - application: meldekort-api
           namespace: meldekort
+        - application: veilarbdialog
+          namespace: pto
+          cluster: prod-fss
         - application: veilarbregistrering
   gcp:
     sqlInstances:
