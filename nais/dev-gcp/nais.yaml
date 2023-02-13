@@ -78,3 +78,5 @@ spec:
       - type: POSTGRES_14
         databases:
           - name: aia-backend
+  kafka:
+    pool: nav-dev
