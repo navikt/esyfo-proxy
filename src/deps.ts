@@ -9,6 +9,7 @@ import createAutomatiskReaktiveringRepository, {
 import createAutomatiskReaktiveringSvarRepository, {
     AutomatiskReaktiveringSvarRepository,
 } from './db/automatiskReaktiveringSvarRepository';
+import createProducer, { KafkaProducer } from './kafka/automatisk-reaktivert-producer';
 
 export interface Dependencies {
     tokenDings: Promise<Auth>;
@@ -16,6 +17,7 @@ export interface Dependencies {
     behovRepository: BehovRepository;
     automatiskReaktiveringRepository: AutomatiskReaktiveringRepository;
     automatiskReaktiveringSvarRepository: AutomatiskReaktiveringSvarRepository;
+    automatiskReaktivertProducer: Promise<KafkaProducer>;
 }
 
 function createDependencies(): Dependencies {
@@ -32,6 +34,7 @@ function createDependencies(): Dependencies {
         behovRepository: createBehovRepository(prismaClient),
         automatiskReaktiveringRepository: createAutomatiskReaktiveringRepository(prismaClient),
         automatiskReaktiveringSvarRepository: createAutomatiskReaktiveringSvarRepository(prismaClient),
+        automatiskReaktivertProducer: createProducer(),
     };
 }
 

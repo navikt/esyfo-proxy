@@ -1,10 +1,10 @@
+import { AutomatiskReaktivering, AutomatiskReaktiveringSvar } from '@prisma/client';
 import { Kafka, KafkaConfig } from 'kafkajs';
 import config from '../config';
+import logger from '../logger';
 
-interface Producer {
-    start(): Promise<void>;
-    stop(): Promise<void>;
-    send(data: any): Promise<void>;
+export interface KafkaProducer {
+    send(data: Array<AutomatiskReaktivering | AutomatiskReaktiveringSvar>): Promise<void>;
 }
 
 const kafkaConfig: KafkaConfig = {
@@ -19,32 +19,42 @@ const kafkaConfig: KafkaConfig = {
               cert: config.KAFKA_CERTIFICATE,
           },
 };
-const createProducer = (): Producer => {
+const createProducer = async (): Promise<KafkaProducer> => {
     const kafka = new Kafka(kafkaConfig);
     const producer = kafka.producer();
 
+    await producer.connect();
+
     return {
-        async start(): Promise<void> {
-            try {
-                await producer.connect();
-            } catch (e) {}
-        },
-        async send(data: any): Promise<void> {
+        async send(data: Array<AutomatiskReaktivering | AutomatiskReaktiveringSvar>): Promise<void> {
+            const messages = data.map((d) => {
+                if ('svar' in d) {
+                    return {
+                        value: JSON.stringify({
+                            bruker_id: d.bruker_id,
+                            created_at: d.created_at,
+                            svar: d.svar,
+                            type: 'AutomatiskReaktiveringSvar',
+                        }),
+                    };
+                }
+                return {
+                    value: JSON.stringify({
+                        bruker_id: d.bruker_id,
+                        created_at: d.created_at,
+                        type: 'AutomatiskReaktivering',
+                    }),
+                };
+            });
+
             try {
                 await producer.send({
                     topic: config.KAFKA_TOPIC,
-                    messages: [
-                        {
-                            value: JSON.stringify(data),
-                        },
-                    ],
+                    messages,
                 });
-            } catch (e) {}
-        },
-        async stop(): Promise<void> {
-            try {
-                await producer.disconnect();
-            } catch (e) {}
+            } catch (e) {
+                logger.error(`Fikk ikke sendt melding til kafka ${e}`);
+            }
         },
     };
 };

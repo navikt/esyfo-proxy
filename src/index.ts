@@ -44,6 +44,7 @@ async function setUpRoutes() {
         behovRepository,
         automatiskReaktiveringRepository,
         automatiskReaktiveringSvarRepository,
+        automatiskReaktivertProducer,
     } = createDependencies();
 
     // Public routes
@@ -52,7 +53,7 @@ async function setUpRoutes() {
     router.use(unleashApi());
 
     // azure ad
-    router.use(automatiskReaktiveringApi(automatiskReaktiveringRepository));
+    router.use(automatiskReaktiveringApi(automatiskReaktiveringRepository, await automatiskReaktivertProducer));
 
     // id porten
     router.use(idportenAuthentication);
@@ -68,7 +69,13 @@ async function setUpRoutes() {
     router.use(behovForVeiledningApi(behovRepository));
     router.use(dagpengerStatusApi(await tokenDings));
     router.use(meldekortInaktivering());
-    router.use(reaktiveringApi(automatiskReaktiveringRepository, automatiskReaktiveringSvarRepository));
+    router.use(
+        reaktiveringApi(
+            automatiskReaktiveringRepository,
+            automatiskReaktiveringSvarRepository,
+            await automatiskReaktivertProducer
+        )
+    );
 
     app.use(config.BASE_PATH || '', router);
 }

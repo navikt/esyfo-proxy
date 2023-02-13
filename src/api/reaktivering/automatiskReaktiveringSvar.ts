@@ -1,12 +1,14 @@
 import { Router } from 'express';
 import { AutomatiskReaktiveringRepository } from '../../db/automatiskReaktiveringRepository';
 import { AutomatiskReaktiveringSvarRepository } from '../../db/automatiskReaktiveringSvarRepository';
+import { KafkaProducer } from '../../kafka/automatisk-reaktivert-producer';
 import logger from '../../logger';
 import { IdPortenRequest } from '../../middleware/idporten-authentication';
 
 function automatiskReaktiveringSvarRoutes(
     reaktiveringRepository: AutomatiskReaktiveringRepository,
-    svarRepository: AutomatiskReaktiveringSvarRepository
+    svarRepository: AutomatiskReaktiveringSvarRepository,
+    automatiskReaktivertProducer: KafkaProducer
 ) {
     const router = Router();
 
@@ -62,7 +64,7 @@ function automatiskReaktiveringSvarRoutes(
                 automatiskReaktiveringId: reaktivering.id,
             });
 
-            // await kafkaProducer.send(result)
+            await automatiskReaktivertProducer.send([result]);
 
             res.status(201).send({
                 opprettetDato: reaktivering.created_at,
