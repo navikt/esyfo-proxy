@@ -1,4 +1,4 @@
-import { CompressionTypes, Kafka, KafkaConfig } from 'kafkajs';
+import { Kafka, KafkaConfig } from 'kafkajs';
 import config from '../config';
 
 interface Producer {
@@ -32,8 +32,7 @@ const createProducer = (): Producer => {
         async send(data: any): Promise<void> {
             try {
                 await producer.send({
-                    topic: 'topic',
-                    compression: CompressionTypes.GZIP,
+                    topic: config.KAFKA_TOPIC,
                     messages: [
                         {
                             value: JSON.stringify(data),
