@@ -57,6 +57,8 @@ spec:
       value: prod
     - name: DAGPENGER_INNSYN_URL
       value: http://dp-innsyn.teamdagpenger.svc.cluster.local
+    - name: KAFKA_TOPIC
+      value: arbeidssoker-reaktivering-v1
   resources:
     limits:
       cpu: "3"
