@@ -8,7 +8,7 @@ import { axiosLogError } from '../logger';
 
 function dialogRoutes(tokenDings: Auth, dialogApiUrl = config.VEILARBDIALOG_API_URL) {
     const router = Router();
-    const DIALOG_CLIENT_ID = `${config.NAIS_CLUSTER_NAME}:pto:${config.DIALOG_APP_NAME}`;
+    const DIALOG_CLIENT_ID = `${config.NAIS_CLUSTER_NAME.replace('gcp', 'fss')}:pto:${config.DIALOG_APP_NAME}`;
 
     const getTokenXHeaders = async (req: Request) => {
         const idPortenToken = getTokenFromCookie(req);
