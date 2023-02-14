@@ -46,6 +46,8 @@ spec:
       value: https://pto-proxy.dev.intern.nav.no/proxy
     - name: VEILARBDIALOG_API_URL
       value: https://veilarbdialog.dev-fss-pub.nais.io/veilarbdialog/api
+    - name: DIALOG_APP_NAME
+      value: veilarbdialog
     - name: VEILARBREGISTRERING_URL
       value: http://veilarbregistrering
     - name: VEILARBREGISTRERING_GCP_URL

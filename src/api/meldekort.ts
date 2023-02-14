@@ -1,9 +1,10 @@
+import { AxiosError } from 'axios';
+import { Request, Response, Router } from 'express';
+
 import { Auth, getTokenFromCookie } from '../auth/tokenDings';
 import config from '../config';
-import { Request, Response, Router } from 'express';
 import { proxyHttpCall } from '../http';
 import { axiosLogError } from '../logger';
-import { AxiosError } from 'axios';
 
 function meldekortRoutes(tokenDings: Auth, meldekortUrl: string = config.MELDEKORT_URL) {
     const router = Router();
