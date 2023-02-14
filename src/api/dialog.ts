@@ -14,7 +14,7 @@ function dialogRoutes(tokenDings: Auth, dialogApiUrl = config.VEILARBDIALOG_API_
         const idPortenToken = getTokenFromCookie(req);
         const tokenSet = await tokenDings.exchangeIDPortenToken(idPortenToken, DIALOG_CLIENT_ID);
         const token = tokenSet.access_token;
-        return { Authorization: null, TokenXAuthorization: `Bearer ${token}` };
+        return { Authorization: `Bearer ${token}` };
     };
 
     const dialogCall = (url: string) => {
