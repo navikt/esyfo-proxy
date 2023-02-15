@@ -50,8 +50,6 @@ spec:
       value: veilarbdialog
     - name: VEILARBREGISTRERING_URL
       value: http://veilarbregistrering
-    - name: VEILARBREGISTRERING_GCP_URL
-      value: http://veilarbregistrering
     - name: UNLEASH_API_URL
       value: https://unleash.nais.io/api/
     - name: UNLEASH_ENVIRONMENT

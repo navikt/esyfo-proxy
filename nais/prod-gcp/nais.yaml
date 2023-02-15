@@ -52,8 +52,6 @@ spec:
     - name: DIALOG_APP_NAME
       value: veilarbdialog
     - name: VEILARBREGISTRERING_URL
-      value: https://pto-proxy.intern.nav.no/proxy
-    - name: VEILARBREGISTRERING_GCP_URL
       value: http://veilarbregistrering
     - name: UNLEASH_API_URL
       value: https://unleash.nais.io/api/

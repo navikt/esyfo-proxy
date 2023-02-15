@@ -6,7 +6,7 @@ import { MeldekortDto } from './typer';
 import { beregnMeldekortStatus, grupperMeldekort } from './beregnMeldekortStatus';
 import { getDefaultHeaders } from '../../../http';
 
-function meldekortInaktivering(veilarbregistreringUrl = config.VEILARBREGISTRERING_GCP_URL) {
+function meldekortInaktivering(veilarbregistreringUrl = config.VEILARBREGISTRERING_URL) {
     const router = Router();
 
     router.get('/data/meldekort-inaktivering', async (req, res) => {

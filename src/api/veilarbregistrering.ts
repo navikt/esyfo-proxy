@@ -2,7 +2,7 @@ import { proxyHttpCall as proxy } from '../http';
 import config from '../config';
 import { Router } from 'express';
 
-function veilarbregistrering(veilarbregistreringUrl = config.VEILARBREGISTRERING_GCP_URL): Router {
+function veilarbregistrering(veilarbregistreringUrl = config.VEILARBREGISTRERING_URL): Router {
     const router = Router();
 
     /**
