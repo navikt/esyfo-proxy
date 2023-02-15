@@ -8,6 +8,7 @@ import cors from 'cors';
 import healhApi from './api/health';
 import unleashApi from './api/unleash';
 import ptoProxyApi from './api/ptoproxy';
+import dialogRoutes from './api/dialog';
 import dagpengerApi from './api/dagpenger';
 import meldekortApi from './api/meldekort';
 import profilApi from './api/profil';
@@ -57,6 +58,7 @@ async function setUpRoutes() {
     // id porten
     router.use(idportenAuthentication);
     router.use(ptoProxyApi());
+    router.use(dialogRoutes(await tokenDings));
     router.use(veilarbregistreringApi());
     router.use(arbeidssokerApi());
 
