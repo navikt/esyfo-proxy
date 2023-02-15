@@ -32,45 +32,6 @@ function ptoProxy(ptoProxyUrl = config.PTO_PROXY_URL) {
 
     /**
      * @openapi
-     * /dialog/antallUleste:
-     *   get:
-     *     description:
-     *     responses:
-     *       200:
-     *         $ref: '#/components/schemas/Ok'
-     *       401:
-     *         $ref: '#/components/schemas/Unauthorized'
-     */
-    router.get('/dialog/antallUleste', proxyHttpCall(`${ptoProxyUrl}/veilarbdialog/api/dialog/antallUleste`));
-
-    /**
-     * @openapi
-     * /dialog:
-     *   post:
-     *     description: Oppretter ny dialog i dialogløsningen
-     *     responses:
-     *       200:
-     *         $ref: '#/components/schemas/Ok'
-     *       401:
-     *         $ref: '#/components/schemas/Unauthorized'
-     */
-    router.post('/dialog', proxyHttpCall(`${ptoProxyUrl}/veilarbdialog/api/dialog`));
-
-    /**
-     * @openapi
-     * /dialog/egenvurdering:
-     *   post:
-     *     description: Oppretter ny dialog i dialogløsningen og setter den til ferdig behandlet
-     *     responses:
-     *       200:
-     *         $ref: '#/components/schemas/Ok'
-     *       401:
-     *         $ref: '#/components/schemas/Unauthorized'
-     */
-    router.post('/dialog/egenvurdering', proxyHttpCall(`${ptoProxyUrl}/veilarbdialog/api/dialog/egenvurdering`));
-
-    /**
-     * @openapi
      * /vedtakinfo/besvarelse:
      *   get:
      *     description:

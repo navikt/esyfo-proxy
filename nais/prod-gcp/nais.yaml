@@ -47,9 +47,11 @@ spec:
       value: http://meldekort-api.meldekort.svc.cluster.local/meldekort/meldekort-api/api/person
     - name: PTO_PROXY_URL
       value: https://pto-proxy.intern.nav.no/proxy
+    - name: VEILARBDIALOG_API_URL
+      value: https://veilarbdialog.prod-fss-pub.nais.io/veilarbdialog/api
+    - name: DIALOG_APP_NAME
+      value: veilarbdialog
     - name: VEILARBREGISTRERING_URL
-      value: https://pto-proxy.intern.nav.no/proxy
-    - name: VEILARBREGISTRERING_GCP_URL
       value: http://veilarbregistrering
     - name: UNLEASH_API_URL
       value: https://unleash.nais.io/api/
@@ -77,6 +79,9 @@ spec:
           namespace: teamdagpenger
         - application: meldekort-api
           namespace: meldekort
+        - application: veilarbdialog
+          namespace: pto
+          cluster: prod-fss
         - application: veilarbregistrering
   gcp:
     sqlInstances:

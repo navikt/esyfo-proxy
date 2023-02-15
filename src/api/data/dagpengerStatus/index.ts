@@ -12,7 +12,7 @@ import { getDefaultHeaders } from '../../../http';
 function dagpengerStatus(
     tokenDings: Auth,
     dagpengerInnsynUrl = config.DAGPENGER_INNSYN_URL,
-    veilarbregistreringUrl = config.VEILARBREGISTRERING_GCP_URL
+    veilarbregistreringUrl = config.VEILARBREGISTRERING_URL
 ) {
     const router = Router();
     const DP_INNSYN_CLIENT_ID = `${config.NAIS_CLUSTER_NAME}:teamdagpenger:dp-innsyn`;
