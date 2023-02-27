@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import { mockDeep } from 'jest-mock-extended';
 import { AutomatiskReaktiveringRepository } from '../../../src/db/automatiskReaktiveringRepository';
 import automatiskReaktiveringRoutes from '../../../src/api/reaktivering/automatiskReaktivering';
+import { KafkaProducer } from '../../../src/kafka/automatisk-reaktivert-producer';
 
 describe('automatisk reaktivering api', () => {
     describe('POST /azure/automatisk-reaktivering', () => {
@@ -16,7 +17,9 @@ describe('automatisk reaktivering api', () => {
             };
             const repository = mockDeep<AutomatiskReaktiveringRepository>();
 
-            app.use(automatiskReaktiveringRoutes(repository, authMiddleware));
+            const kafkaProducer = mockDeep<KafkaProducer>();
+
+            app.use(automatiskReaktiveringRoutes(repository, kafkaProducer, authMiddleware));
             const response = await request(app).post('/azure/automatisk-reaktivering');
 
             expect(response.statusCode).toEqual(401);
@@ -32,7 +35,9 @@ describe('automatisk reaktivering api', () => {
 
             const repository = mockDeep<AutomatiskReaktiveringRepository>();
 
-            app.use(automatiskReaktiveringRoutes(repository, authMiddleware));
+            const kafkaProducer = mockDeep<KafkaProducer>();
+
+            app.use(automatiskReaktiveringRoutes(repository, kafkaProducer, authMiddleware));
             const response = await request(app).post('/azure/automatisk-reaktivering');
 
             expect(response.statusCode).toEqual(400);
@@ -47,13 +52,16 @@ describe('automatisk reaktivering api', () => {
             };
 
             const repository = mockDeep<AutomatiskReaktiveringRepository>();
+
+            const kafkaProducer = mockDeep<KafkaProducer>();
+
             repository.lagre.mockResolvedValue({
                 id: 42,
                 bruker_id: 'fnr-123',
                 created_at: new Date('2022-12-12T11:30:28.603Z'),
             });
 
-            app.use(automatiskReaktiveringRoutes(repository, authMiddleware));
+            app.use(automatiskReaktiveringRoutes(repository, kafkaProducer, authMiddleware));
 
             const response = await request(app).post('/azure/automatisk-reaktivering').send({ fnr: 'fnr-123' });
 

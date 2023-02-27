@@ -59,6 +59,8 @@ spec:
       value: prod
     - name: DAGPENGER_INNSYN_URL
       value: http://dp-innsyn.teamdagpenger.svc.cluster.local
+    - name: KAFKA_TOPIC
+      value: arbeidssoker-reaktivering-v1
   resources:
     limits:
       cpu: "3"
@@ -87,3 +89,5 @@ spec:
         tier: db-custom-1-3840
         databases:
           - name: aia-backend
+  kafka:
+    pool: nav-prod
