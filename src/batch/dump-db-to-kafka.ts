@@ -9,7 +9,7 @@ import createProducer from '../kafka/automatisk-reaktivert-producer';
     const automatiskReaktivering = await prismaClient.automatiskReaktivering.findMany({
         where: {
             created_at: {
-                lt: new Date(),
+                lt: new Date('2023-02-27 12:22:53.584000 UTC'),
             },
         },
     });
@@ -22,7 +22,7 @@ import createProducer from '../kafka/automatisk-reaktivert-producer';
     const automatiskReaktiveringSvar = await prismaClient.automatiskReaktiveringSvar.findMany({
         where: {
             created_at: {
-                lt: new Date(),
+                lt: new Date('2023-02-27 12:26:09.939000 UTC'),
             },
         },
     });
@@ -30,5 +30,5 @@ import createProducer from '../kafka/automatisk-reaktivert-producer';
     console.log(`Fant ${automatiskReaktiveringSvar.length} rader`);
     console.log('Dumper automatiskReaktiveringSvar på kafka...');
     await kafkaProducer.send(automatiskReaktiveringSvar);
-    console.log('Ferdig med automatiskReaktiveringSvar');
+    console.log('Ferdig med automatiskReaktiveringSvar\n\n');
 })();
