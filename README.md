@@ -4,10 +4,10 @@ Backend for AiA
 
 ## Utvikling
 
-Bruk Node.js 16.
+Bruk Node.js 18.
 
 Du kan bruke [NVM](https://github.com/nvm-sh/nvm) for å sette versjon.
-F.eks. `nvm install 16.17.1 && nvm use 16.17.1`
+F.eks. `nvm install 18.14.2 && nvm use 18.14.2`
 
 -   klon repo
 -   installer avhengigheter `npm i`
