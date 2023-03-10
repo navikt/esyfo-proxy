@@ -34,7 +34,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(pinoHttpMiddleware());
 app.use(helmet());
-app.use(cors({ origin: /\.nav\.no$/ }));
+app.use(cors({ origin: /\.nav\.no$/, credentials: true }));
 app.disable('x-powered-by');
 
 async function setUpRoutes() {
