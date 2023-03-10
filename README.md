@@ -81,7 +81,7 @@ git branch -m dev/<opprinnlig-branch>
 
 ## Dokumentasjon
 
-Se swagger dokumentasjon på https://www.dev.nav.no/aia-backend/docs/
+Se swagger dokumentasjon på https://www.intern.dev.nav.no/aia-backend/docs/
 
 # Henvendelser
 

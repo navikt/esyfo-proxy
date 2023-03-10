@@ -28,7 +28,7 @@ spec:
   idporten:
     enabled: true
   ingresses:
-    - https://www.dev.nav.no/aia-backend
+    - https://www.intern.dev.nav.no/aia-backend
   envFrom:
     - configmap: loginservice-idporten
   env:
