@@ -30,12 +30,11 @@ import nivaa4Authentication from './middleware/nivaa4-authentication';
 const PORT = 3000;
 const app = express();
 const router = express.Router();
-
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(pinoHttpMiddleware());
 app.use(helmet());
-app.use(cors());
+app.use(cors({ origin: /\.nav\.no$/ }));
 app.disable('x-powered-by');
 
 async function setUpRoutes() {
