@@ -23,6 +23,9 @@ jobs:
 
     build:
         name: Test, build and push
+        permissions:
+          contents: "read"
+          id-token: "write"
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
