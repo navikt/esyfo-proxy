@@ -1,10 +1,8 @@
-import { AxiosError } from 'axios';
-import { Request, Response, Router } from 'express';
+import { Request, Router } from 'express';
 
 import { Auth, getTokenFromCookie } from '../auth/tokenDings';
 import config from '../config';
-import { proxyHttpCall } from '../http';
-import { axiosLogError } from '../logger';
+import { proxyTokenXCall } from '../http';
 
 function meldekortRoutes(tokenDings: Auth, meldekortUrl: string = config.MELDEKORT_URL) {
     const router = Router();
@@ -17,20 +15,7 @@ function meldekortRoutes(tokenDings: Auth, meldekortUrl: string = config.MELDEKO
         return { Authorization: null, TokenXAuthorization: `Bearer ${token}` };
     };
 
-    const meldekortCall = (url: string) => {
-        return async (req: Request, res: Response) => {
-            try {
-                await proxyHttpCall(url, {
-                    headers: await getTokenXHeaders(req),
-                })(req, res);
-            } catch (err) {
-                const axiosError = err as AxiosError;
-                const status = axiosError.response?.status || 500;
-                axiosLogError(axiosError);
-                res.status(status).end();
-            }
-        };
-    };
+    const meldekortCall = (url: string) => proxyTokenXCall(url, getTokenXHeaders);
 
     /**
      * @openapi

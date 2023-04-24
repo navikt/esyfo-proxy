@@ -58,6 +58,10 @@ spec:
       value: http://dp-innsyn.teamdagpenger.svc.cluster.local
     - name: KAFKA_TOPIC
       value: paw.arbeidssoker-reaktivering-v1
+    - name: SITUASJON_URL
+      value: https://arbeidssoker-situasjon.intern.dev.nav.no
+    - name: SITUASJON_APP_NAME
+      value: paw-arbeidssoker-situasjon
   resources:
     limits:
       cpu: "3"
@@ -80,6 +84,7 @@ spec:
           namespace: pto
           cluster: dev-fss
         - application: veilarbregistrering
+        - application: paw-arbeidssoker-situasjon
   gcp:
     sqlInstances:
       - type: POSTGRES_14

@@ -79,3 +79,21 @@ export function proxyHttpCall(url: string, opts: ProxyOpts = defaultOpts) {
         return retry(0);
     };
 }
+
+export function proxyTokenXCall(
+    url: string,
+    getTokenXHeaders: (req: Request) => Promise<Record<string, string | null>>
+) {
+    return async (req: Request, res: Response) => {
+        try {
+            await proxyHttpCall(url, {
+                headers: await getTokenXHeaders(req),
+            })(req, res);
+        } catch (err) {
+            const axiosError = err as AxiosError;
+            const status = axiosError.response?.status || 500;
+            axiosLogError(axiosError);
+            res.status(status).end();
+        }
+    };
+}
