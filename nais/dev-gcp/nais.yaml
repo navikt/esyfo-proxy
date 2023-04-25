@@ -74,6 +74,8 @@ spec:
       rules:
         - application: veientilarbeid
         - application: paw-reaktiver-arbeidssoker
+        - application: tms-min-side-proxy
+          namespace: min-side
     outbound:
       rules:
         - application: dp-innsyn
