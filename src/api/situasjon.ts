@@ -15,6 +15,7 @@ function situasjon(tokenDings: Auth, situasjonUrl = config.SITUASJON_URL): Route
     };
 
     router.get('/situasjon', proxyTokenXCall(`${situasjonUrl}/api/v1/situasjon`, getTokenXHeaders));
+    router.post('/situasjon', proxyTokenXCall(`${situasjonUrl}/api/v1/situasjon`, getTokenXHeaders));
 
     return router;
 }
