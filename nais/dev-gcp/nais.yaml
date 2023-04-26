@@ -60,8 +60,6 @@ spec:
       value: paw.arbeidssoker-reaktivering-v1
     - name: SITUASJON_URL
       value: https://arbeidssoker-situasjon.intern.dev.nav.no
-    - name: SITUASJON_APP_NAME
-      value: paw-arbeidssoker-situasjon
   resources:
     limits:
       cpu: "3"

@@ -6,7 +6,7 @@ import logger from '../logger';
 
 function situasjon(tokenDings: Auth, situasjonUrl = config.SITUASJON_URL): Router {
     const router = Router();
-    const SITUASJON_CLIENT_ID = `${config.NAIS_CLUSTER_NAME}:paw:${config.SITUASJON_APP_NAME}`;
+    const SITUASJON_CLIENT_ID = `${config.NAIS_CLUSTER_NAME}:paw:paw-arbeidssoker-situasjon`;
 
     const getTokenXHeaders = async (req: Request) => {
         const idPortenToken = getTokenFromRequest(req);

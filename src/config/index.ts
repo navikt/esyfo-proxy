@@ -24,7 +24,6 @@ export interface IEnvironmentVariables {
     KAFKA_CA: string;
     KAFKA_PRIVATE_KEY: string;
     SITUASJON_URL: string;
-    SITUASJON_APP_NAME: string;
 }
 
 const env = process.env as unknown as IEnvironmentVariables;
