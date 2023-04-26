@@ -2,6 +2,7 @@ import { Request, Router } from 'express';
 import config from '../config';
 import { Auth, getTokenFromRequest } from '../auth/tokenDings';
 import { proxyTokenXCall } from '../http';
+import logger from '../logger';
 
 function situasjon(tokenDings: Auth, situasjonUrl = config.SITUASJON_URL): Router {
     const router = Router();
@@ -9,8 +10,10 @@ function situasjon(tokenDings: Auth, situasjonUrl = config.SITUASJON_URL): Route
 
     const getTokenXHeaders = async (req: Request) => {
         const idPortenToken = getTokenFromRequest(req);
+        logger.info('Innkommende token fra request', idPortenToken);
         const tokenSet = await tokenDings.exchangeIDPortenToken(idPortenToken, SITUASJON_CLIENT_ID);
         const token = tokenSet.access_token;
+        logger.info('TokenX token', token);
         return { Authorization: `Bearer ${token}` };
     };
 
