@@ -2,7 +2,7 @@ import { Router } from 'express';
 import config from '../../../config';
 import axios, { AxiosError } from 'axios';
 import { hentArbeidssokerPerioder } from '../../arbeidssoker';
-import { Auth, getTokenFromCookie } from '../../../auth/tokenDings';
+import { Auth, getTokenFromRequest } from '../../../auth/tokenDings';
 import beregnDagpengeStatus from './beregnDagpengeStatus';
 import beregnArbeidssokerperioder from './beregnArbeidssokerPerioder';
 import logger, { axiosLogError } from '../../../logger';
@@ -18,7 +18,7 @@ function dagpengerStatus(
     const DP_INNSYN_CLIENT_ID = `${config.NAIS_CLUSTER_NAME}:teamdagpenger:dp-innsyn`;
 
     router.get('/dagpenger-status', async (req, res) => {
-        const token = getTokenFromCookie(req);
+        const token = getTokenFromRequest(req);
         const getTokenXHeaders = async () => {
             const tokenSet = await tokenDings.exchangeIDPortenToken(token, DP_INNSYN_CLIENT_ID);
             const accessToken = tokenSet.access_token;

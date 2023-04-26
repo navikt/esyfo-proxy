@@ -1,6 +1,6 @@
 import { Request, Router } from 'express';
 import config from '../config';
-import { Auth, getTokenFromCookie } from '../auth/tokenDings';
+import { Auth, getTokenFromRequest } from '../auth/tokenDings';
 import { proxyTokenXCall } from '../http';
 
 function situasjon(tokenDings: Auth, situasjonUrl = config.SITUASJON_URL): Router {
@@ -8,7 +8,7 @@ function situasjon(tokenDings: Auth, situasjonUrl = config.SITUASJON_URL): Route
     const SITUASJON_CLIENT_ID = `${config.NAIS_CLUSTER_NAME}:paw:${config.SITUASJON_APP_NAME}`;
 
     const getTokenXHeaders = async (req: Request) => {
-        const idPortenToken = getTokenFromCookie(req);
+        const idPortenToken = getTokenFromRequest(req);
         const tokenSet = await tokenDings.exchangeIDPortenToken(idPortenToken, SITUASJON_CLIENT_ID);
         const token = tokenSet.access_token;
         return { Authorization: `Bearer ${token}` };

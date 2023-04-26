@@ -1,6 +1,6 @@
 import { Request, Router } from 'express';
 
-import { Auth, getTokenFromCookie } from '../auth/tokenDings';
+import { Auth, getTokenFromRequest } from '../auth/tokenDings';
 import config from '../config';
 import { proxyTokenXCall } from '../http';
 
@@ -9,7 +9,7 @@ function dialogRoutes(tokenDings: Auth, dialogApiUrl = config.VEILARBDIALOG_API_
     const DIALOG_CLIENT_ID = `${config.NAIS_CLUSTER_NAME.replace('gcp', 'fss')}:pto:${config.DIALOG_APP_NAME}`;
 
     const getTokenXHeaders = async (req: Request) => {
-        const idPortenToken = getTokenFromCookie(req);
+        const idPortenToken = getTokenFromRequest(req);
         const tokenSet = await tokenDings.exchangeIDPortenToken(idPortenToken, DIALOG_CLIENT_ID);
         const token = tokenSet.access_token;
         return { Authorization: `Bearer ${token}` };
