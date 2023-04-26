@@ -90,6 +90,7 @@ export function proxyTokenXCall(
                 headers: await getTokenXHeaders(req),
             })(req, res);
         } catch (err) {
+            logger.error(`proxyTokenXCall error : ${(err as Error).message}`);
             const axiosError = err as AxiosError;
             const status = axiosError.response?.status || 500;
             axiosLogError(axiosError);
