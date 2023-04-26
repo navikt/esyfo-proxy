@@ -1,6 +1,6 @@
 import { Request, RequestHandler } from 'express';
 import logger from '../logger';
-import { createRemoteJWKSet, jwtVerify } from 'jose';
+import { createRemoteJWKSet, decodeJwt, jwtVerify } from 'jose';
 import { getTokenFromRequest } from '../auth/tokenDings';
 import config from '../config';
 import { FlattenedJWSInput, GetKeyFunction, JWSHeaderParameters } from 'jose/dist/types/types';
@@ -25,6 +25,12 @@ const idportenAuthentication: RequestHandler = async (req, res, next) => {
             logger.warn('Bearer token mangler');
             res.sendStatus(401);
             return;
+        }
+
+        const decodedToken = decodeJwt(idPortenToken);
+
+        if (/tokendings/.test(decodedToken?.iss ?? '')) {
+            return next();
         }
 
         const result = await jwtVerify(idPortenToken, getIdPortenJwkSet(), {
