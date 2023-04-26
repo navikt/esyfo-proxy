@@ -30,6 +30,10 @@ const idportenAuthentication: RequestHandler = async (req, res, next) => {
         const decodedToken = decodeJwt(idPortenToken);
 
         if (/tokendings/.test(decodedToken?.iss ?? '')) {
+            // temp
+            (req as any).user = {
+                level: 'Level4',
+            };
             return next();
         }
 
