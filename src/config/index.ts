@@ -3,6 +3,7 @@ export interface IEnvironmentVariables {
     TOKEN_X_CLIENT_ID: string;
     TOKEN_X_PRIVATE_JWK: string;
     TOKEN_X_TOKEN_ENDPOINT: string;
+    TOKEN_X_JWKS_URI: string;
     UNLEASH_API_URL: string;
     UNLEASH_ENVIRONMENT: string;
     DAGPENGER_INNSYN_URL: string;

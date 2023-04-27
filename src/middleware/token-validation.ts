@@ -8,7 +8,7 @@ import config from '../config';
 let tokenxJWKSet: GetKeyFunction<JWSHeaderParameters, FlattenedJWSInput>;
 const getTokenXJwkSet = () => {
     if (!tokenxJWKSet) {
-        tokenxJWKSet = createRemoteJWKSet(new URL(config.TOKEN_X_WELL_KNOWN_URL));
+        tokenxJWKSet = createRemoteJWKSet(new URL(config.TOKEN_X_JWKS_URI));
     }
 
     return tokenxJWKSet;
