@@ -26,6 +26,7 @@ import meldekortInaktivering from './api/data/meldekortInaktivering';
 import automatiskReaktiveringApi from './api/reaktivering/automatiskReaktivering';
 import reaktiveringApi from './api/reaktivering/automatiskReaktiveringSvar';
 import tokenValidation from './middleware/token-validation';
+import nivaa4Authentication from './middleware/nivaa4-authentication';
 
 const PORT = 3000;
 const app = express();
@@ -65,7 +66,7 @@ async function setUpRoutes() {
     router.use(arbeidssokerApi());
 
     // level4
-    // router.use(nivaa4Authentication);
+    router.use(nivaa4Authentication);
     router.use(dagpengerApi(await tokenDings));
     router.use(meldekortApi(await tokenDings));
     router.use(profilApi(profilRepository));

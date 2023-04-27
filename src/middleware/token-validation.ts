@@ -1,9 +1,10 @@
-import { RequestHandler } from 'express';
+import { Request, RequestHandler } from 'express';
 import { getTokenFromHeader } from '../auth/tokenDings';
 import logger from '../logger';
 import { createRemoteJWKSet, decodeJwt, jwtVerify } from 'jose';
 import { FlattenedJWSInput, GetKeyFunction, JWSHeaderParameters } from 'jose/dist/types/types';
 import config from '../config';
+import { AuthLevel } from './idporten-authentication';
 
 let tokenxJWKSet: GetKeyFunction<JWSHeaderParameters, FlattenedJWSInput>;
 const getTokenXJwkSet = () => {
@@ -13,6 +14,8 @@ const getTokenXJwkSet = () => {
 
     return tokenxJWKSet;
 };
+
+export type ValidatedRequest = Request & { user: { level: AuthLevel; ident: string; fnr: string } };
 
 const tokenValidation: RequestHandler = async (req, res, next) => {
     try {
@@ -25,17 +28,21 @@ const tokenValidation: RequestHandler = async (req, res, next) => {
         }
 
         const decodedToken = decodeJwt(token);
-        logger.info(`decodedToken: ${decodedToken}`);
-
+        // er det nok med decodedToken?
         const result = await jwtVerify(token, getTokenXJwkSet(), {
             algorithms: ['RS256'],
         });
 
-        logger.info(`Resultat fra tokenx validering: sub=${result.payload.sub} pid=${result.payload.pid}`, result);
+        (req as ValidatedRequest).user = {
+            ident: result.payload.sub!,
+            fnr: result.payload.pid as string,
+            level: decodedToken.acr as AuthLevel,
+        };
+
         next();
     } catch (err: any) {
         logger.warn(`Feil ved tokenx validering: ${err.message}`);
-        next();
+        res.sendStatus(401);
     }
 };
 
