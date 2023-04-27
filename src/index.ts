@@ -25,6 +25,7 @@ import createDependencies from './deps';
 import meldekortInaktivering from './api/data/meldekortInaktivering';
 import automatiskReaktiveringApi from './api/reaktivering/automatiskReaktivering';
 import reaktiveringApi from './api/reaktivering/automatiskReaktiveringSvar';
+import tokenValidation from './middleware/token-validation';
 
 const PORT = 3000;
 const app = express();
@@ -56,6 +57,8 @@ async function setUpRoutes() {
 
     // id porten
     // router.use(idportenAuthentication);
+    router.use(tokenValidation);
+
     router.use(ptoProxyApi());
     router.use(dialogRoutes(await tokenDings));
     router.use(veilarbregistreringApi(await tokenDings));
