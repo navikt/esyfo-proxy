@@ -8,6 +8,7 @@ import cors from 'cors';
 import healhApi from './api/health';
 import unleashApi from './api/unleash';
 import ptoProxyApi from './api/ptoproxy';
+import oppfolgingApi from './api/oppfolging';
 import dialogRoutes from './api/dialog';
 import dagpengerApi from './api/dagpenger';
 import meldekortApi from './api/meldekort';
@@ -60,6 +61,7 @@ async function setUpRoutes() {
     // router.use(idportenAuthentication);
     router.use(tokenValidation);
 
+    router.use(oppfolgingApi(await tokenDings));
     router.use(ptoProxyApi());
     router.use(dialogRoutes(await tokenDings));
     router.use(veilarbregistreringApi(await tokenDings));

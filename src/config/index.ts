@@ -11,6 +11,7 @@ export interface IEnvironmentVariables {
     VEILARBDIALOG_API_URL: string;
     DIALOG_APP_NAME: string;
     VEILARBREGISTRERING_URL: string;
+    VEILARBOPPFOLGING_URL: string;
     NAIS_CLUSTER_NAME: string;
     BASE_PATH: string;
     MELDEKORT_APP_NAME: string;

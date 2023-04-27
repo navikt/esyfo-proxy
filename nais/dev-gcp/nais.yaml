@@ -50,6 +50,8 @@ spec:
       value: veilarbdialog
     - name: VEILARBREGISTRERING_URL
       value: http://veilarbregistrering
+    - name: VEILARBOPPFOLGING_URL
+      value: https://veilarboppfolging.dev.intern.nav.no
     - name: UNLEASH_API_URL
       value: https://unleash.nais.io/api/
     - name: UNLEASH_ENVIRONMENT
@@ -85,6 +87,8 @@ spec:
           cluster: dev-fss
         - application: veilarbregistrering
         - application: paw-arbeidssoker-situasjon
+        - application: veilarboppfolging
+          namespace: pto
   gcp:
     sqlInstances:
       - type: POSTGRES_14
