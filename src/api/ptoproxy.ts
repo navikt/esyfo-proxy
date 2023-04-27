@@ -32,23 +32,6 @@ function ptoProxy(ptoProxyUrl = config.PTO_PROXY_URL) {
 
     /**
      * @openapi
-     * /vedtakinfo/besvarelse:
-     *   get:
-     *     description:
-     *     responses:
-     *       200:
-     *         $ref: '#/components/schemas/Ok'
-     *       401:
-     *         $ref: '#/components/schemas/Unauthorized'
-     */
-
-    router.get(
-        '/vedtakinfo/besvarelse',
-        proxyHttpCall(`${ptoProxyUrl}/veilarbvedtakinfo/api/behovsvurdering/besvarelse`)
-    );
-
-    /**
-     * @openapi
      * /vedtakinfo/motestotte:
      *   get:
      *     description:
