@@ -5,7 +5,7 @@ import { proxyTokenXCall } from '../http';
 
 function oppfolging(tokenDings: Auth, veilarboppfolgingUrl = config.VEILARBOPPFOLGING_URL) {
     const router = Router();
-    const VEILARBOPPFOLGING_CLIENT_ID = `${config.NAIS_CLUSTER_NAME}:pto:veilarboppfolging`;
+    const VEILARBOPPFOLGING_CLIENT_ID = `${config.NAIS_CLUSTER_NAME.replace('gcp', 'fss')}:pto:veilarboppfolging`;
 
     const getTokenXHeaders = async (req: Request) => {
         const incomingToken = getTokenFromRequest(req);
