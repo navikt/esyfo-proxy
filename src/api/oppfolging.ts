@@ -2,15 +2,21 @@ import { Auth, getTokenFromRequest } from '../auth/tokenDings';
 import { Request, Router } from 'express';
 import config from '../config';
 import { proxyTokenXCall } from '../http';
+import logger from '../logger';
 
 export const getTokenXHeadersForVeilarboppfolging =
     (tokenDings: Auth, naisCluster = config.NAIS_CLUSTER_NAME) =>
     async (req: Request) => {
-        const VEILARBOPPFOLGING_CLIENT_ID = `${naisCluster.replace('gcp', 'fss')}:pto:veilarboppfolging`;
         const incomingToken = getTokenFromRequest(req);
-        const tokenSet = await tokenDings.exchangeIDPortenToken(incomingToken, VEILARBOPPFOLGING_CLIENT_ID);
-        const token = tokenSet.access_token;
-        return { Authorization: `Bearer ${token}` };
+        const VEILARBOPPFOLGING_CLIENT_ID = `${naisCluster.replace('gcp', 'fss')}:pto:veilarboppfolging`;
+        try {
+            const tokenSet = await tokenDings.exchangeIDPortenToken(incomingToken, VEILARBOPPFOLGING_CLIENT_ID);
+            const token = tokenSet.access_token;
+            return { Authorization: `Bearer ${token}` };
+        } catch (e: any) {
+            logger.error(`Feil ved token-utveksling for veilarboppfolging: ${e.message}`);
+            return { Authorization: `Bearer ${incomingToken}` };
+        }
     };
 function oppfolging(tokenDings: Auth, veilarboppfolgingUrl = config.VEILARBOPPFOLGING_URL) {
     const router = Router();
