@@ -3,16 +3,16 @@ import config from '../config';
 import { Request, Router } from 'express';
 import { Auth, getTokenFromRequest } from '../auth/tokenDings';
 
+export const getTokenXHeadersForVeilarbregistrering = (tokenDings: Auth) => async (req: Request) => {
+    const VEILARBREGISTRERING_CLIENT_ID = `${config.NAIS_CLUSTER_NAME}:paw:veilarbregistrering`;
+    const incomingToken = getTokenFromRequest(req);
+    const tokenSet = await tokenDings.exchangeIDPortenToken(incomingToken, VEILARBREGISTRERING_CLIENT_ID);
+    const token = tokenSet.access_token;
+    return { Authorization: `Bearer ${token}` };
+};
 function veilarbregistrering(tokenDings: Auth, veilarbregistreringUrl = config.VEILARBREGISTRERING_URL): Router {
     const router = Router();
-    const VEILARBREGISTRERING_CLIENT_ID = `${config.NAIS_CLUSTER_NAME}:paw:veilarbregistrering`;
-
-    const getTokenXHeaders = async (req: Request) => {
-        const incomingToken = getTokenFromRequest(req);
-        const tokenSet = await tokenDings.exchangeIDPortenToken(incomingToken, VEILARBREGISTRERING_CLIENT_ID);
-        const token = tokenSet.access_token;
-        return { Authorization: `Bearer ${token}` };
-    };
+    const getTokenXHeaders = getTokenXHeadersForVeilarbregistrering(tokenDings);
 
     /**
      * @openapi

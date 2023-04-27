@@ -4,6 +4,9 @@ import { axiosLogError } from '../logger';
 import axios, { AxiosError, RawAxiosRequestHeaders } from 'axios';
 import { ParsedQs } from 'qs';
 import { getDefaultHeaders } from '../http';
+import { Auth } from '../auth/tokenDings';
+import { getTokenXHeadersForVeilarbregistrering } from './veilarbregistrering';
+import { getTokenXHeadersForVeilarboppfolging } from './oppfolging';
 
 interface Arbeidssokerperioder {
     status: number;
@@ -46,11 +49,14 @@ export async function hentArbeidssokerPerioder(
 }
 
 function arbeidssokerRoutes(
-    ptoProxyUrl = config.PTO_PROXY_URL,
-    veilarbregistreringUrl = config.VEILARBREGISTRERING_URL
+    tokenDings: Auth,
+    veilarboppfolgingUrl = config.VEILARBOPPFOLGING_URL,
+    veilarbregistreringUrl = config.VEILARBREGISTRERING_URL,
+    naisCluster = config.NAIS_CLUSTER_NAME
 ) {
     const router = Router();
-
+    const tokenXHeadersForVeilarbregistrering = getTokenXHeadersForVeilarbregistrering(tokenDings);
+    const tokenXHeadersForVeilarboppfoling = getTokenXHeadersForVeilarboppfolging(tokenDings, naisCluster);
     /**
      * @openapi
      * /arbeidssoker:
@@ -99,10 +105,16 @@ function arbeidssokerRoutes(
     router.get('/arbeidssoker', async (req, res) => {
         const arbeidssokerperioder = await hentArbeidssokerPerioder(
             veilarbregistreringUrl,
-            getDefaultHeaders(req),
+            {
+                ...getDefaultHeaders(req),
+                ...(await tokenXHeadersForVeilarbregistrering(req)),
+            },
             req.query
         );
-        const underoppfolging = await hentUnderOppfolging(getDefaultHeaders(req));
+        const underoppfolging = await hentUnderOppfolging({
+            ...getDefaultHeaders(req),
+            ...(await tokenXHeadersForVeilarboppfoling(req)),
+        });
 
         return res.send({
             underoppfolging,
@@ -130,10 +142,22 @@ function arbeidssokerRoutes(
      *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/er-arbeidssoker', async (req, res) => {
-        const perioder = await hentArbeidssokerPerioder(veilarbregistreringUrl, getDefaultHeaders(req), {
-            fraOgMed: '2020-01-01',
+        const perioder = await hentArbeidssokerPerioder(
+            veilarbregistreringUrl,
+            {
+                ...getDefaultHeaders(req),
+                ...(await tokenXHeadersForVeilarbregistrering(req)),
+            },
+            {
+                fraOgMed: '2020-01-01',
+            }
+        );
+
+        const underOppfolging = await hentUnderOppfolging({
+            ...getDefaultHeaders(req),
+            ...(await tokenXHeadersForVeilarboppfoling(req)),
         });
-        const underOppfolging = await hentUnderOppfolging(getDefaultHeaders(req));
+
         const erUnderOppfolging = underOppfolging.underoppfolging;
         const erArbeidssoker = erUnderOppfolging || perioder.arbeidssokerperioder.length > 0;
         return res.send({ erArbeidssoker });
@@ -141,9 +165,12 @@ function arbeidssokerRoutes(
 
     async function hentUnderOppfolging(headers: RawAxiosRequestHeaders): Promise<UnderOppfolging> {
         try {
-            const { data, status } = await axios(`${ptoProxyUrl}/veilarboppfolging/api/niva3/underoppfolging`, {
-                headers,
-            });
+            const { data, status } = await axios(
+                `${veilarboppfolgingUrl}/veilarboppfolging/api/niva3/underoppfolging`,
+                {
+                    headers,
+                }
+            );
             return {
                 status,
                 underoppfolging: Boolean(data.underOppfolging),

@@ -40,7 +40,6 @@ describe('veilarbregistrering api', () => {
     it('kaller veilarbregistrering med token i header', async () => {
         const proxyServer = express();
         proxyServer.get('/veilarbregistrering/api/registrering', (req, res) => {
-            console.log(req.headers['authorization']);
             if (req.headers['authorization'] === 'Bearer x-token123') {
                 res.status(200).send('ok');
             } else {

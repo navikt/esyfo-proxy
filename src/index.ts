@@ -65,7 +65,7 @@ async function setUpRoutes() {
     router.use(vedtakinfoApi(await tokenDings));
     router.use(dialogRoutes(await tokenDings));
     router.use(veilarbregistreringApi(await tokenDings));
-    router.use(arbeidssokerApi());
+    router.use(arbeidssokerApi(await tokenDings));
 
     // level4
     router.use(nivaa4Authentication);
