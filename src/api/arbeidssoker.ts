@@ -23,8 +23,8 @@ export async function hentArbeidssokerPerioder(
     headers: RawAxiosRequestHeaders,
     query: ParsedQs
 ): Promise<Arbeidssokerperioder> {
-    const fraOgMed = query.fraOgMed;
-    const tilOgMed = query.tilOgMed;
+    const fraOgMed = query.fraOgMed ?? '2020-01-01';
+    const tilOgMed = query.tilOgMed ?? '';
     const url = `${veilarbregistreringUrl}/veilarbregistrering/api/arbeidssoker/perioder/niva3?fraOgMed=${fraOgMed}${
         tilOgMed ? `&tilOgMed=${tilOgMed}` : ''
     }`;
