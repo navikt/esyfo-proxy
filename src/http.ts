@@ -82,11 +82,13 @@ export function proxyHttpCall(url: string, opts: ProxyOpts = defaultOpts) {
 
 export function proxyTokenXCall(
     url: string,
-    getTokenXHeaders: (req: Request) => Promise<Record<string, string | null>>
+    getTokenXHeaders: (req: Request) => Promise<Record<string, string | null>>,
+    opts = defaultOpts
 ) {
     return async (req: Request, res: Response) => {
         try {
             await proxyHttpCall(url, {
+                ...opts,
                 headers: await getTokenXHeaders(req),
             })(req, res);
         } catch (err) {

@@ -1,9 +1,18 @@
-import { proxyHttpCall as proxy } from '../http';
+import { proxyTokenXCall } from '../http';
 import config from '../config';
-import { Router } from 'express';
+import { Request, Router } from 'express';
+import { Auth, getTokenFromRequest } from '../auth/tokenDings';
 
-function veilarbregistrering(veilarbregistreringUrl = config.VEILARBREGISTRERING_URL): Router {
+function veilarbregistrering(tokenDings: Auth, veilarbregistreringUrl = config.VEILARBREGISTRERING_URL): Router {
     const router = Router();
+    const VEILARBREGISTRERING_CLIENT_ID = `${config.NAIS_CLUSTER_NAME}:paw:veilarbregistrering`;
+
+    const getTokenXHeaders = async (req: Request) => {
+        const incomingToken = getTokenFromRequest(req);
+        const tokenSet = await tokenDings.exchangeIDPortenToken(incomingToken, VEILARBREGISTRERING_CLIENT_ID);
+        const token = tokenSet.access_token;
+        return { Authorization: `Bearer ${token}` };
+    };
 
     /**
      * @openapi
@@ -19,7 +28,10 @@ function veilarbregistrering(veilarbregistreringUrl = config.VEILARBREGISTRERING
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
-    router.get('/startregistrering', proxy(`${veilarbregistreringUrl}/veilarbregistrering/api/startregistrering`));
+    router.get(
+        '/startregistrering',
+        proxyTokenXCall(`${veilarbregistreringUrl}/veilarbregistrering/api/startregistrering`, getTokenXHeaders)
+    );
 
     /**
      * @openapi
@@ -35,7 +47,10 @@ function veilarbregistrering(veilarbregistreringUrl = config.VEILARBREGISTRERING
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
-    router.get('/registrering', proxy(`${veilarbregistreringUrl}/veilarbregistrering/api/registrering`));
+    router.get(
+        '/registrering',
+        proxyTokenXCall(`${veilarbregistreringUrl}/veilarbregistrering/api/registrering`, getTokenXHeaders)
+    );
 
     /**
      * @openapi
@@ -49,7 +64,7 @@ function veilarbregistrering(veilarbregistreringUrl = config.VEILARBREGISTRERING
      */
     router.post(
         '/fullfoerreaktivering',
-        proxy(`${veilarbregistreringUrl}/veilarbregistrering/api/fullfoerreaktivering`)
+        proxyTokenXCall(`${veilarbregistreringUrl}/veilarbregistrering/api/fullfoerreaktivering`, getTokenXHeaders)
     );
 
     /**
@@ -68,7 +83,10 @@ function veilarbregistrering(veilarbregistreringUrl = config.VEILARBREGISTRERING
      */
     router.get(
         '/standard-innsats',
-        proxy(`${veilarbregistreringUrl}/veilarbregistrering/api/profilering/standard-innsats`)
+        proxyTokenXCall(
+            `${veilarbregistreringUrl}/veilarbregistrering/api/profilering/standard-innsats`,
+            getTokenXHeaders
+        )
     );
 
     /**
@@ -100,7 +118,9 @@ function veilarbregistrering(veilarbregistreringUrl = config.VEILARBREGISTRERING
      */
     router.get(
         '/arbeidssoker/perioder',
-        proxy(`${veilarbregistreringUrl}/veilarbregistrering/api/arbeidssoker/perioder`, { overrideMethod: 'POST' })
+        proxyTokenXCall(`${veilarbregistreringUrl}/veilarbregistrering/api/arbeidssoker/perioder`, getTokenXHeaders, {
+            overrideMethod: 'POST',
+        })
     );
 
     /**
@@ -121,7 +141,10 @@ function veilarbregistrering(veilarbregistreringUrl = config.VEILARBREGISTRERING
      */
     router.get(
         '/meldeplikt/siste',
-        proxy(`${veilarbregistreringUrl}/veilarbregistrering/api/arbeidssoker/meldekort/siste`)
+        proxyTokenXCall(
+            `${veilarbregistreringUrl}/veilarbregistrering/api/arbeidssoker/meldekort/siste`,
+            getTokenXHeaders
+        )
     );
     /**
      * @openapi
@@ -137,7 +160,10 @@ function veilarbregistrering(veilarbregistreringUrl = config.VEILARBREGISTRERING
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
-    router.get('/meldeplikt', proxy(`${veilarbregistreringUrl}/veilarbregistrering/api/arbeidssoker/meldekort`));
+    router.get(
+        '/meldeplikt',
+        proxyTokenXCall(`${veilarbregistreringUrl}/veilarbregistrering/api/arbeidssoker/meldekort`, getTokenXHeaders)
+    );
     return router;
 }
 

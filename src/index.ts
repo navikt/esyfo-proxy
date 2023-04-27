@@ -58,7 +58,7 @@ async function setUpRoutes() {
     // router.use(idportenAuthentication);
     router.use(ptoProxyApi());
     router.use(dialogRoutes(await tokenDings));
-    router.use(veilarbregistreringApi());
+    router.use(veilarbregistreringApi(await tokenDings));
     router.use(arbeidssokerApi());
 
     // level4
