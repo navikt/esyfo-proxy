@@ -74,7 +74,7 @@ async function setUpRoutes() {
     router.use(profilApi(profilRepository));
     router.use(behovForVeiledningApi(behovRepository));
     router.use(dagpengerStatusApi(await tokenDings));
-    router.use(meldekortInaktivering());
+    router.use(meldekortInaktivering(await tokenDings));
     router.use(
         reaktiveringApi(
             automatiskReaktiveringRepository,

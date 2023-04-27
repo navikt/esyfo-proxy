@@ -5,16 +5,22 @@ import { axiosLogError } from '../../../logger';
 import { MeldekortDto } from './typer';
 import { beregnMeldekortStatus, grupperMeldekort } from './beregnMeldekortStatus';
 import { getDefaultHeaders } from '../../../http';
+import { getTokenXHeadersForVeilarboppfolging } from '../../oppfolging';
+import { Auth } from '../../../auth/tokenDings';
 
-function meldekortInaktivering(veilarbregistreringUrl = config.VEILARBREGISTRERING_URL) {
+function meldekortInaktivering(tokenDings: Auth, veilarbregistreringUrl = config.VEILARBREGISTRERING_URL) {
     const router = Router();
+    const getTokenXHeaders = getTokenXHeadersForVeilarboppfolging(tokenDings);
 
     router.get('/data/meldekort-inaktivering', async (req, res) => {
         try {
             const meldekort = await axios<MeldekortDto[]>(
                 `${veilarbregistreringUrl}/veilarbregistrering/api/arbeidssoker/meldekort`,
                 {
-                    headers: getDefaultHeaders(req),
+                    headers: {
+                        ...getDefaultHeaders(req),
+                        ...(await getTokenXHeaders(req)),
+                    },
                 }
             );
 
