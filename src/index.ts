@@ -25,8 +25,6 @@ import createDependencies from './deps';
 import meldekortInaktivering from './api/data/meldekortInaktivering';
 import automatiskReaktiveringApi from './api/reaktivering/automatiskReaktivering';
 import reaktiveringApi from './api/reaktivering/automatiskReaktiveringSvar';
-import idportenAuthentication from './middleware/idporten-authentication';
-import nivaa4Authentication from './middleware/nivaa4-authentication';
 
 const PORT = 3000;
 const app = express();
@@ -57,14 +55,14 @@ async function setUpRoutes() {
     router.use(automatiskReaktiveringApi(automatiskReaktiveringRepository, await automatiskReaktivertProducer));
 
     // id porten
-    router.use(idportenAuthentication);
+    // router.use(idportenAuthentication);
     router.use(ptoProxyApi());
     router.use(dialogRoutes(await tokenDings));
     router.use(veilarbregistreringApi());
     router.use(arbeidssokerApi());
 
     // level4
-    router.use(nivaa4Authentication);
+    // router.use(nivaa4Authentication);
     router.use(dagpengerApi(await tokenDings));
     router.use(meldekortApi(await tokenDings));
     router.use(profilApi(profilRepository));
