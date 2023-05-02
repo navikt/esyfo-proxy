@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import config from '../config';
-import { axiosLogError } from '../logger';
+import logger, { axiosLogError } from '../logger';
 import axios, { AxiosError, RawAxiosRequestHeaders } from 'axios';
 import { ParsedQs } from 'qs';
 import { getDefaultHeaders } from '../http';
@@ -175,7 +175,8 @@ function arbeidssokerRoutes(
                 status,
                 underoppfolging: Boolean(data.underOppfolging),
             };
-        } catch (err) {
+        } catch (err: any) {
+            logger.error(`Feil ved hentUnderOppfolging: ${err.message}`);
             const axiosError = err as AxiosError;
             const status = axiosError.response?.status || 500;
             axiosLogError(axiosError);
