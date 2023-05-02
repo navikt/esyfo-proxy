@@ -80,7 +80,7 @@ spec:
           namespace: min-side
     outbound:
       external:
-        - host: https://veilarboppfolging.dev-fss-pub.nais.io
+        - host: veilarboppfolging.dev-fss-pub.nais.io
       rules:
         - application: dp-innsyn
           namespace: teamdagpenger
