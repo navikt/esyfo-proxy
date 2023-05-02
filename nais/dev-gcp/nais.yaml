@@ -79,6 +79,8 @@ spec:
         - application: tms-min-side-proxy
           namespace: min-side
     outbound:
+      external:
+        - host: https://veilarboppfolging.dev-fss-pub.nais.io
       rules:
         - application: dp-innsyn
           namespace: teamdagpenger
