@@ -81,6 +81,7 @@ spec:
     outbound:
       external:
         - host: veilarboppfolging.dev-fss-pub.nais.io
+        - host: veilarbvedtakinfo.dev-fss-pub.nais.io
       rules:
         - application: dp-innsyn
           namespace: teamdagpenger
