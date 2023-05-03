@@ -7,7 +7,6 @@ export interface IEnvironmentVariables {
     UNLEASH_API_URL: string;
     UNLEASH_ENVIRONMENT: string;
     DAGPENGER_INNSYN_URL: string;
-    PTO_PROXY_URL: string;
     VEILARBDIALOG_API_URL: string;
     DIALOG_APP_NAME: string;
     VEILARBREGISTRERING_URL: string;
