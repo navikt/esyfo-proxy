@@ -77,7 +77,12 @@ spec:
       rules:
         - application: veientilarbeid
         - application: paw-reaktiver-arbeidssoker
+        - application: tms-min-side-proxy
+          namespace: min-side
     outbound:
+      external:
+        - host: veilarboppfolging.prod-fss-pub.nais.io
+        - host: veilarbvedtakinfo.prod-fss-pub.nais.io
       rules:
         - application: dp-innsyn
           namespace: teamdagpenger
@@ -90,6 +95,7 @@ spec:
         - application: paw-arbeidssoker-situasjon
         - application: veilarboppfolging
           namespace: pto
+          cluster: prod-fss
         - application: veilarbvedtakinfo
           namespace: pto
           cluster: prod-fss
