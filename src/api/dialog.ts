@@ -42,19 +42,6 @@ function dialogRoutes(tokenDings: Auth, dialogApiUrl = config.VEILARBDIALOG_API_
      */
     router.post('/dialog', dialogCall(`${dialogApiUrl}/dialog`));
 
-    /**
-     * @openapi
-     * /dialog/egenvurdering:
-     *   post:
-     *     description: Oppretter ny dialog i dialogløsningen og setter den til ferdig behandlet
-     *     responses:
-     *       200:
-     *         $ref: '#/components/schemas/Ok'
-     *       401:
-     *         $ref: '#/components/schemas/Unauthorized'
-     */
-    router.post('/dialog/egenvurdering', dialogCall(`${dialogApiUrl}/dialog/egenvurdering`));
-
     return router;
 }
 
