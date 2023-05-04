@@ -52,7 +52,7 @@ spec:
     - name: VEILARBREGISTRERING_URL
       value: http://veilarbregistrering
     - name: VEILARBOPPFOLGING_URL
-      value: https://veilarboppfolging.intern.nav.no
+      value: https://veilarboppfolging.prod-fss-pub.nais.io
     - name: VEILARBVEDTAKINFO_URL
       value: https://veilarbvedtakinfo.prod-fss-pub.nais.io
     - name: UNLEASH_API_URL
