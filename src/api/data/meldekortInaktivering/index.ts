@@ -5,12 +5,12 @@ import { axiosLogError } from '../../../logger';
 import { MeldekortDto } from './typer';
 import { beregnMeldekortStatus, grupperMeldekort } from './beregnMeldekortStatus';
 import { getDefaultHeaders } from '../../../http';
-import { getTokenXHeadersForVeilarboppfolging } from '../../oppfolging';
 import { Auth } from '../../../auth/tokenDings';
+import { getTokenXHeadersForVeilarbregistrering } from '../../veilarbregistrering';
 
 function meldekortInaktivering(tokenDings: Auth, veilarbregistreringUrl = config.VEILARBREGISTRERING_URL) {
     const router = Router();
-    const getTokenXHeaders = getTokenXHeadersForVeilarboppfolging(tokenDings);
+    const getTokenXHeaders = getTokenXHeadersForVeilarbregistrering(tokenDings);
 
     router.get('/data/meldekort-inaktivering', async (req, res) => {
         try {
