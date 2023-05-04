@@ -1,9 +1,7 @@
-import { Request, Response, Router } from 'express';
+import { Request, Router } from 'express';
 import config from '../config';
-import { Auth, getTokenFromCookie } from '../auth/tokenDings';
-import { proxyHttpCall } from '../http';
-import { axiosLogError } from '../logger';
-import { AxiosError } from 'axios';
+import { Auth, getTokenFromRequest } from '../auth/tokenDings';
+import { proxyTokenXCall } from '../http';
 
 function dagpengerRoutes(tokenDings: Auth, dagpengerInnsynUrl = config.DAGPENGER_INNSYN_URL) {
     const SOKNAD_URL = `${dagpengerInnsynUrl}/soknad`;
@@ -14,26 +12,13 @@ function dagpengerRoutes(tokenDings: Auth, dagpengerInnsynUrl = config.DAGPENGER
     const router = Router();
 
     const getTokenXHeaders = async (req: Request) => {
-        const idPortenToken = getTokenFromCookie(req);
+        const idPortenToken = getTokenFromRequest(req);
         const tokenSet = await tokenDings.exchangeIDPortenToken(idPortenToken, DP_INNSYN_CLIENT_ID);
         const token = tokenSet.access_token;
         return { Authorization: `Bearer ${token}`, TokenXAuthorization: `Bearer ${token}` };
     };
 
-    const dagpengerCall = (url: string) => {
-        return async (req: Request, res: Response) => {
-            try {
-                await proxyHttpCall(url, {
-                    headers: await getTokenXHeaders(req),
-                })(req, res);
-            } catch (err) {
-                const axiosError = err as AxiosError;
-                const status = axiosError.response?.status || 500;
-                axiosLogError(axiosError);
-                res.status(status).end();
-            }
-        };
-    };
+    const dagpengerCall = (url: string) => proxyTokenXCall(url, getTokenXHeaders);
 
     /**
      * @openapi

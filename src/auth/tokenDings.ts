@@ -21,8 +21,16 @@ export interface TokenDingsOptions {
     tokenXPrivateJwk: string;
 }
 
-export function getTokenFromCookie(req: Request) {
+export function getTokenFromRequest(req: Request) {
+    return getTokenFromHeader(req) || getTokenFromCookie(req);
+}
+
+function getTokenFromCookie(req: Request) {
     return req.cookies && req.cookies[config.NAV_COOKIE_NAME];
+}
+
+export function getTokenFromHeader(req: Request) {
+    return req.headers.authorization?.replace('Bearer ', '');
 }
 
 async function createClientAssertion(options: TokenDingsOptions): Promise<string> {

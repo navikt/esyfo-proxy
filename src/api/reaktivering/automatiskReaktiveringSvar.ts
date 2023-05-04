@@ -3,7 +3,7 @@ import { AutomatiskReaktiveringRepository } from '../../db/automatiskReaktiverin
 import { AutomatiskReaktiveringSvarRepository } from '../../db/automatiskReaktiveringSvarRepository';
 import { KafkaProducer } from '../../kafka/automatisk-reaktivert-producer';
 import logger from '../../logger';
-import { IdPortenRequest } from '../../middleware/idporten-authentication';
+import { ValidatedRequest } from '../../middleware/token-validation';
 
 function automatiskReaktiveringSvarRoutes(
     reaktiveringRepository: AutomatiskReaktiveringRepository,
@@ -13,7 +13,7 @@ function automatiskReaktiveringSvarRoutes(
     const router = Router();
 
     router.get('/reaktivering', async (req, res) => {
-        const brukerId = (req as IdPortenRequest).user.fnr;
+        const brukerId = (req as ValidatedRequest).user.fnr;
 
         try {
             const automatiskReaktivering = await reaktiveringRepository.hent(brukerId);
@@ -40,7 +40,7 @@ function automatiskReaktiveringSvarRoutes(
     });
 
     router.post('/reaktivering', async (req, res) => {
-        const brukerId = (req as IdPortenRequest).user.fnr;
+        const brukerId = (req as ValidatedRequest).user.fnr;
         const svar = req.body.svar;
 
         if (!svar) {

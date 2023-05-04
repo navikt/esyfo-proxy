@@ -2,14 +2,37 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import request from 'supertest';
 import veilarbregistrering from '../../src/api/veilarbregistrering';
-import idportenAuthentication from '../../src/middleware/idporten-authentication';
+import { Auth } from '../../src/auth/tokenDings';
+import tokenValidation from '../../src/middleware/token-validation';
 
 describe('veilarbregistrering api', () => {
-    it('gir 401 hvis request uten selvbetjening-id cookie', (done) => {
+    let tokenDings: Auth;
+    beforeAll(() => {
+        tokenDings = {
+            exchangeIDPortenToken(token: string, targetApp: string) {
+                return Promise.resolve({
+                    access_token: `x-${token}`,
+                    expired() {
+                        return false;
+                    },
+                    claims() {
+                        return {
+                            aud: 'test',
+                            exp: 0,
+                            iat: 0,
+                            iss: 'test',
+                            sub: 'test',
+                        };
+                    },
+                });
+            },
+        };
+    });
+    it('gir 401 hvis request uten auth header', (done) => {
         const app = express();
         app.use(cookieParser());
-        app.use(idportenAuthentication);
-        app.use(veilarbregistrering('http://localhost:6666'));
+        app.use(tokenValidation);
+        app.use(veilarbregistrering(tokenDings, 'http://localhost:6666'));
 
         request(app).get('/registrering').expect(401, done);
     });
@@ -17,7 +40,7 @@ describe('veilarbregistrering api', () => {
     it('kaller veilarbregistrering med token i header', async () => {
         const proxyServer = express();
         proxyServer.get('/veilarbregistrering/api/registrering', (req, res) => {
-            if (req.headers['authorization'] === 'Bearer token123') {
+            if (req.headers['authorization'] === 'Bearer x-token123') {
                 res.status(200).send('ok');
             } else {
                 res.status(400).end();
@@ -27,10 +50,10 @@ describe('veilarbregistrering api', () => {
         const proxy = proxyServer.listen(port);
         const app = express();
         app.use(cookieParser());
-        app.use(veilarbregistrering(`http://localhost:${port}`));
+        app.use(veilarbregistrering(tokenDings, `http://localhost:${port}`));
 
         try {
-            const response = await request(app).get('/registrering').set('Cookie', ['selvbetjening-idtoken=token123;']);
+            const response = await request(app).get('/registrering').set('authorization', 'token123');
 
             expect(response.statusCode).toEqual(200);
             expect(response.text).toBe('ok');
@@ -52,12 +75,12 @@ describe('veilarbregistrering api', () => {
         const proxy = proxyServer.listen(port);
         const app = express();
         app.use(cookieParser());
-        app.use(veilarbregistrering(`http://localhost:${port}`));
+        app.use(veilarbregistrering(tokenDings, `http://localhost:${port}`));
 
         try {
             const response = await request(app)
                 .get('/registrering')
-                .set('Cookie', ['selvbetjening-idtoken=token123;'])
+                .set('authorization', 'token123')
                 .set('Nav-Call-Id', 'call-id-123');
 
             expect(response.statusCode).toEqual(200);

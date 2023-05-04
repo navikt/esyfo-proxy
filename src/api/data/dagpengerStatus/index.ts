@@ -2,12 +2,13 @@ import { Router } from 'express';
 import config from '../../../config';
 import axios, { AxiosError } from 'axios';
 import { hentArbeidssokerPerioder } from '../../arbeidssoker';
-import { Auth, getTokenFromCookie } from '../../../auth/tokenDings';
+import { Auth, getTokenFromRequest } from '../../../auth/tokenDings';
 import beregnDagpengeStatus from './beregnDagpengeStatus';
 import beregnArbeidssokerperioder from './beregnArbeidssokerPerioder';
 import logger, { axiosLogError } from '../../../logger';
 import beregnAntallDagerSidenDagpengerStanset from './beregnAntallDagerSidenDagpengerStanset';
 import { getDefaultHeaders } from '../../../http';
+import { getTokenXHeadersForVeilarbregistrering } from '../../veilarbregistrering';
 
 function dagpengerStatus(
     tokenDings: Auth,
@@ -18,32 +19,40 @@ function dagpengerStatus(
     const DP_INNSYN_CLIENT_ID = `${config.NAIS_CLUSTER_NAME}:teamdagpenger:dp-innsyn`;
 
     router.get('/dagpenger-status', async (req, res) => {
-        const token = getTokenFromCookie(req);
-        const getTokenXHeaders = async () => {
+        const token = getTokenFromRequest(req);
+        const getTokenXHeadersForDpInnsyn = async () => {
             const tokenSet = await tokenDings.exchangeIDPortenToken(token, DP_INNSYN_CLIENT_ID);
             const accessToken = tokenSet.access_token;
             return { Authorization: `Bearer ${accessToken}`, TokenXAuthorization: `Bearer ${accessToken}` };
         };
 
         try {
-            const headers = {
-                headers: getDefaultHeaders(req),
+            const veilarbregistreringHeaders = {
+                headers: {
+                    ...getDefaultHeaders(req),
+                    ...(await getTokenXHeadersForVeilarbregistrering(tokenDings)(req)),
+                },
             };
 
-            const tokenXHeaders = {
+            const dpInnsynHeaders = {
                 headers: {
-                    ...headers.headers,
-                    ...(await getTokenXHeaders()),
+                    ...getDefaultHeaders(req),
+                    ...(await getTokenXHeadersForDpInnsyn()),
                 },
             };
 
             const requests = await Promise.all([
-                axios(`${veilarbregistreringUrl}/veilarbregistrering/api/startregistrering`, headers),
-                axios(`${veilarbregistreringUrl}/veilarbregistrering/api/registrering`, headers),
-                hentArbeidssokerPerioder(veilarbregistreringUrl, headers.headers, { fraOgMed: '2020-01-01' }),
-                axios(`${dagpengerInnsynUrl}/paabegynte`, tokenXHeaders),
-                axios(`${dagpengerInnsynUrl}/soknad`, tokenXHeaders),
-                axios(`${dagpengerInnsynUrl}/vedtak`, tokenXHeaders),
+                axios(
+                    `${veilarbregistreringUrl}/veilarbregistrering/api/startregistrering`,
+                    veilarbregistreringHeaders
+                ),
+                axios(`${veilarbregistreringUrl}/veilarbregistrering/api/registrering`, veilarbregistreringHeaders),
+                hentArbeidssokerPerioder(veilarbregistreringUrl, veilarbregistreringHeaders.headers, {
+                    fraOgMed: '2020-01-01',
+                }),
+                axios(`${dagpengerInnsynUrl}/paabegynte`, dpInnsynHeaders),
+                axios(`${dagpengerInnsynUrl}/soknad`, dpInnsynHeaders),
+                axios(`${dagpengerInnsynUrl}/vedtak`, dpInnsynHeaders),
             ]);
 
             const brukerInfoData = requests[0].data;

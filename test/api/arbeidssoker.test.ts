@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import arbeidssoker from '../../src/api/arbeidssoker';
 import idportenAuthentication from '../../src/middleware/idporten-authentication';
+import { Auth } from '../../src/auth/tokenDings';
 
 function getProxyServer() {
     const proxyServer = express();
@@ -25,12 +26,35 @@ function getProxyServer() {
 }
 
 describe('arbeidssoker api', () => {
+    let tokenDings: Auth;
+    beforeAll(() => {
+        tokenDings = {
+            exchangeIDPortenToken(token: string, targetApp: string) {
+                return Promise.resolve({
+                    access_token: token,
+                    expired() {
+                        return false;
+                    },
+                    claims() {
+                        return {
+                            aud: 'test',
+                            exp: 0,
+                            iat: 0,
+                            iss: 'test',
+                            sub: 'test',
+                        };
+                    },
+                });
+            },
+        };
+    });
+
     describe('/arbeidssoker', () => {
         it('returnerer 401 når token mangler', (done) => {
             const app = express();
             app.use(cookieParser());
             app.use(idportenAuthentication);
-            app.use(arbeidssoker('http://localhost:7666', 'http://localhost:7666'));
+            app.use(arbeidssoker(tokenDings, 'http://localhost:7666', 'http://localhost:7666', 'dev-gcp'));
 
             request(app).get('/arbeidssoker').expect(401, done);
         });
@@ -42,12 +66,10 @@ describe('arbeidssoker api', () => {
             const app = express();
             app.use(cookieParser());
             app.use(bodyParser.json());
-            app.use(arbeidssoker('http://localhost:7666', 'http://localhost:7666'));
+            app.use(arbeidssoker(tokenDings, 'http://localhost:7666', 'http://localhost:7666', 'dev-gcp'));
 
             try {
-                const response = await request(app)
-                    .get('/arbeidssoker')
-                    .set('Cookie', ['selvbetjening-idtoken=token123;']);
+                const response = await request(app).get('/arbeidssoker').set('authorization', 'token123');
                 expect(response.statusCode).toEqual(200);
                 expect(response.body).toEqual({
                     underoppfolging: {
@@ -70,7 +92,7 @@ describe('arbeidssoker api', () => {
             const app = express();
             app.use(cookieParser());
             app.use(idportenAuthentication);
-            app.use(arbeidssoker('http://localhost:7666', 'http://localhost:7666'));
+            app.use(arbeidssoker(tokenDings, 'http://localhost:7666', 'http://localhost:7666', 'dev-gcp'));
 
             request(app).get('/er-arbeidssoker').expect(401, done);
         });
@@ -82,12 +104,10 @@ describe('arbeidssoker api', () => {
             const app = express();
             app.use(cookieParser());
             app.use(bodyParser.json());
-            app.use(arbeidssoker('http://localhost:7666', 'http://localhost:7666'));
+            app.use(arbeidssoker(tokenDings, 'http://localhost:7666', 'http://localhost:7666', 'dev-gcp'));
 
             try {
-                const response = await request(app)
-                    .get('/er-arbeidssoker')
-                    .set('Cookie', ['selvbetjening-idtoken=token123;']);
+                const response = await request(app).get('/er-arbeidssoker').set('authorization', 'token123');
                 expect(response.statusCode).toEqual(200);
                 expect(response.body).toEqual({ erArbeidssoker: true });
             } finally {
@@ -116,12 +136,10 @@ describe('arbeidssoker api', () => {
             const app = express();
             app.use(cookieParser());
             app.use(bodyParser.json());
-            app.use(arbeidssoker('http://localhost:7666', 'http://localhost:7666'));
+            app.use(arbeidssoker(tokenDings, 'http://localhost:7666', 'http://localhost:7666', 'dev-gcp'));
 
             try {
-                const response = await request(app)
-                    .get('/er-arbeidssoker')
-                    .set('Cookie', ['selvbetjening-idtoken=token123;']);
+                const response = await request(app).get('/er-arbeidssoker').set('authorization', 'token123');
                 expect(response.statusCode).toEqual(200);
                 expect(response.body).toEqual({ erArbeidssoker: false });
             } finally {

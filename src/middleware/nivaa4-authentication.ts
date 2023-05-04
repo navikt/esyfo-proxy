@@ -1,9 +1,9 @@
 import { RequestHandler } from 'express';
-import { IdPortenRequest } from './idporten-authentication';
 import logger from '../logger';
+import { ValidatedRequest } from './token-validation';
 
 const nivaa4Authentication: RequestHandler = (req, res, next) => {
-    const authLevel = (req as IdPortenRequest).user?.level;
+    const authLevel = (req as ValidatedRequest).user?.level;
 
     if (authLevel !== 'Level4') {
         logger.warn(`Level4 autentisering feiler: ${authLevel}`);

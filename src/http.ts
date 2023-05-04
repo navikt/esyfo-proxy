@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import config from './config';
 import axios, { AxiosError } from 'axios';
 import logger, { axiosLogError } from './logger';
-import { getTokenFromCookie } from './auth/tokenDings';
+import { getTokenFromRequest } from './auth/tokenDings';
 import { isNetworkOrIdempotentRequestError } from './isRetryAllowed';
 
 interface ProxyOpts {
@@ -14,7 +14,7 @@ interface ProxyOpts {
 }
 
 export function getDefaultHeaders(req: Request) {
-    const token = getTokenFromCookie(req);
+    const token = getTokenFromRequest(req);
     return {
         'Content-Type': req.header('Content-Type') || 'application/json',
         ...(req.header('Nav-Call-Id') ? { 'Nav-Call-Id': req.header('Nav-Call-Id') } : {}),
@@ -77,5 +77,26 @@ export function proxyHttpCall(url: string, opts: ProxyOpts = defaultOpts) {
         };
 
         return retry(0);
+    };
+}
+
+export function proxyTokenXCall(
+    url: string,
+    getTokenXHeaders: (req: Request) => Promise<Record<string, string | null>>,
+    opts = defaultOpts
+) {
+    return async (req: Request, res: Response) => {
+        try {
+            await proxyHttpCall(url, {
+                ...opts,
+                headers: await getTokenXHeaders(req),
+            })(req, res);
+        } catch (err) {
+            logger.error(`proxyTokenXCall error : ${(err as Error).message}`);
+            const axiosError = err as AxiosError;
+            const status = axiosError.response?.status || 500;
+            axiosLogError(axiosError);
+            res.status(status).end();
+        }
     };
 }

@@ -7,7 +7,8 @@ import helmet from 'helmet';
 import cors from 'cors';
 import healhApi from './api/health';
 import unleashApi from './api/unleash';
-import ptoProxyApi from './api/ptoproxy';
+import oppfolgingApi from './api/oppfolging';
+import vedtakinfoApi from './api/vedtakinfo';
 import dialogRoutes from './api/dialog';
 import dagpengerApi from './api/dagpenger';
 import meldekortApi from './api/meldekort';
@@ -15,6 +16,7 @@ import profilApi from './api/profil';
 import behovForVeiledningApi from './api/behovForVeiledning';
 import arbeidssokerApi from './api/arbeidssoker';
 import veilarbregistreringApi from './api/veilarbregistrering';
+import bevarelseApi from './api/besvarelse';
 import swaggerDocs from './api/swagger';
 import dagpengerStatusApi from './api/data/dagpengerStatus';
 import bodyParser from 'body-parser';
@@ -24,7 +26,7 @@ import createDependencies from './deps';
 import meldekortInaktivering from './api/data/meldekortInaktivering';
 import automatiskReaktiveringApi from './api/reaktivering/automatiskReaktivering';
 import reaktiveringApi from './api/reaktivering/automatiskReaktiveringSvar';
-import idportenAuthentication from './middleware/idporten-authentication';
+import tokenValidation from './middleware/token-validation';
 import nivaa4Authentication from './middleware/nivaa4-authentication';
 
 const PORT = 3000;
@@ -56,11 +58,14 @@ async function setUpRoutes() {
     router.use(automatiskReaktiveringApi(automatiskReaktiveringRepository, await automatiskReaktivertProducer));
 
     // id porten
-    router.use(idportenAuthentication);
-    router.use(ptoProxyApi());
+    // router.use(idportenAuthentication);
+    router.use(tokenValidation);
+
+    router.use(oppfolgingApi(await tokenDings));
+    router.use(vedtakinfoApi(await tokenDings));
     router.use(dialogRoutes(await tokenDings));
-    router.use(veilarbregistreringApi());
-    router.use(arbeidssokerApi());
+    router.use(veilarbregistreringApi(await tokenDings));
+    router.use(arbeidssokerApi(await tokenDings));
 
     // level4
     router.use(nivaa4Authentication);
@@ -69,7 +74,7 @@ async function setUpRoutes() {
     router.use(profilApi(profilRepository));
     router.use(behovForVeiledningApi(behovRepository));
     router.use(dagpengerStatusApi(await tokenDings));
-    router.use(meldekortInaktivering());
+    router.use(meldekortInaktivering(await tokenDings));
     router.use(
         reaktiveringApi(
             automatiskReaktiveringRepository,
@@ -77,6 +82,7 @@ async function setUpRoutes() {
             await automatiskReaktivertProducer
         )
     );
+    router.use(bevarelseApi(await tokenDings));
 
     app.use(config.BASE_PATH || '', router);
 }

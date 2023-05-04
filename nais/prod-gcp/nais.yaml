@@ -45,14 +45,16 @@ spec:
       value: meldekort-api
     - name: MELDEKORT_URL
       value: http://meldekort-api.meldekort.svc.cluster.local/meldekort/meldekort-api/api/person
-    - name: PTO_PROXY_URL
-      value: https://pto-proxy.intern.nav.no/proxy
     - name: VEILARBDIALOG_API_URL
       value: https://veilarbdialog.prod-fss-pub.nais.io/veilarbdialog/api
     - name: DIALOG_APP_NAME
       value: veilarbdialog
     - name: VEILARBREGISTRERING_URL
       value: http://veilarbregistrering
+    - name: VEILARBOPPFOLGING_URL
+      value: https://veilarboppfolging.intern.nav.no
+    - name: VEILARBVEDTAKINFO_URL
+      value: https://veilarbvedtakinfo.prod-fss-pub.nais.io
     - name: UNLEASH_API_URL
       value: https://unleash.nais.io/api/
     - name: UNLEASH_ENVIRONMENT
@@ -61,6 +63,8 @@ spec:
       value: http://dp-innsyn.teamdagpenger.svc.cluster.local
     - name: KAFKA_TOPIC
       value: paw.arbeidssoker-reaktivering-v1
+    - name: BESVARELSE_URL
+      value: http://arbeidssoker-besvarelse
   resources:
     limits:
       cpu: "3"
@@ -73,7 +77,12 @@ spec:
       rules:
         - application: veientilarbeid
         - application: paw-reaktiver-arbeidssoker
+        - application: tms-min-side-proxy
+          namespace: min-side
     outbound:
+      external:
+        - host: veilarboppfolging.prod-fss-pub.nais.io
+        - host: veilarbvedtakinfo.prod-fss-pub.nais.io
       rules:
         - application: dp-innsyn
           namespace: teamdagpenger
@@ -83,6 +92,13 @@ spec:
           namespace: pto
           cluster: prod-fss
         - application: veilarbregistrering
+        - application: paw-arbeidssoker-besvarelse
+        - application: veilarboppfolging
+          namespace: pto
+          cluster: prod-fss
+        - application: veilarbvedtakinfo
+          namespace: pto
+          cluster: prod-fss
   gcp:
     sqlInstances:
       - type: POSTGRES_14
