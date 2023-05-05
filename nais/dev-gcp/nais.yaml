@@ -61,7 +61,7 @@ spec:
     - name: KAFKA_TOPIC
       value: paw.arbeidssoker-reaktivering-v1
     - name: BESVARELSE_URL
-      value: http://arbeidssoker-besvarelse
+      value: https://arbeidssoker-besvarelse.intern.dev.nav.no
   resources:
     limits:
       cpu: "3"
