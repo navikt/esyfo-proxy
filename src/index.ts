@@ -62,13 +62,13 @@ async function setUpRoutes() {
     router.use(tokenValidation);
 
     router.use(oppfolgingApi(await tokenDings));
-    router.use(vedtakinfoApi(await tokenDings));
-    router.use(dialogRoutes(await tokenDings));
-    router.use(veilarbregistreringApi(await tokenDings));
     router.use(arbeidssokerApi(await tokenDings));
 
     // level4
     router.use(nivaa4Authentication);
+    router.use(vedtakinfoApi(await tokenDings));
+    router.use(dialogRoutes(await tokenDings));
+    router.use(veilarbregistreringApi(await tokenDings));
     router.use(dagpengerApi(await tokenDings));
     router.use(meldekortApi(await tokenDings));
     router.use(profilApi(profilRepository));

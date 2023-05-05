@@ -3,6 +3,7 @@ import { Request, Router } from 'express';
 import config from '../config';
 import { proxyTokenXCall } from '../http';
 import logger from '../logger';
+import nivaa4Authentication from '../middleware/nivaa4-authentication';
 
 export const getTokenXHeadersForVeilarboppfolging =
     (tokenDings: Auth, naisCluster = config.NAIS_CLUSTER_NAME) =>
@@ -34,6 +35,7 @@ function oppfolging(tokenDings: Auth, veilarboppfolgingUrl = config.VEILARBOPPFO
      */
     router.get(
         '/oppfolging',
+        nivaa4Authentication,
         proxyTokenXCall(`${veilarboppfolgingUrl}/veilarboppfolging/api/oppfolging`, getTokenXHeaders)
     );
 
