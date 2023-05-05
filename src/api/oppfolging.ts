@@ -2,7 +2,7 @@ import { Auth, getTokenFromRequest } from '../auth/tokenDings';
 import { Request, Router } from 'express';
 import config from '../config';
 import { proxyTokenXCall } from '../http';
-import logger from '../logger';
+import logger, { getCustomLogProps } from '../logger';
 import nivaa4Authentication from '../middleware/nivaa4-authentication';
 
 export const getTokenXHeadersForVeilarboppfolging =
@@ -15,7 +15,7 @@ export const getTokenXHeadersForVeilarboppfolging =
             const token = tokenSet.access_token;
             return { Authorization: `Bearer ${token}` };
         } catch (e: any) {
-            logger.error(`Feil ved token-utveksling for veilarboppfolging: ${e.message}`);
+            logger.error(getCustomLogProps(req), `Feil ved token-utveksling for veilarboppfolging: ${e.message}`);
             return { Authorization: `Bearer ${incomingToken}` };
         }
     };

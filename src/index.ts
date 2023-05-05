@@ -16,7 +16,7 @@ import profilApi from './api/profil';
 import behovForVeiledningApi from './api/behovForVeiledning';
 import arbeidssokerApi from './api/arbeidssoker';
 import veilarbregistreringApi from './api/veilarbregistrering';
-import bevarelseApi from './api/besvarelse';
+import besvarelseApi from './api/besvarelse';
 import swaggerDocs from './api/swagger';
 import dagpengerStatusApi from './api/data/dagpengerStatus';
 import bodyParser from 'body-parser';
@@ -82,7 +82,7 @@ async function setUpRoutes() {
             await automatiskReaktivertProducer
         )
     );
-    router.use(bevarelseApi(await tokenDings));
+    router.use(besvarelseApi(await tokenDings));
 
     app.use(config.BASE_PATH || '', router);
 }

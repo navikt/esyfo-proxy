@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import config from './config';
 import axios, { AxiosError } from 'axios';
-import logger, { axiosLogError } from './logger';
+import logger, { axiosLogError, getCustomLogProps } from './logger';
 import { getTokenFromRequest } from './auth/tokenDings';
 import { isNetworkOrIdempotentRequestError } from './isRetryAllowed';
 
@@ -71,7 +71,7 @@ export function proxyHttpCall(url: string, opts: ProxyOpts = defaultOpts) {
                     return setTimeout(() => retry(counter + 1), retryDelay);
                 }
 
-                axiosLogError(axiosError);
+                axiosLogError(axiosError, getCustomLogProps(req));
                 return res.status(status).send((err as Error).message);
             }
         };
@@ -95,7 +95,7 @@ export function proxyTokenXCall(
             logger.error(`proxyTokenXCall error : ${(err as Error).message}`);
             const axiosError = err as AxiosError;
             const status = axiosError.response?.status || 500;
-            axiosLogError(axiosError);
+            axiosLogError(axiosError, getCustomLogProps(req));
             res.status(status).end();
         }
     };

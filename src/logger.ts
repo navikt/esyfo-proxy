@@ -22,6 +22,13 @@ export function getLogLevel(statusCode: number, err?: Error): pino.Level {
     return 'info';
 }
 
+export function getCustomLogProps(req: IncomingMessage) {
+    return {
+        x_callId: req.headers['nav-call-id'],
+        x_consumerId: req.headers[Config.CONSUMER_ID_HEADER_NAME],
+    };
+}
+
 export function pinoHttpMiddleware() {
     return pinoHttp({
         autoLogging: {
@@ -38,20 +45,17 @@ export function pinoHttpMiddleware() {
                 x_consumerId: req.headers[Config.CONSUMER_ID_HEADER_NAME],
             };
         },
-        customProps: (req) => ({
-            x_callId: req.headers['nav-call-id'],
-            x_consumerId: req.headers[Config.CONSUMER_ID_HEADER_NAME],
-        }),
+        customProps: getCustomLogProps,
     });
 }
 
-export function axiosLogError(err: AxiosError) {
+export function axiosLogError(err: AxiosError, props: unknown = {}) {
     const status = err.response?.status || 500;
     const logLevel = getLogLevel(status);
     const method = err.request?.method || 'Unknown method';
     const url = err.config?.url || 'unknown URL';
     const statusText = err.response?.statusText || '';
-    logger[logLevel](`${method} ${url}: ${status} ${statusText}`);
+    logger[logLevel](props, `${method} ${url}: ${status} ${statusText}`);
 }
 
 export default logger;

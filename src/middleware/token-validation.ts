@@ -1,6 +1,6 @@
 import { Request, RequestHandler } from 'express';
 import { getTokenFromHeader } from '../auth/tokenDings';
-import logger from '../logger';
+import logger, { getCustomLogProps } from '../logger';
 import { createRemoteJWKSet, decodeJwt, jwtVerify } from 'jose';
 import { FlattenedJWSInput, GetKeyFunction, JWSHeaderParameters } from 'jose/dist/types/types';
 import config from '../config';
@@ -22,7 +22,7 @@ const tokenValidation: RequestHandler = async (req, res, next) => {
         const token = getTokenFromHeader(req);
 
         if (!token) {
-            logger.warn('Bearer token mangler');
+            logger.warn(getCustomLogProps(req), 'Bearer token mangler');
             res.sendStatus(401);
             return;
         }
@@ -41,7 +41,7 @@ const tokenValidation: RequestHandler = async (req, res, next) => {
 
         next();
     } catch (err: any) {
-        logger.warn(`Feil ved tokenx validering: ${err.message}`);
+        logger.warn(getCustomLogProps(req), `Feil ved tokenx validering: ${err.message}`);
         res.sendStatus(401);
     }
 };
