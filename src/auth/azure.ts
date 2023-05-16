@@ -28,11 +28,12 @@ export type ValidationError<ErrorTypes extends string> = {
 
 export type ValidationResult<ErrorTypes extends string> = 'valid' | ValidationError<ErrorTypes>;
 
+export type VerifyJwt = (JWTVerifyResult & ResolvedKey) | ValidationError<'EXPIRED' | 'UNKNOWN_JOSE_ERROR'>;
 async function verifyJwt(
     bearerToken: string,
     jwkSet: ReturnType<typeof createRemoteJWKSet>,
     issuer: Issuer<Client>
-): Promise<(JWTVerifyResult & ResolvedKey) | ValidationError<'EXPIRED' | 'UNKNOWN_JOSE_ERROR'>> {
+): Promise<VerifyJwt> {
     const token = bearerToken.replace('Bearer ', '');
 
     try {
@@ -62,8 +63,11 @@ async function verifyJwt(
 export type AzureAdErrorVariants = 'EXPIRED' | 'CLIENT_ID_MISMATCH' | 'UNKNOWN_JOSE_ERROR';
 export type AzureAdValidationResult = ValidationResult<AzureAdErrorVariants>;
 
+export async function verifyAzureToken(bearerToken: string) {
+    return verifyJwt(bearerToken, await getJwkSet(), await getIssuer());
+}
 export async function validateAzureToken(bearerToken: string): Promise<AzureAdValidationResult> {
-    const verificationResult = await verifyJwt(bearerToken, await getJwkSet(), await getIssuer());
+    const verificationResult = await verifyAzureToken(bearerToken);
 
     if ('errorType' in verificationResult) {
         return verificationResult;
