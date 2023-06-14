@@ -1,47 +1,30 @@
 import express from 'express';
 import request from 'supertest';
 import veilederApi from '../../../src/api/veileder';
-import bodyParser from 'body-parser';
 
 describe('veileder api', () => {
-    describe('POST /besvarelse', () => {
-        it('returnerer 401 hvis mangler bearerToken', async () => {
-            const verifyAzureToken = () => Promise.resolve();
+    describe('POST /veileder/besvarelse', () => {
+        it('proxy kaller besvarelse', async () => {
+            const proxyServer = express();
+            const spy = jest.fn();
+
+            proxyServer.post('/api/v1/veileder/besvarelse', (req, res) => {
+                spy();
+                res.status(200).end();
+            });
+
+            const port = 6169;
+            const proxy = proxyServer.listen(port);
+
             const app = express();
-            app.use(veilederApi(verifyAzureToken as any));
+            app.use(veilederApi({} as any, `http://localhost:${port}`));
 
-            await request(app).post('/veileder/besvarelse').expect(401, 'mangler bearer token');
-        });
-
-        it('returnerer 401 hvis verifisering kaster exception', async () => {
-            const verifyAzureToken = () => Promise.reject();
-            const app = express();
-            app.use(veilederApi(verifyAzureToken as any));
-
-            const response = await request(app).post('/veileder/besvarelse').set('authorization', 'token123');
-            expect(response.statusCode).toEqual(401);
-            expect(response.text).toEqual('kan ikke verifisere token');
-        });
-
-        it('returnerer 401 hvis verifisering feiler', async () => {
-            const verifyAzureToken = () => Promise.resolve({ errorType: 'UNKNOWN_JOSE_ERROR' });
-            const app = express();
-            app.use(veilederApi(verifyAzureToken as any));
-
-            const response = await request(app).post('/veileder/besvarelse').set('authorization', 'token123');
-            expect(response.statusCode).toEqual(401);
-            expect(response.text).toEqual('feil ved verifisering av token');
-        });
-
-        it('returnerer 400 hvis fnr mangler i body', async () => {
-            const verifyAzureToken = () => Promise.resolve({ payload: { aud: 'test' } });
-            const app = express();
-            app.use(bodyParser());
-            app.use(veilederApi(verifyAzureToken as any, 'test'));
-
-            const response = await request(app).post('/veileder/besvarelse').set('authorization', 'token123');
-
-            expect(response.statusCode).toEqual(400);
+            try {
+                await request(app).post('/veileder/besvarelse').expect(200);
+                expect(spy).toHaveBeenCalled();
+            } finally {
+                proxy.close();
+            }
         });
     });
 });

@@ -1,43 +1,32 @@
 import { Router } from 'express';
-import { getTokenFromHeader } from '../../auth/tokenDings';
-import { VerifyJwt } from '../../auth/azure';
 import config from '../../config';
+import { getDefaultHeaders, proxyHttpCall } from '../../http';
+import axios from 'axios';
+import { BehovRepository } from '../../db/behovForVeiledningRepository';
 
-function veilederApi(
-    verifyAzureToken: (bearerToken: string) => Promise<VerifyJwt>,
-    azureAppIdClient = config.AZURE_APP_CLIENT_ID
-) {
+function veilederApi(behovForVeiledningRepository: BehovRepository, besvarelseUrl = config.BESVARELSE_URL) {
     const router = Router();
 
-    router.post('/veileder/besvarelse', async (req, res) => {
-        const bearerToken = getTokenFromHeader(req);
-        if (!bearerToken) {
-            res.status(401).send('mangler bearer token');
-            return;
-        }
+    router.post('/veileder/besvarelse', proxyHttpCall(`${besvarelseUrl}/api/v1/veileder/besvarelse`));
 
+    router.post('/veileder/behov-for-veiledning', async (req, res) => {
         try {
-            const result = await verifyAzureToken(bearerToken);
-            if ('errorType' in result || result.payload.aud !== azureAppIdClient) {
-                res.status(401).send('feil ved verifisering av token');
-                return;
+            const { foedselsnummer } = req.body;
+            const { status } = await axios(`${besvarelseUrl}/api/v1/veileder/har-tilgang`, {
+                headers: getDefaultHeaders(req),
+                method: 'POST',
+                data: { foedselsnummer },
+            });
+
+            if (status !== 200) {
+                // TODO
             }
-            const { fnr } = req.body;
-
-            if (!fnr) {
-                res.status(400).end();
-                return;
-            }
-
-            // sjekk at veileder har lov til å hente ut data
-
-            // proxy kall til besvarelse - med hvilket token?
-            res.status(200).end();
         } catch (err) {
-            res.status(401).send('kan ikke verifisere token');
-            return;
+        } finally {
+            res.status(200).end();
         }
     });
+
     return router;
 }
 
