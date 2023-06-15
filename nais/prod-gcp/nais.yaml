@@ -83,6 +83,8 @@ spec:
         - application: paw-reaktiver-arbeidssoker
         - application: tms-min-side-proxy
           namespace: min-side
+        - application: poao-tilgang
+          namespace: poao
     outbound:
       external:
         - host: veilarboppfolging.prod-fss-pub.nais.io
