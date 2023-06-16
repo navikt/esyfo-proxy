@@ -28,6 +28,7 @@ import automatiskReaktiveringApi from './api/reaktivering/automatiskReaktivering
 import reaktiveringApi from './api/reaktivering/automatiskReaktiveringSvar';
 import tokenValidation from './middleware/token-validation';
 import nivaa4Authentication from './middleware/nivaa4-authentication';
+import veilederApi from './api/veileder';
 
 const PORT = 3000;
 const app = express();
@@ -53,6 +54,9 @@ async function setUpRoutes() {
     router.use(swaggerDocs());
     router.use(healhApi());
     router.use(unleashApi());
+
+    // veileder routes - ingen auth middleware
+    router.use(veilederApi(await behovRepository));
 
     // azure ad
     router.use(automatiskReaktiveringApi(automatiskReaktiveringRepository, await automatiskReaktivertProducer));

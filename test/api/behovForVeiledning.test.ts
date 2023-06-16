@@ -92,6 +92,7 @@ describe('behovForVeiledning API', () => {
             expect(response.statusCode).toEqual(201);
             expect(behovRepository.lagreBehov).toHaveBeenCalledWith({
                 bruker: 'test-ident',
+                foedselsnummer: 'test-fnr',
                 oppfolging: 'SITUASJONSBESTEMT_INNSATS',
                 dialogId: 'dialog-id-1',
             });

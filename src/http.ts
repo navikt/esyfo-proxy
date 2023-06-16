@@ -43,7 +43,11 @@ export function proxyHttpCall(url: string, opts: ProxyOpts = defaultOpts) {
             };
 
             try {
-                const { data, status } = await axios(url, {
+                const {
+                    data: bodyStream,
+                    status,
+                    headers,
+                } = await axios(url, {
                     method,
                     data: req.method === 'POST' ? req.body : undefined,
                     params: req.params,
@@ -61,7 +65,10 @@ export function proxyHttpCall(url: string, opts: ProxyOpts = defaultOpts) {
                 if (status === 204) {
                     return res.status(status).end();
                 }
-                return data.pipe(res);
+
+                res.status(status);
+                res.set(headers);
+                return bodyStream.pipe(res);
             } catch (err) {
                 const axiosError = err as AxiosError;
                 const status = axiosError.response?.status || 500;
