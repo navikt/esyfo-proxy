@@ -28,7 +28,18 @@ function veilederApi(behovForVeiledningRepository: BehovRepository, besvarelseUr
                 const behov = await behovForVeiledningRepository.hentBehov({ foedselsnummer });
 
                 if (behov) {
-                    res.send({ oppfolging: behov.oppfolging, dato: behov.created_at, dialogId: behov.dialog_id });
+                    res.send({
+                        oppfolging: behov.oppfolging,
+                        dato: behov.created_at,
+                        dialogId: behov.dialog_id,
+                        tekster: {
+                            sporsmal: 'Hva slags veiledning ønsker du?',
+                            svar: {
+                                STANDARD_INNSATS: 'Jeg ønsker å klare meg selv',
+                                SITUASJONSBESTEMT_INNSATS: 'Jeg ønsker oppfølging fra NAV',
+                            },
+                        },
+                    });
                 } else {
                     res.status(204).end();
                 }

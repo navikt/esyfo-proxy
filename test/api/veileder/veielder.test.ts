@@ -101,6 +101,13 @@ describe('veileder api', () => {
                     oppfolging: 'SITUASJONSBESTEMT_INNSATS',
                     dato: 'test-dato',
                     dialogId: 'dialog-id',
+                    tekster: {
+                        sporsmal: 'Hva slags veiledning ønsker du?',
+                        svar: {
+                            STANDARD_INNSATS: 'Jeg ønsker å klare meg selv',
+                            SITUASJONSBESTEMT_INNSATS: 'Jeg ønsker oppfølging fra NAV',
+                        },
+                    },
                 });
             } finally {
                 proxy.close();
