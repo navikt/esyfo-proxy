@@ -85,6 +85,9 @@ spec:
           namespace: min-side
         - application: poao-tilgang
           namespace: poao
+        - application: veilarbvedtaksstotte
+          namespace: pto
+          cluster: prod-fss
     outbound:
       external:
         - host: veilarboppfolging.prod-fss-pub.nais.io
