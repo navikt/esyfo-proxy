@@ -3,6 +3,7 @@ import config from '../../config';
 import { getDefaultHeaders, proxyHttpCall } from '../../http';
 import axios, { AxiosError } from 'axios';
 import { BehovRepository } from '../../db/behovForVeiledningRepository';
+import logger from '../../logger';
 
 function veilederApi(behovForVeiledningRepository: BehovRepository, besvarelseUrl = config.BESVARELSE_URL) {
     const router = Router();
@@ -17,9 +18,11 @@ function veilederApi(behovForVeiledningRepository: BehovRepository, besvarelseUr
                 res.status(400).send('missing foedselsnummer');
                 return;
             }
+            const headers = getDefaultHeaders(req);
+            logger.info(`TOKEN: ${headers.Authorization}`);
 
             const { status } = await axios(`${besvarelseUrl}/api/v1/veileder/har-tilgang`, {
-                headers: getDefaultHeaders(req),
+                headers,
                 method: 'POST',
                 data: { foedselsnummer },
             });
