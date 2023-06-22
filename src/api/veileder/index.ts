@@ -4,6 +4,7 @@ import { getDefaultHeaders, proxyHttpCall } from '../../http';
 import axios, { AxiosError } from 'axios';
 import { BehovRepository } from '../../db/behovForVeiledningRepository';
 import logger from '../../logger';
+import { getTokenFromHeader } from '../../auth/tokenDings';
 
 function veilederApi(behovForVeiledningRepository: BehovRepository, besvarelseUrl = config.BESVARELSE_URL) {
     const router = Router();
@@ -19,10 +20,15 @@ function veilederApi(behovForVeiledningRepository: BehovRepository, besvarelseUr
                 return;
             }
             const headers = getDefaultHeaders(req);
-            logger.info(`TOKEN: ${headers.Authorization}`);
+            const token = getTokenFromHeader(req);
+            logger.info(`TOKEN fra request: ${headers.Authorization}`);
+            logger.info(`TOKEN fra header: ${token}`);
 
             const { status } = await axios(`${besvarelseUrl}/api/v1/veileder/har-tilgang`, {
-                headers,
+                headers: {
+                    ...getDefaultHeaders(req),
+                    Authorization: `Bearer ${token}`,
+                },
                 method: 'POST',
                 data: { foedselsnummer },
             });
