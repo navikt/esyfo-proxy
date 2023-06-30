@@ -88,6 +88,9 @@ spec:
         - application: veilarbvedtaksstotte
           namespace: pto
           cluster: prod-fss
+        - application: veilarbperson
+          namespace: pto
+          cluster: prod-fss
     outbound:
       external:
         - host: veilarboppfolging.prod-fss-pub.nais.io
