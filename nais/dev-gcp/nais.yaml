@@ -28,6 +28,14 @@ spec:
     enabled: true
   idporten:
     enabled: true
+    sidecar:
+      autoLogin: true
+      autoLoginIgnorePaths:
+        - /internal/*
+        - /azure/*
+        - /veileder/*
+        - /docs/*
+        - /unleash
   ingresses:
     - https://www.intern.dev.nav.no/aia-backend
   envFrom:
