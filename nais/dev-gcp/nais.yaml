@@ -29,13 +29,14 @@ spec:
   idporten:
     enabled: true
     sidecar:
+      enabled: true
       autoLogin: true
       autoLoginIgnorePaths:
-        - /internal/*
-        - /azure/*
-        - /veileder/*
-        - /docs/*
-        - /unleash
+        - /aia-backend/internal/*
+        - /aia-backend/azure/*
+        - /aia-backend/veileder/*
+        - /aia-backend/docs/*
+        - /aia-backend/unleash
       level: Level4
   ingresses:
     - https://www.intern.dev.nav.no/aia-backend
