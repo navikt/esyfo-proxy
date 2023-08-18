@@ -29,6 +29,9 @@ spec:
     enabled: true
   idporten:
     enabled: true
+    sidecar:
+      enabled: true
+      level: Level3
   webproxy: true
   ingresses:
     - https://www.nav.no/aia-backend
@@ -69,6 +72,8 @@ spec:
       value: paw.arbeidssoker-reaktivering-v1
     - name: BESVARELSE_URL
       value: http://paw-arbeidssoker-besvarelse
+    - name: SSO_NAV_COOKIE
+      value: sso-nav.no
   resources:
     limits:
       cpu: "3"

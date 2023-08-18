@@ -9,6 +9,7 @@ jest.mock('../../src/config', () => {
         ...config.default,
         NAIS_CLUSTER_NAME: 'test',
         MELDEKORT_APP_NAME: 'meldekort-api-test',
+        SSO_NAV_COOKIE: 'sso-nav.no',
     };
 });
 
@@ -38,7 +39,7 @@ describe('meldekort api', () => {
         app.use(meldekort(tokenDings, 'http://localhost:6669'));
 
         try {
-            const response = await request(app).get('/meldekort').set('Cookie', ['selvbetjening-idtoken=token123;']);
+            const response = await request(app).get('/meldekort').set('Cookie', ['sso-nav.no=token123;']);
 
             expect(tokenDings.exchangeIDPortenToken).toBeCalledWith('token123', 'test:meldekort:meldekort-api-test');
             expect(response.statusCode).toEqual(200);

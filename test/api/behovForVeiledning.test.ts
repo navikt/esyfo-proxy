@@ -3,10 +3,10 @@ import express, { RequestHandler } from 'express';
 import cookieParser from 'cookie-parser';
 import behovForVeiledning from '../../src/api/behovForVeiledning';
 import bodyParser from 'body-parser';
-import { IdPortenRequest } from '../../src/middleware/idporten-authentication';
+import { ValidatedRequest } from '../../src/middleware/token-validation';
 
 const mockAuthMiddleware: RequestHandler = (req, res, next) => {
-    (req as IdPortenRequest).user = {
+    (req as ValidatedRequest).user = {
         level: 'Level4',
         ident: 'test-ident',
         fnr: 'test-fnr',

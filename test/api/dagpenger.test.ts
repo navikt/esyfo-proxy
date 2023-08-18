@@ -7,6 +7,7 @@ jest.mock('../../src/config', () => {
     const config = jest.requireActual('../../src/config');
     return {
         ...config.default,
+        SSO_NAV_COOKIE: 'sso-nav.no',
         NAIS_CLUSTER_NAME: 'test',
     };
 });
@@ -36,9 +37,7 @@ describe('dagpenger api', () => {
         app.use(dagpenger(tokenDings, 'http://localhost:6667'));
 
         try {
-            const response = await request(app)
-                .get('/dagpenger/soknad')
-                .set('Cookie', ['selvbetjening-idtoken=token123;']);
+            const response = await request(app).get('/dagpenger/soknad').set('Cookie', ['sso-nav.no=token123;']);
 
             expect(tokenDings.exchangeIDPortenToken).toBeCalledWith('token123', 'test:teamdagpenger:dp-innsyn');
             expect(response.statusCode).toEqual(200);
