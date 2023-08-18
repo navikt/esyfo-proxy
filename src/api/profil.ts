@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import logger from '../logger';
 import { ProfilRepository } from '../db/profilRepository';
-import { IdPortenRequest } from '../middleware/idporten-authentication';
+import { ValidatedRequest } from '../middleware/token-validation';
 
 function profilRoutes(profilRepository: ProfilRepository) {
     const router = Router();
@@ -83,7 +83,7 @@ function profilRoutes(profilRepository: ProfilRepository) {
      */
     router.get('/profil', async (req, res) => {
         try {
-            const ident = (req as IdPortenRequest).user.ident;
+            const ident = (req as ValidatedRequest).user.ident;
             const profil = await profilRepository.hentProfil(ident as string);
 
             if (!profil) {
@@ -104,7 +104,7 @@ function profilRoutes(profilRepository: ProfilRepository) {
         }
 
         try {
-            const ident = (req as IdPortenRequest).user.ident;
+            const ident = (req as ValidatedRequest).user.ident;
             const result = await profilRepository.lagreProfil({
                 bruker: ident,
                 profil,

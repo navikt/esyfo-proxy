@@ -3,8 +3,8 @@ import request from 'supertest';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import arbeidssoker from '../../src/api/arbeidssoker';
-import idportenAuthentication from '../../src/middleware/idporten-authentication';
 import { Auth } from '../../src/auth/tokenDings';
+import tokenValidation from '../../src/middleware/token-validation';
 
 function getProxyServer() {
     const proxyServer = express();
@@ -53,7 +53,7 @@ describe('arbeidssoker api', () => {
         it('returnerer 401 når token mangler', (done) => {
             const app = express();
             app.use(cookieParser());
-            app.use(idportenAuthentication);
+            app.use(tokenValidation);
             app.use(arbeidssoker(tokenDings, 'http://localhost:7666', 'http://localhost:7666', 'dev-gcp'));
 
             request(app).get('/arbeidssoker').expect(401, done);
@@ -91,7 +91,7 @@ describe('arbeidssoker api', () => {
         it('returnerer 401 når token mangler', (done) => {
             const app = express();
             app.use(cookieParser());
-            app.use(idportenAuthentication);
+            app.use(tokenValidation);
             app.use(arbeidssoker(tokenDings, 'http://localhost:7666', 'http://localhost:7666', 'dev-gcp'));
 
             request(app).get('/er-arbeidssoker').expect(401, done);

@@ -15,7 +15,7 @@ const options = {
                 cookieAuth: {
                     type: 'apiKey',
                     in: 'cookie',
-                    name: config.NAV_COOKIE_NAME,
+                    name: config.SSO_NAV_COOKIE,
                 },
             },
             schemas: {

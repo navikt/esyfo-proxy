@@ -26,7 +26,7 @@ export function getTokenFromRequest(req: Request) {
 }
 
 function getTokenFromCookie(req: Request) {
-    return req.cookies && req.cookies[config.NAV_COOKIE_NAME];
+    return req.cookies && req.cookies[config.SSO_NAV_COOKIE];
 }
 
 export function getTokenFromHeader(req: Request) {

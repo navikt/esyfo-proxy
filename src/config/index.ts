@@ -26,12 +26,12 @@ export interface IEnvironmentVariables {
     KAFKA_CA: string;
     KAFKA_PRIVATE_KEY: string;
     BESVARELSE_URL: string;
+    SSO_NAV_COOKIE: string;
 }
 
 const env = process.env as unknown as IEnvironmentVariables;
 
 export default {
-    NAV_COOKIE_NAME: 'selvbetjening-idtoken',
     CONSUMER_ID_HEADER_NAME: 'Nav-Consumer-Id',
     CONSUMER_ID_HEADER_VALUE: 'paw:aia-backend',
     ...env,

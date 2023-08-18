@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import logger from '../logger';
 import { BehovRepository } from '../db/behovForVeiledningRepository';
-import { IdPortenRequest } from '../middleware/idporten-authentication';
+import { ValidatedRequest } from '../middleware/token-validation';
 
 function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository) {
     const router = Router();
@@ -57,7 +57,7 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
      */
     router.get('/behov-for-veiledning', async (req, res) => {
         try {
-            const ident = (req as IdPortenRequest).user.ident;
+            const ident = (req as ValidatedRequest).user.ident;
             const behov = await behovForVeiledningRepository.hentBehov({ bruker_id: ident });
 
             if (!behov) {
@@ -80,7 +80,7 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
         }
 
         try {
-            const { ident, fnr } = (req as IdPortenRequest).user;
+            const { ident, fnr } = (req as ValidatedRequest).user;
             const result = await behovForVeiledningRepository.lagreBehov({
                 bruker: ident,
                 foedselsnummer: fnr,
