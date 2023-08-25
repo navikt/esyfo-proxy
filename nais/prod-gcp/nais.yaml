@@ -37,6 +37,7 @@ spec:
     - https://www.nav.no/aia-backend
   envFrom:
     - configmap: loginservice-idporten
+    - secret: aia-backend-unleash-api-token
   env:
     - name: BASE_PATH
       value: /aia-backend
@@ -74,6 +75,8 @@ spec:
       value: http://paw-arbeidssoker-besvarelse
     - name: SSO_NAV_COOKIE
       value: sso-nav.no
+    - name: UNLEASH_SERVER_API_URL
+      value: https://paw-unleash-api.nav.cloud.nais.io/api
   resources:
     limits:
       cpu: "3"
@@ -100,6 +103,7 @@ spec:
       external:
         - host: veilarboppfolging.prod-fss-pub.nais.io
         - host: veilarbvedtakinfo.prod-fss-pub.nais.io
+        - host: paw-unleash-api.nav.cloud.nais.io
       rules:
         - application: dp-innsyn
           namespace: teamdagpenger
