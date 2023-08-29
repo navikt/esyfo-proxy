@@ -29,6 +29,7 @@ import reaktiveringApi from './api/reaktivering/automatiskReaktiveringSvar';
 import tokenValidation from './middleware/token-validation';
 import nivaa4Authentication from './middleware/nivaa4-authentication';
 import veilederApi from './api/veileder';
+import fullfoerReaktivering from './api/reaktivering/fullfoerReaktivering';
 
 const PORT = 3000;
 const app = express();
@@ -83,9 +84,10 @@ async function setUpRoutes() {
         reaktiveringApi(
             automatiskReaktiveringRepository,
             automatiskReaktiveringSvarRepository,
-            await automatiskReaktivertProducer
-        )
+            await automatiskReaktivertProducer,
+        ),
     );
+    router.use(fullfoerReaktivering(await tokenDings));
     router.use(besvarelseApi(await tokenDings));
 
     app.use(config.BASE_PATH || '', router);
