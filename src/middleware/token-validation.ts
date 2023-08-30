@@ -23,7 +23,7 @@ const getIdPortenJwkSet = () => {
     return idPortenJWKSet;
 };
 
-export type AuthLevel = 'Level3' | 'Level4';
+export type AuthLevel = 'Level3' | 'Level4' | 'idporten-loa-substantial' | 'idporten-loa-high';
 export type ValidatedRequest = Request & { user: { level: AuthLevel; ident: string; fnr: string } };
 
 function isTokenX(decodedToken: JWTPayload) {
