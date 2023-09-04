@@ -1,23 +1,30 @@
 import { Request, RequestHandler } from 'express';
 import { getTokenFromRequest } from '../auth/tokenDings';
 import logger, { getCustomLogProps } from '../logger';
-import { createRemoteJWKSet, decodeJwt, JWTPayload, jwtVerify } from 'jose';
-import { FlattenedJWSInput, GetKeyFunction, JWSHeaderParameters } from 'jose/dist/types/types';
+import {
+    createRemoteJWKSet,
+    decodeJwt,
+    FlattenedJWSInput,
+    JWSHeaderParameters,
+    JWTPayload,
+    jwtVerify,
+    KeyLike,
+} from 'jose';
 import config from '../config';
 
-let tokenxJWKSet: GetKeyFunction<JWSHeaderParameters, FlattenedJWSInput>;
+let tokenxJWKSet: (protectedHeader?: JWSHeaderParameters, token?: FlattenedJWSInput) => Promise<KeyLike>;
 const getTokenXJwkSet = () => {
     if (!tokenxJWKSet) {
-        tokenxJWKSet = createRemoteJWKSet(new URL(config.TOKEN_X_JWKS_URI));
+        tokenxJWKSet = createRemoteJWKSet<KeyLike>(new URL(config.TOKEN_X_JWKS_URI));
     }
 
     return tokenxJWKSet;
 };
 
-let idPortenJWKSet: GetKeyFunction<JWSHeaderParameters, FlattenedJWSInput>;
+let idPortenJWKSet: (protectedHeader?: JWSHeaderParameters, token?: FlattenedJWSInput) => Promise<KeyLike>;
 const getIdPortenJwkSet = () => {
     if (!idPortenJWKSet) {
-        idPortenJWKSet = createRemoteJWKSet(new URL(config.IDPORTEN_JWKS_URI!));
+        idPortenJWKSet = createRemoteJWKSet<KeyLike>(new URL(config.IDPORTEN_JWKS_URI!));
     }
 
     return idPortenJWKSet;
