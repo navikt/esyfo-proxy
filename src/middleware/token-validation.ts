@@ -34,7 +34,7 @@ export type AuthLevel = 'Level3' | 'Level4' | 'idporten-loa-substantial' | 'idpo
 export type ValidatedRequest = Request & { user: { level: AuthLevel; ident: string; fnr: string } };
 
 function isTokenX(decodedToken: JWTPayload) {
-    return /tokendings|tokenx/.test(decodedToken?.iss ?? '');
+    return decodedToken?.iss === process.env.TOKEN_X_ISSUER;
 }
 
 async function verifyToken(token: string, decodedToken: JWTPayload) {
