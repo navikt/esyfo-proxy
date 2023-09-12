@@ -106,6 +106,7 @@ export async function getAzureAdToken(
     }
 
     try {
+        // eslint-disable-next-line
         // @ts-ignore
         const response = await fetch(azureTokenEndpoint, {
             headers: {
