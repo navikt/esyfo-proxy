@@ -20,6 +20,8 @@ export interface IEnvironmentVariables {
     IDPORTEN_JWKS_URI: string;
     AZURE_APP_WELL_KNOWN_URL: string;
     AZURE_APP_CLIENT_ID: string;
+    AZURE_OPENID_CONFIG_TOKEN_ENDPOINT: string;
+    AZURE_APP_CLIENT_SECRET: string;
     APP_NAME: string;
     KAFKA_TOPIC: string;
     KAFKA_BROKERS: string;
