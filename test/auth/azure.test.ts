@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 
 function getAzureEndpointMockServer(spy: Mock, token: string) {
     const proxyServer = express();
-    proxyServer.use(bodyParser());
+    proxyServer.use(bodyParser.urlencoded());
     proxyServer.post('/token-endpoint', (req, res) => {
         spy(req.body);
         res.send({ access_token: token });

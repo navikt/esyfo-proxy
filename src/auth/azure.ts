@@ -3,6 +3,7 @@ import config from '../config';
 import { createRemoteJWKSet, errors, jwtVerify, JWTVerifyResult, ResolvedKey } from 'jose';
 import logger from '../logger';
 import jwt from 'jsonwebtoken';
+import axios from 'axios';
 
 let issuer: Issuer<Client>;
 const getIssuer = async (): Promise<Issuer<Client>> => {
@@ -106,15 +107,13 @@ export async function getAzureAdToken(
     }
 
     try {
-        // eslint-disable-next-line
-        // @ts-ignore
-        const response = await fetch(azureTokenEndpoint, {
+        const { data: token } = await axios(azureTokenEndpoint, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 Accept: 'application/json',
             },
             method: 'POST',
-            body: new URLSearchParams({
+            data: new URLSearchParams({
                 grant_type: 'client_credentials',
                 client_id: config.AZURE_APP_CLIENT_ID,
                 client_secret: config.AZURE_APP_CLIENT_SECRET,
@@ -122,13 +121,8 @@ export async function getAzureAdToken(
             }),
         });
 
-        if (!response.ok) {
-            throw response;
-        }
-
         logger.info({ message: `Genererer nytt token med scope ${scope}` });
 
-        const token = await response.json();
         tokenCache.set(scope, token.access_token);
         return token.access_token;
     } catch (error) {
