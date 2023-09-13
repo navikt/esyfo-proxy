@@ -75,6 +75,8 @@ spec:
       value: sso-dev-nav.no
     - name: UNLEASH_SERVER_API_URL
       value: https://paw-unleash-api.nav.cloud.nais.io/api
+    - name: OPPGAVE_URL
+      value: https://oppgave-q1.dev-fss-pub.nais.io
   resources:
     limits:
       cpu: "3"
@@ -102,6 +104,7 @@ spec:
         - host: veilarboppfolging.dev-fss-pub.nais.io
         - host: veilarbvedtakinfo.dev-fss-pub.nais.io
         - host: paw-unleash-api.nav.cloud.nais.io
+        - host: oppgave-q1.dev-fss-pub.nais.io
       rules:
         - application: dp-innsyn
           namespace: teamdagpenger

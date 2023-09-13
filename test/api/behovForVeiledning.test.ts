@@ -5,7 +5,7 @@ import behovForVeiledning from '../../src/api/behovForVeiledning';
 import bodyParser from 'body-parser';
 import { ValidatedRequest } from '../../src/middleware/token-validation';
 
-const mockAuthMiddleware: RequestHandler = (req, res, next) => {
+export const mockAuthMiddleware: RequestHandler = (req, res, next) => {
     (req as ValidatedRequest).user = {
         level: 'Level4',
         ident: 'test-ident',
@@ -32,7 +32,7 @@ describe('behovForVeiledning API', () => {
                         oppfolging: 'SITUASJONSBESTEMT_INNSATS',
                         created_at: 'test-dato',
                         dialog_id: 'dialog-id',
-                    })
+                    }),
                 ),
             };
 
@@ -77,7 +77,7 @@ describe('behovForVeiledning API', () => {
                         oppfolging: 'SITUASJONSBESTEMT_INNSATS',
                         created_at: 'test-dato',
                         dialog_id: 'dialog-id',
-                    })
+                    }),
                 ),
             };
 
