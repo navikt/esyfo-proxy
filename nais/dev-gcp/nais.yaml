@@ -34,7 +34,6 @@ spec:
   ingresses:
     - https://www.intern.dev.nav.no/aia-backend
   envFrom:
-    - configmap: loginservice-idporten
     - secret: aia-backend-unleash-api-token
   env:
     - name: BASE_PATH
