@@ -8,7 +8,7 @@ describe('oppgave api', () => {
     it('poster til oppgave api', async () => {
         const bodySpy = jest.fn();
         const oppgaveServer = express();
-        oppgaveServer.use(bodyParser());
+        oppgaveServer.use(bodyParser.json());
         oppgaveServer.post('/api/v1/oppgaver', (req, res) => {
             bodySpy(req.body);
             res.status(201).end();
@@ -20,7 +20,7 @@ describe('oppgave api', () => {
         const oppgaveUrl = 'http://localhost:9898';
 
         const app = express();
-        app.use(bodyParser());
+        app.use(bodyParser.json());
         app.use(mockAuthMiddleware);
         app.use(createOppgaveRoutes(getAzureAdToken)('', oppgaveUrl));
 
@@ -46,7 +46,7 @@ describe('oppgave api', () => {
     it('poster med azure ad token og correlation-id i header', async () => {
         const headersSpy = jest.fn();
         const oppgaveServer = express();
-        oppgaveServer.use(bodyParser());
+        oppgaveServer.use(bodyParser.json());
         oppgaveServer.post('/api/v1/oppgaver', (req, res) => {
             headersSpy(req.headers);
             res.status(201).end();
@@ -58,7 +58,7 @@ describe('oppgave api', () => {
         const oppgaveUrl = 'http://localhost:9897';
 
         const app = express();
-        app.use(bodyParser());
+        app.use(bodyParser.json());
         app.use(mockAuthMiddleware);
         app.use(createOppgaveRoutes(getAzureAdToken)('scope', oppgaveUrl));
 
@@ -78,6 +78,7 @@ describe('oppgave api', () => {
 
     it('handterer feil', async () => {
         const oppgaveServer = express();
+        oppgaveServer.use(bodyParser.json());
         oppgaveServer.post('/api/v1/oppgaver', (req, res) => {
             res.status(500).end();
         });
@@ -86,13 +87,12 @@ describe('oppgave api', () => {
         const oppgaveUrl = 'http://localhost:9896';
 
         const app = express();
-        app.use(bodyParser());
+        app.use(bodyParser.json());
         app.use(mockAuthMiddleware);
         app.use(createOppgaveRoutes(getAzureAdToken)('', oppgaveUrl));
 
         try {
             const response = await request(app).post('/oppgave').send({ beskrivelse: 'beskrivelse' });
-
             expect(response.statusCode).toEqual(500);
         } finally {
             oppgaveMock.close();
