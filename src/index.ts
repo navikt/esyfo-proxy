@@ -30,6 +30,7 @@ import tokenValidation from './middleware/token-validation';
 import nivaa4Authentication from './middleware/nivaa4-authentication';
 import veilederApi from './api/veileder';
 import fullfoerReaktivering from './api/reaktivering/fullfoerReaktivering';
+import oppgaveApi from './api/oppgave';
 
 const PORT = 3000;
 const app = express();
@@ -89,6 +90,7 @@ async function setUpRoutes() {
     );
     router.use(fullfoerReaktivering(await tokenDings));
     router.use(besvarelseApi(await tokenDings));
+    router.use(oppgaveApi(config.OPPGAVE_API_SCOPE));
 
     app.use(config.BASE_PATH || '', router);
 }

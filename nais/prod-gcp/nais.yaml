@@ -78,6 +78,8 @@ spec:
       value: https://paw-unleash-api.nav.cloud.nais.io/api
     - name: OPPGAVE_URL
       value: https://oppgave.prod-fss-pub.nais.io
+    - name: OPPGAVE_API_SCOPE
+      value: api://prod-fss.oppgavehandtering.oppgave/.default
   resources:
     limits:
       cpu: "3"
