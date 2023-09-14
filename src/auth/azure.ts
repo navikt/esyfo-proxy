@@ -113,12 +113,12 @@ export async function getAzureAdToken(
                 Accept: 'application/json',
             },
             method: 'POST',
-            data: new URLSearchParams({
+            data: {
                 grant_type: 'client_credentials',
                 client_id: config.AZURE_APP_CLIENT_ID,
                 client_secret: config.AZURE_APP_CLIENT_SECRET,
                 scope,
-            }),
+            },
         });
 
         logger.info({ message: `Genererer nytt token med scope ${scope}` });
