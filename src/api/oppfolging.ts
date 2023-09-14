@@ -16,7 +16,7 @@ export const getTokenXHeadersForVeilarboppfolging =
             return { Authorization: `Bearer ${token}` };
         } catch (e: any) {
             logger.error(getCustomLogProps(req), `Feil ved token-utveksling for veilarboppfolging: ${e.message}`);
-            return { Authorization: `Bearer ${incomingToken}` };
+            throw e;
         }
     };
 function oppfolging(tokenDings: Auth, veilarboppfolgingUrl = config.VEILARBOPPFOLGING_URL) {
@@ -36,7 +36,7 @@ function oppfolging(tokenDings: Auth, veilarboppfolgingUrl = config.VEILARBOPPFO
     router.get(
         '/oppfolging',
         nivaa4Authentication,
-        proxyTokenXCall(`${veilarboppfolgingUrl}/veilarboppfolging/api/oppfolging`, getTokenXHeaders)
+        proxyTokenXCall(`${veilarboppfolgingUrl}/veilarboppfolging/api/oppfolging`, getTokenXHeaders),
     );
 
     /**
@@ -52,7 +52,7 @@ function oppfolging(tokenDings: Auth, veilarboppfolgingUrl = config.VEILARBOPPFO
      */
     router.get(
         '/underoppfolging',
-        proxyTokenXCall(`${veilarboppfolgingUrl}/veilarboppfolging/api/niva3/underoppfolging`, getTokenXHeaders)
+        proxyTokenXCall(`${veilarboppfolgingUrl}/veilarboppfolging/api/niva3/underoppfolging`, getTokenXHeaders),
     );
 
     return router;

@@ -1,7 +1,6 @@
 import express from 'express';
 import request from 'supertest';
-import cookieParser from 'cookie-parser';
-import { proxyHttpCall } from '../../src/http';
+import { proxyHttpCall, proxyTokenXCall } from '../../src/http';
 
 describe('proxyHttpCall', () => {
     it('kaller feilede requester på nytt angitte ganger', async () => {
@@ -17,11 +16,10 @@ describe('proxyHttpCall', () => {
         const proxy = proxyServer.listen(port);
         const app = express();
 
-        app.use(cookieParser());
         app.get('/test', proxyHttpCall(`http://localhost:${port}/test-retry`, { maxRetries: 2 }));
 
         try {
-            const response = await request(app).get('/test').set('Cookie', ['selvbetjening-idtoken=token123;']);
+            const response = await request(app).get('/test');
             expect(response.statusCode).toEqual(500);
             expect(spy).toHaveBeenCalledTimes(3);
         } finally {
@@ -42,13 +40,41 @@ describe('proxyHttpCall', () => {
         const proxy = proxyServer.listen(port);
         const app = express();
 
-        app.use(cookieParser());
         app.get('/test', proxyHttpCall(`http://localhost:${port}/test-retry`, { skipRetry: true }));
 
         try {
-            const response = await request(app).get('/test').set('Cookie', ['selvbetjening-idtoken=token123;']);
+            const response = await request(app).get('/test');
             expect(response.statusCode).toEqual(500);
             expect(spy).toHaveBeenCalledTimes(1);
+        } finally {
+            proxy.close();
+        }
+    });
+});
+
+describe('proxyTokenXCall', () => {
+    it('returnere 500 hvis getTokenXHeaders-kall feiler', async () => {
+        const proxyServer = express();
+        const spy = jest.fn();
+        proxyServer.get('/test-server', (req, res) => {
+            spy();
+            res.status(200).end();
+        });
+
+        const port = 6264;
+        const proxy = proxyServer.listen(port);
+        const app = express();
+
+        const getTokenXHeaders = jest.fn().mockRejectedValueOnce('feil');
+        app.get(
+            '/test',
+            proxyTokenXCall(`http://localhost:${port}/test-server`, getTokenXHeaders, { skipRetry: true }),
+        );
+
+        try {
+            const response = await request(app).get('/test');
+            expect(spy).toHaveBeenCalledTimes(0);
+            expect(response.statusCode).toEqual(500);
         } finally {
             proxy.close();
         }

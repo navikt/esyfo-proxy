@@ -13,7 +13,7 @@ export const getTokenXHeadersForVeilarbregistrering = (tokenDings: Auth) => asyn
         return { Authorization: `Bearer ${token}` };
     } catch (e: any) {
         logger.error(`Feil ved token-utveksling for veilarbregistrering: ${e.message}`);
-        return { Authorization: `Bearer ${incomingToken}` };
+        throw e;
     }
 };
 function veilarbregistrering(tokenDings: Auth, veilarbregistreringUrl = config.VEILARBREGISTRERING_URL): Router {
@@ -36,7 +36,7 @@ function veilarbregistrering(tokenDings: Auth, veilarbregistreringUrl = config.V
      */
     router.get(
         '/startregistrering',
-        proxyTokenXCall(`${veilarbregistreringUrl}/veilarbregistrering/api/startregistrering`, getTokenXHeaders)
+        proxyTokenXCall(`${veilarbregistreringUrl}/veilarbregistrering/api/startregistrering`, getTokenXHeaders),
     );
 
     /**
@@ -55,7 +55,7 @@ function veilarbregistrering(tokenDings: Auth, veilarbregistreringUrl = config.V
      */
     router.get(
         '/registrering',
-        proxyTokenXCall(`${veilarbregistreringUrl}/veilarbregistrering/api/registrering`, getTokenXHeaders)
+        proxyTokenXCall(`${veilarbregistreringUrl}/veilarbregistrering/api/registrering`, getTokenXHeaders),
     );
 
     /**
@@ -70,7 +70,7 @@ function veilarbregistrering(tokenDings: Auth, veilarbregistreringUrl = config.V
      */
     router.post(
         '/fullfoerreaktivering',
-        proxyTokenXCall(`${veilarbregistreringUrl}/veilarbregistrering/api/fullfoerreaktivering`, getTokenXHeaders)
+        proxyTokenXCall(`${veilarbregistreringUrl}/veilarbregistrering/api/fullfoerreaktivering`, getTokenXHeaders),
     );
 
     /**
@@ -91,8 +91,8 @@ function veilarbregistrering(tokenDings: Auth, veilarbregistreringUrl = config.V
         '/standard-innsats',
         proxyTokenXCall(
             `${veilarbregistreringUrl}/veilarbregistrering/api/profilering/standard-innsats`,
-            getTokenXHeaders
-        )
+            getTokenXHeaders,
+        ),
     );
 
     /**
@@ -126,7 +126,7 @@ function veilarbregistrering(tokenDings: Auth, veilarbregistreringUrl = config.V
         '/arbeidssoker/perioder',
         proxyTokenXCall(`${veilarbregistreringUrl}/veilarbregistrering/api/arbeidssoker/perioder`, getTokenXHeaders, {
             overrideMethod: 'POST',
-        })
+        }),
     );
 
     /**
@@ -149,8 +149,8 @@ function veilarbregistrering(tokenDings: Auth, veilarbregistreringUrl = config.V
         '/meldeplikt/siste',
         proxyTokenXCall(
             `${veilarbregistreringUrl}/veilarbregistrering/api/arbeidssoker/meldekort/siste`,
-            getTokenXHeaders
-        )
+            getTokenXHeaders,
+        ),
     );
     /**
      * @openapi
@@ -168,7 +168,7 @@ function veilarbregistrering(tokenDings: Auth, veilarbregistreringUrl = config.V
      */
     router.get(
         '/meldeplikt',
-        proxyTokenXCall(`${veilarbregistreringUrl}/veilarbregistrering/api/arbeidssoker/meldekort`, getTokenXHeaders)
+        proxyTokenXCall(`${veilarbregistreringUrl}/veilarbregistrering/api/arbeidssoker/meldekort`, getTokenXHeaders),
     );
     return router;
 }
