@@ -23,12 +23,13 @@ export const createOppgaveRoutes = (getAzureAdToken: (scope: string) => Promise<
                     aktivDato: new Date().toLocaleDateString('en-GB').replaceAll('/', '.'), // <dd.mm.yyyy>,
                     prioritet: 'HOY',
                 };
-
+                const callId = ulid();
                 await axios(`${oppgaveUrl}/api/v1/oppgaver`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-Correlation-ID': ulid(),
+                        'X-Correlation-ID': callId,
+                        'Nav-Call-Id': callId,
                         [config.CONSUMER_ID_HEADER_NAME]: config.CONSUMER_ID_HEADER_VALUE,
                         Authorization: `Bearer ${azureAdToken}`,
                     },
