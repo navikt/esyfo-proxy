@@ -20,7 +20,6 @@ export const createOppgaveRoutes = (getAzureAdToken: (scope: string) => Promise<
                     beskrivelse,
                     tema: 'DAG',
                     oppgavetype: 'VUR_KONS_YTE',
-                    //aktivDato: new Date().toLocaleDateString('en-GB').replaceAll('/', '.'), // <dd.mm.yyyy>,
                     aktivDato: new Date().toISOString().substring(0, 10), // <yyyy-mm-dd>,
                     prioritet: 'HOY',
                 };
@@ -30,7 +29,7 @@ export const createOppgaveRoutes = (getAzureAdToken: (scope: string) => Promise<
                     headers: {
                         'Content-Type': 'application/json',
                         'X-Correlation-ID': v4(),
-                        //'Nav-Call-Id': req.header('Nav-Call-Id') || ulid(),
+                        'Nav-Call-Id': req.header('Nav-Call-Id') || null,
                         [config.CONSUMER_ID_HEADER_NAME]: config.CONSUMER_ID_HEADER_VALUE,
                         Authorization: `Bearer ${azureAdToken}`,
                     },
@@ -42,7 +41,6 @@ export const createOppgaveRoutes = (getAzureAdToken: (scope: string) => Promise<
                 logger.error(e, `Feil ved posting av ny oppgave`);
                 const axiosError = e as AxiosError;
                 const status = axiosError.response?.status || 500;
-                logger.error(axiosError.response?.data, 'Respons feil-data');
                 axiosLogError(axiosError);
                 res.status(status).end();
             }
