@@ -35,7 +35,7 @@ describe('oppgave api', () => {
                 beskrivelse: 'beskrivelse',
                 tema: 'DAG',
                 oppgavetype: 'VUR_KONS_YTE',
-                aktivDato: new Date().toLocaleDateString('en-GB').replaceAll('/', '.'),
+                aktivDato: new Date().toISOString().substring(0, 10),
                 prioritet: 'HOY',
             });
         } finally {

@@ -20,7 +20,8 @@ export const createOppgaveRoutes = (getAzureAdToken: (scope: string) => Promise<
                     beskrivelse,
                     tema: 'DAG',
                     oppgavetype: 'VUR_KONS_YTE',
-                    aktivDato: new Date().toLocaleDateString('en-GB').replaceAll('/', '.'), // <dd.mm.yyyy>,
+                    //aktivDato: new Date().toLocaleDateString('en-GB').replaceAll('/', '.'), // <dd.mm.yyyy>,
+                    aktivDato: new Date().toISOString().substring(0, 10), // <yyyy-mm-dd>,
                     prioritet: 'HOY',
                 };
                 const callId = ulid();
