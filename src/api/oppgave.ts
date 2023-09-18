@@ -42,6 +42,7 @@ export const createOppgaveRoutes = (getAzureAdToken: (scope: string) => Promise<
                 logger.error(e, `Feil ved posting av ny oppgave`);
                 const axiosError = e as AxiosError;
                 const status = axiosError.response?.status || 500;
+                logger.error(axiosError.response?.data, 'Respons feil-data');
                 axiosLogError(axiosError);
                 res.status(status).end();
             }
