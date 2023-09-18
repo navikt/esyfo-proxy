@@ -3,8 +3,8 @@ import logger, { axiosLogError } from '../logger';
 import { getAzureAdToken } from '../auth/azure';
 import { ValidatedRequest } from '../middleware/token-validation';
 import config from '../config';
-import { ulid } from 'ulid';
 import axios, { AxiosError } from 'axios';
+import { v4 } from 'uuid';
 
 export const createOppgaveRoutes = (getAzureAdToken: (scope: string) => Promise<string>) => {
     return (scope: string, oppgaveUrl = config.OPPGAVE_URL) => {
@@ -24,13 +24,13 @@ export const createOppgaveRoutes = (getAzureAdToken: (scope: string) => Promise<
                     aktivDato: new Date().toISOString().substring(0, 10), // <yyyy-mm-dd>,
                     prioritet: 'HOY',
                 };
-                const callId = ulid();
+
                 await axios(`${oppgaveUrl}/api/v1/oppgaver`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-Correlation-ID': callId,
-                        'Nav-Call-Id': callId,
+                        'X-Correlation-ID': v4(),
+                        //'Nav-Call-Id': req.header('Nav-Call-Id') || ulid(),
                         [config.CONSUMER_ID_HEADER_NAME]: config.CONSUMER_ID_HEADER_VALUE,
                         Authorization: `Bearer ${azureAdToken}`,
                     },
