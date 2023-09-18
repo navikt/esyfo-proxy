@@ -49,13 +49,14 @@ export function pinoHttpMiddleware() {
     });
 }
 
-export function axiosLogError(err: AxiosError, props: unknown = {}) {
+export function axiosLogError(err: AxiosError, props: any = {}) {
     const status = err.response?.status || 500;
     const logLevel = getLogLevel(status);
     const method = err.request?.method || 'Unknown method';
     const url = err.config?.url || 'unknown URL';
     const statusText = err.response?.statusText || '';
-    logger[logLevel](props, `${method} ${url}: ${status} ${statusText}`);
+    const data = err.response?.data || {};
+    logger[logLevel]({ ...props, ...data }, `${method} ${url}: ${status} ${statusText}`);
 }
 
 export default logger;
