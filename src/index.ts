@@ -1,6 +1,4 @@
 import dotenv from 'dotenv';
-dotenv.config();
-
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
@@ -29,8 +27,9 @@ import reaktiveringApi from './api/reaktivering/automatiskReaktiveringSvar';
 import tokenValidation from './middleware/token-validation';
 import nivaa4Authentication from './middleware/nivaa4-authentication';
 import veilederApi from './api/veileder';
-import fullfoerReaktivering from './api/reaktivering/fullfoerReaktivering';
 import oppgaveApi from './api/oppgave';
+
+dotenv.config();
 
 const PORT = 3000;
 const app = express();
@@ -88,7 +87,6 @@ async function setUpRoutes() {
             await automatiskReaktivertProducer,
         ),
     );
-    router.use(fullfoerReaktivering(await tokenDings));
     router.use(besvarelseApi(await tokenDings));
     router.use(oppgaveApi(config.OPPGAVE_API_SCOPE));
 
