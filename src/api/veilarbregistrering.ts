@@ -85,7 +85,7 @@ function veilarbregistrering(tokenDings: Auth, veilarbregistreringUrl = config.V
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
-    router.post('/kan-reaktiveres', async (req, res) => {
+    router.get('/kan-reaktiveres', async (req, res) => {
         try {
             const fnr = (req as ValidatedRequest).user.fnr;
             const {
