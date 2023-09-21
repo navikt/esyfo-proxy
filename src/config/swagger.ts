@@ -255,6 +255,14 @@ const options = {
                         },
                     },
                 },
+                KanReaktiveresDto: {
+                    type: 'object',
+                    properties: {
+                        kanReaktiveres: {
+                            type: 'boolean',
+                        },
+                    },
+                },
             },
         },
         security: [

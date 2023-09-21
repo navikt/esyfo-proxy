@@ -1,8 +1,10 @@
-import { proxyTokenXCall } from '../http';
+import { getDefaultHeaders, proxyTokenXCall } from '../http';
 import config from '../config';
 import { Request, Router } from 'express';
 import { Auth, getTokenFromRequest } from '../auth/tokenDings';
-import logger from '../logger';
+import logger, { axiosLogError, getCustomLogProps } from '../logger';
+import { ValidatedRequest } from '../middleware/token-validation';
+import axios, { AxiosError } from 'axios';
 
 export const getTokenXHeadersForVeilarbregistrering = (tokenDings: Auth) => async (req: Request) => {
     const VEILARBREGISTRERING_CLIENT_ID = `${config.NAIS_CLUSTER_NAME}:paw:veilarbregistrering`;
@@ -73,6 +75,43 @@ function veilarbregistrering(tokenDings: Auth, veilarbregistreringUrl = config.V
         proxyTokenXCall(`${veilarbregistreringUrl}/veilarbregistrering/api/fullfoerreaktivering`, getTokenXHeaders),
     );
 
+    /**
+     * @openapi
+     * /kan-reaktiveres:
+     *   post:
+     *     description: Sjekker om bruker kan reaktiveres.
+     *     responses:
+     *       200: $ref: '#/components/schemas/KanReaktiveresDto'
+     *       401:
+     *         $ref: '#/components/schemas/Unauthorized'
+     */
+    router.post('/kan-reaktiveres', async (req, res) => {
+        try {
+            const fnr = (req as ValidatedRequest).user.fnr;
+            const {
+                data: bodyStream,
+                status,
+                headers,
+            } = await axios(`${veilarbregistreringUrl}/veilarbregistrering/api/kan-reaktiveres`, {
+                method: 'POST',
+                data: { fnr },
+                headers: {
+                    ...getDefaultHeaders(req),
+                    ...(await getTokenXHeaders(req)),
+                },
+                responseType: 'stream',
+            });
+
+            res.status(status);
+            res.set(headers);
+            return bodyStream.pipe(res);
+        } catch (err) {
+            const axiosError = err as AxiosError;
+            const status = axiosError.response?.status || 500;
+            axiosLogError(axiosError, getCustomLogProps(req));
+            return res.status(status).send((err as Error).message);
+        }
+    });
     /**
      * @openapi
      * /standard-innsats:
