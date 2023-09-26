@@ -9,10 +9,12 @@ import { getTokenXHeadersForDialog } from '../../dialog';
 import { ProfilRepository } from '../../../db/profilRepository';
 import { ValidatedRequest } from '../../../middleware/token-validation';
 import logger from '../../../logger';
+import { BehovRepository } from '../../../db/behovForVeiledningRepository';
 
 function arbeidssokerInnhold(
     tokenDings: Auth,
     profilRepository: ProfilRepository,
+    behovForVeiledningRepository: BehovRepository,
     veilarboppfolgingUrl = config.VEILARBOPPFOLGING_URL,
     veilarbregistreringUrl = config.VEILARBREGISTRERING_URL,
     dialogApiUrl = config.VEILARBDIALOG_API_URL,
@@ -31,9 +33,25 @@ function arbeidssokerInnhold(
             };
         } catch (err) {
             logger.error(`Feil ved henting av profil: ${err}`);
+            return { error: (err as Error)?.message };
+        }
+    };
+
+    const hentBehovForVeiledning = async (ident: string) => {
+        try {
+            const behov = await behovForVeiledningRepository.hentBehov({ bruker_id: ident });
+
+            if (!behov) {
+                return { status: 204 };
+            }
+
             return {
-                error: err,
+                status: 200,
+                data: { oppfolging: behov.oppfolging, dato: behov.created_at, dialogId: behov.dialog_id },
             };
+        } catch (err) {
+            logger.error(`Feil ved henting av behov for veiledning: ${err}`);
+            return { error: (err as Error)?.message };
         }
     };
     const router = Router();
@@ -66,7 +84,6 @@ function arbeidssokerInnhold(
                         ...(await getTokenXHeadersForDialog(tokenDings)(req)),
                     },
                 }),
-                // behov for veiledning: todo
                 // todo: dagpenger-status
             ]);
 
@@ -95,6 +112,7 @@ function arbeidssokerInnhold(
                 },
                 {
                     profil: await hentProfil(ident),
+                    behovForVeiledning: await hentBehovForVeiledning(ident),
                 },
             );
             res.status(200).send(result);
