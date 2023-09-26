@@ -91,7 +91,7 @@ async function setUpRoutes() {
     router.use(besvarelseApi(await tokenDings));
     router.use(oppgaveApi(config.OPPGAVE_API_SCOPE));
 
-    router.use(arbeidssokerInnhold(await tokenDings));
+    router.use(arbeidssokerInnhold(await tokenDings, profilRepository));
 
     app.use(config.BASE_PATH || '', router);
 }

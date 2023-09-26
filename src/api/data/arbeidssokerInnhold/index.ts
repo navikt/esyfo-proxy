@@ -6,16 +6,41 @@ import { getDefaultHeaders } from '../../../http';
 import { getTokenXHeadersForVeilarboppfolging } from '../../oppfolging';
 import { getTokenXHeadersForVeilarbregistrering } from '../../veilarbregistrering';
 import { getTokenXHeadersForDialog } from '../../dialog';
+import { ProfilRepository } from '../../../db/profilRepository';
+import { ValidatedRequest } from '../../../middleware/token-validation';
+import logger from '../../../logger';
 
 function arbeidssokerInnhold(
     tokenDings: Auth,
+    profilRepository: ProfilRepository,
     veilarboppfolgingUrl = config.VEILARBOPPFOLGING_URL,
     veilarbregistreringUrl = config.VEILARBREGISTRERING_URL,
     dialogApiUrl = config.VEILARBDIALOG_API_URL,
 ) {
+    const hentProfil = async (ident: string) => {
+        try {
+            const profil = await profilRepository.hentProfil(ident as string);
+            if (!profil) {
+                return {
+                    status: 204,
+                };
+            }
+            return {
+                status: 200,
+                data: profil,
+            };
+        } catch (err) {
+            logger.error(`Feil ved henting av profil: ${err}`);
+            return {
+                error: err,
+            };
+        }
+    };
     const router = Router();
+
     router.get('/data/arbeidssoker-innhold', async (req, res) => {
         try {
+            const ident = (req as ValidatedRequest).user.ident;
             const requests = await Promise.allSettled([
                 axios(`${veilarboppfolgingUrl}/veilarboppfolging/api/oppfolging`, {
                     headers: {
@@ -41,33 +66,37 @@ function arbeidssokerInnhold(
                         ...(await getTokenXHeadersForDialog(tokenDings)(req)),
                     },
                 }),
-                // profil: todo
                 // behov for veiledning: todo
                 // todo: dagpenger-status
             ]);
 
             const requestKeys = ['oppfolging', 'brukerregistrering', 'brukerInfo', 'ulesteDialoger'];
 
-            const result = requests.reduce((acc, currentValue, currentIndex) => {
-                let currentResult;
-                if (currentValue.status === 'fulfilled') {
-                    currentResult = {
-                        status: currentValue.value.status,
-                        data: currentValue.value.data,
+            const result = requests.reduce(
+                (acc, currentValue, currentIndex) => {
+                    let currentResult;
+                    if (currentValue.status === 'fulfilled') {
+                        currentResult = {
+                            status: currentValue.value.status,
+                            data: currentValue.value.data,
+                        };
+                    }
+                    if (currentValue.status === 'rejected') {
+                        currentResult = {
+                            error: currentValue.reason,
+                        };
+                    }
+                    return {
+                        ...acc,
+                        [requestKeys[currentIndex]]: {
+                            ...currentResult,
+                        },
                     };
-                }
-                if (currentValue.status === 'rejected') {
-                    currentResult = {
-                        error: currentValue.reason,
-                    };
-                }
-                return {
-                    ...acc,
-                    [requestKeys[currentIndex]]: {
-                        ...currentResult,
-                    },
-                };
-            }, {});
+                },
+                {
+                    profil: await hentProfil(ident),
+                },
+            );
             res.status(200).send(result);
         } catch (err) {
             res.status(500).end();
