@@ -55,30 +55,34 @@ function arbeidssokerInnhold(
         }
     };
     const router = Router();
-
+    const timeout = 3000;
     router.get('/data/arbeidssoker-innhold', async (req, res) => {
         try {
             const ident = (req as ValidatedRequest).user.ident;
             const requests = await Promise.allSettled([
                 axios(`${veilarboppfolgingUrl}/veilarboppfolging/api/oppfolging`, {
+                    timeout,
                     headers: {
                         ...getDefaultHeaders(req),
                         ...(await getTokenXHeadersForVeilarboppfolging(tokenDings)(req)),
                     },
                 }),
                 axios(`${veilarbregistreringUrl}/veilarbregistrering/api/registrering`, {
+                    timeout,
                     headers: {
                         ...getDefaultHeaders(req),
                         ...(await getTokenXHeadersForVeilarbregistrering(tokenDings)(req)),
                     },
                 }),
                 axios(`${veilarbregistreringUrl}/veilarbregistrering/api/startregistrering`, {
+                    timeout,
                     headers: {
                         ...getDefaultHeaders(req),
                         ...(await getTokenXHeadersForVeilarbregistrering(tokenDings)(req)),
                     },
                 }),
                 axios(`${dialogApiUrl}/dialog/antallUleste`, {
+                    timeout,
                     headers: {
                         ...getDefaultHeaders(req),
                         ...(await getTokenXHeadersForDialog(tokenDings)(req)),
