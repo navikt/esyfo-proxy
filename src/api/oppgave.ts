@@ -14,10 +14,14 @@ export const createOppgaveRoutes = (getAzureAdToken: (scope: string) => Promise<
             try {
                 const fnr = (req as ValidatedRequest).user.fnr;
                 const azureAdToken = await getAzureAdToken(scope);
-                const { beskrivelse } = req.body;
+                const { beskrivelse, dinSituasjon } = req.body;
+
+                const tildeltEnhetsnr = dinSituasjon === 'KONKURS' ? '4401' : '4450';
+
                 const payload = {
                     personident: fnr,
                     beskrivelse,
+                    tildeltEnhetsnr,
                     tema: 'DAG',
                     oppgavetype: 'VUR_KONS_YTE',
                     aktivDato: new Date().toISOString().substring(0, 10), // <yyyy-mm-dd>,
