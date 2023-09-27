@@ -33,7 +33,7 @@ function arbeidssokerInnhold(
             };
         } catch (err) {
             logger.error(`Feil ved henting av profil: ${err}`);
-            return { error: (err as Error)?.message };
+            return { error: (err as Error)?.message, status: 500 };
         }
     };
 
@@ -51,7 +51,7 @@ function arbeidssokerInnhold(
             };
         } catch (err) {
             logger.error(`Feil ved henting av behov for veiledning: ${err}`);
-            return { error: (err as Error)?.message };
+            return { error: (err as Error)?.message, status: 500 };
         }
     };
     const router = Router();
@@ -100,7 +100,8 @@ function arbeidssokerInnhold(
                     }
                     if (currentValue.status === 'rejected') {
                         currentResult = {
-                            error: currentValue.reason,
+                            error: currentValue.reason.message,
+                            status: currentValue.reason.status,
                         };
                     }
                     return {
