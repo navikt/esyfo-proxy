@@ -55,7 +55,7 @@ function arbeidssokerInnhold(
         }
     };
     const router = Router();
-    const timeout = 3000;
+    const timeout = 5000;
     router.get('/data/arbeidssoker-innhold', async (req, res) => {
         try {
             const ident = (req as ValidatedRequest).user.ident;
@@ -105,7 +105,7 @@ function arbeidssokerInnhold(
                     if (currentValue.status === 'rejected') {
                         currentResult = {
                             error: currentValue.reason.message,
-                            status: currentValue.reason.status,
+                            status: currentValue.reason.status || 500,
                         };
                     }
                     return {
