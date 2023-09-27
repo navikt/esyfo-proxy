@@ -33,6 +33,7 @@ describe('oppgave api', () => {
             expect(requestBody).toEqual({
                 personident: 'test-fnr',
                 beskrivelse: 'beskrivelse',
+                tildeltEnhetsnr: '4450',
                 tema: 'DAG',
                 oppgavetype: 'VUR_KONS_YTE',
                 aktivDato: new Date().toISOString().substring(0, 10),
