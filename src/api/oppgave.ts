@@ -24,11 +24,16 @@ export const createOppgaveRoutes = (getAzureAdToken: (scope: string) => Promise<
                     prioritet: 'HOY',
                 };
 
+                const correlationId = v4();
+                logger.info(
+                    { x_callId: req.header('Nav-Call-Id') },
+                    `Kaller oppgave api med X-Correlation-Id=${correlationId}`,
+                );
                 await axios(`${oppgaveUrl}/api/v1/oppgaver`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-Correlation-ID': v4(),
+                        'X-Correlation-ID': correlationId,
                         'Nav-Call-Id': req.header('Nav-Call-Id') || null,
                         [config.CONSUMER_ID_HEADER_NAME]: config.CONSUMER_ID_HEADER_VALUE,
                         Authorization: `Bearer ${azureAdToken}`,
