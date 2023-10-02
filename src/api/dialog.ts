@@ -4,17 +4,20 @@ import { Auth, getTokenFromRequest } from '../auth/tokenDings';
 import config from '../config';
 import { proxyTokenXCall } from '../http';
 
-function dialogRoutes(tokenDings: Auth, dialogApiUrl = config.VEILARBDIALOG_API_URL) {
-    const router = Router();
-    const DIALOG_CLIENT_ID = `${config.NAIS_CLUSTER_NAME.replace('gcp', 'fss')}:pto:${config.DIALOG_APP_NAME}`;
+export const getTokenXHeadersForDialog =
+    (tokenDings: Auth, naisCluster = config.NAIS_CLUSTER_NAME) =>
+    async (req: Request) => {
+        const DIALOG_CLIENT_ID = `${naisCluster.replace('gcp', 'fss')}:pto:${config.DIALOG_APP_NAME}`;
 
-    const getTokenXHeaders = async (req: Request) => {
         const idPortenToken = getTokenFromRequest(req);
         const tokenSet = await tokenDings.exchangeIDPortenToken(idPortenToken, DIALOG_CLIENT_ID);
         const token = tokenSet.access_token;
         return { Authorization: `Bearer ${token}` };
     };
 
+function dialogRoutes(tokenDings: Auth, dialogApiUrl = config.VEILARBDIALOG_API_URL) {
+    const router = Router();
+    const getTokenXHeaders = getTokenXHeadersForDialog(tokenDings);
     const dialogCall = (url: string) => proxyTokenXCall(url, getTokenXHeaders);
     /**
      * @openapi

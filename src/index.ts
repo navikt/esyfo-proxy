@@ -28,6 +28,7 @@ import tokenValidation from './middleware/token-validation';
 import nivaa4Authentication from './middleware/nivaa4-authentication';
 import veilederApi from './api/veileder';
 import oppgaveApi from './api/oppgave';
+import arbeidssokerInnhold from './api/data/arbeidssokerInnhold';
 
 dotenv.config();
 
@@ -89,6 +90,8 @@ async function setUpRoutes() {
     );
     router.use(besvarelseApi(await tokenDings));
     router.use(oppgaveApi(config.OPPGAVE_API_SCOPE));
+
+    router.use(arbeidssokerInnhold(await tokenDings));
 
     app.use(config.BASE_PATH || '', router);
 }
