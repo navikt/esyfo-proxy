@@ -35,6 +35,88 @@ describe('oppgave api', () => {
                 beskrivelse: 'beskrivelse',
                 tildeltEnhetsnr: '4450',
                 tema: 'DAG',
+                oppgavetype: 'VURD_HENV',
+                aktivDato: new Date().toISOString().substring(0, 10),
+                prioritet: 'NORM',
+            });
+        } finally {
+            oppgaveMock.close();
+        }
+    });
+
+    it('poster til oppgave api med høy prioritet og korrekt type', async () => {
+        const bodySpy = jest.fn();
+        const oppgaveServer = express();
+        oppgaveServer.use(bodyParser.json());
+        oppgaveServer.post('/api/v1/oppgaver', (req, res) => {
+            bodySpy(req.body);
+            res.status(201).end();
+        });
+
+        const oppgaveMock = oppgaveServer.listen(9898);
+
+        const getAzureAdToken = jest.fn().mockReturnValue(Promise.resolve(''));
+        const oppgaveUrl = 'http://localhost:9898';
+
+        const app = express();
+        app.use(bodyParser.json());
+        app.use(mockAuthMiddleware);
+        app.use(createOppgaveRoutes(getAzureAdToken)('', oppgaveUrl));
+
+        try {
+            const response = await request(app)
+                .post('/oppgave')
+                .send({ beskrivelse: 'beskrivelse', dinSituasjon: 'OPPSIGELSE' });
+
+            expect(response.statusCode).toEqual(201);
+            expect(bodySpy).toBeCalledTimes(1);
+            const requestBody = bodySpy.mock.calls[0][0];
+            expect(requestBody).toEqual({
+                personident: 'test-fnr',
+                beskrivelse: 'beskrivelse',
+                tildeltEnhetsnr: '4450',
+                tema: 'DAG',
+                oppgavetype: 'VUR_KONS_YTE',
+                aktivDato: new Date().toISOString().substring(0, 10),
+                prioritet: 'HOY',
+            });
+        } finally {
+            oppgaveMock.close();
+        }
+    });
+
+    it('poster til oppgave api til annet kontor ved KONKURS', async () => {
+        const bodySpy = jest.fn();
+        const oppgaveServer = express();
+        oppgaveServer.use(bodyParser.json());
+        oppgaveServer.post('/api/v1/oppgaver', (req, res) => {
+            bodySpy(req.body);
+            res.status(201).end();
+        });
+
+        const oppgaveMock = oppgaveServer.listen(9898);
+
+        const getAzureAdToken = jest.fn().mockReturnValue(Promise.resolve(''));
+        const oppgaveUrl = 'http://localhost:9898';
+
+        const app = express();
+        app.use(bodyParser.json());
+        app.use(mockAuthMiddleware);
+        app.use(createOppgaveRoutes(getAzureAdToken)('', oppgaveUrl));
+
+        try {
+            const response = await request(app)
+                .post('/oppgave')
+                .send({ beskrivelse: 'beskrivelse', dinSituasjon: 'KONKURS' });
+
+            expect(response.statusCode).toEqual(201);
+            expect(bodySpy).toBeCalledTimes(1);
+            const requestBody = bodySpy.mock.calls[0][0];
+            expect(requestBody).toEqual({
+                personident: 'test-fnr',
+                beskrivelse: 'beskrivelse',
+                tildeltEnhetsnr: '4401',
+                tema: 'DAG',
                 oppgavetype: 'VUR_KONS_YTE',
                 aktivDato: new Date().toISOString().substring(0, 10),
                 prioritet: 'HOY',

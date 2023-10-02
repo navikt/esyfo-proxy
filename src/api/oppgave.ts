@@ -16,16 +16,21 @@ export const createOppgaveRoutes = (getAzureAdToken: (scope: string) => Promise<
                 const azureAdToken = await getAzureAdToken(scope);
                 const { beskrivelse, dinSituasjon } = req.body;
 
+                const situasjonerSomHaster = ['KONKURS', 'OPPSIGELSE', 'SAGT_OPP'];
+                const erHasteSituasjon = situasjonerSomHaster.includes(dinSituasjon);
                 const tildeltEnhetsnr = dinSituasjon === 'KONKURS' ? '4401' : '4450';
+
+                const prioritet = erHasteSituasjon ? 'HOY' : 'NORM';
+                const oppgavetype = erHasteSituasjon ? 'VUR_KONS_YTE' : 'VURD_HENV';
 
                 const payload = {
                     personident: fnr,
                     beskrivelse,
                     tildeltEnhetsnr,
                     tema: 'DAG',
-                    oppgavetype: 'VUR_KONS_YTE',
+                    oppgavetype,
                     aktivDato: new Date().toISOString().substring(0, 10), // <yyyy-mm-dd>,
-                    prioritet: 'HOY',
+                    prioritet,
                 };
 
                 const correlationId = v4();
