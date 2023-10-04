@@ -2,9 +2,10 @@ import express from 'express';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
-import arbeidssoker from '../../src/api/arbeidssoker';
+import arbeidssoker, { filtrerUtGamleArbeidssokerPerioder } from '../../src/api/arbeidssoker';
 import { Auth } from '../../src/auth/tokenDings';
 import tokenValidation from '../../src/middleware/token-validation';
+import { plussDager } from '../../src/lib/date-utils';
 
 function getProxyServer() {
     const proxyServer = express();
@@ -25,6 +26,22 @@ function getProxyServer() {
     return proxyServer;
 }
 
+describe('filtrerArbeidssokerPerioder', () => {
+    it('filtrerer ut perioder eldre enn 30 dager', () => {
+        const tilOgMedDato = plussDager(new Date(), -31).toISOString().substring(0, 10);
+        const result = filtrerUtGamleArbeidssokerPerioder([
+            { fraOgMedDato: '2023-09-09', tilOgMedDato },
+            { fraOgMedDato: '2023-10-01', tilOgMedDato: plussDager(new Date(), -1).toISOString().substring(0, 10) },
+        ]);
+
+        expect(result.length).toEqual(1);
+        expect(result[0].fraOgMedDato).toEqual('2023-10-01');
+    });
+    it('beholder åpne perioder', () => {
+        const perioder = [{ fraOgMedDato: '2023-10-04', tilOgMedDato: null }];
+        expect(filtrerUtGamleArbeidssokerPerioder(perioder)).toEqual(perioder);
+    });
+});
 describe('arbeidssoker api', () => {
     let tokenDings: Auth;
     beforeAll(() => {

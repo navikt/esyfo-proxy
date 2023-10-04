@@ -19,7 +19,7 @@ interface Props {
     arbeidssokerperioder: [] | Periode[];
 }
 
-function sorterArbeidssokerperioderSisteForst(a: Periode, b: Periode) {
+export function sorterArbeidssokerperioderSisteForst(a: Periode, b: Periode) {
     return new Date(b.fraOgMedDato).getTime() - new Date(a.fraOgMedDato).getTime();
 }
 
