@@ -16,7 +16,14 @@ export const createOppgaveRoutes = (getAzureAdToken: (scope: string) => Promise<
                 const azureAdToken = await getAzureAdToken(scope);
                 const { beskrivelse, dinSituasjon } = req.body;
 
-                const situasjonerSomHaster = ['KONKURS', 'OPPSIGELSE', 'SAGT_OPP'];
+                const situasjonerSomHaster = [
+                    'KONKURS',
+                    'OPPSIGELSE',
+                    'SAGT_OPP',
+                    'TILBAKE_TIL_JOBB',
+                    'NY_JOBB',
+                    'MIDLERTIDIG_JOBB',
+                ];
                 const erHasteSituasjon = situasjonerSomHaster.includes(dinSituasjon);
                 const tildeltEnhetsnr = dinSituasjon === 'KONKURS' ? '4401' : '4450';
 
