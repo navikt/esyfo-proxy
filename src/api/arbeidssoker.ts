@@ -7,6 +7,8 @@ import { getDefaultHeaders } from '../http';
 import { Auth } from '../auth/tokenDings';
 import { getTokenXHeadersForVeilarbregistrering } from './veilarbregistrering';
 import { getTokenXHeadersForVeilarboppfolging } from './oppfolging';
+import { Periode } from './data/dagpengerStatus/beregnArbeidssokerPerioder';
+import { plussDager } from '../lib/date-utils';
 
 interface Arbeidssokerperioder {
     status: number;
@@ -21,7 +23,7 @@ interface UnderOppfolging {
 export async function hentArbeidssokerPerioder(
     veilarbregistreringUrl: string,
     headers: RawAxiosRequestHeaders,
-    query: ParsedQs
+    query: ParsedQs,
 ): Promise<Arbeidssokerperioder> {
     const fraOgMed = query.fraOgMed ?? '2020-01-01';
     const tilOgMed = query.tilOgMed ?? '';
@@ -48,11 +50,17 @@ export async function hentArbeidssokerPerioder(
     }
 }
 
+export function filtrerUtGamleArbeidssokerPerioder(perioder: Periode[]) {
+    const cutOffDato = plussDager(new Date(), -30);
+    return perioder.filter((periode) => {
+        return periode.tilOgMedDato ? new Date(periode.tilOgMedDato) > cutOffDato : true;
+    });
+}
 function arbeidssokerRoutes(
     tokenDings: Auth,
     veilarboppfolgingUrl = config.VEILARBOPPFOLGING_URL,
     veilarbregistreringUrl = config.VEILARBREGISTRERING_URL,
-    naisCluster = config.NAIS_CLUSTER_NAME
+    naisCluster = config.NAIS_CLUSTER_NAME,
 ) {
     const router = Router();
     const tokenXHeadersForVeilarbregistrering = getTokenXHeadersForVeilarbregistrering(tokenDings);
@@ -109,7 +117,7 @@ function arbeidssokerRoutes(
                 ...getDefaultHeaders(req),
                 ...(await tokenXHeadersForVeilarbregistrering(req)),
             },
-            req.query
+            req.query,
         );
         const underoppfolging = await hentUnderOppfolging({
             ...getDefaultHeaders(req),
@@ -150,7 +158,7 @@ function arbeidssokerRoutes(
             },
             {
                 fraOgMed: '2020-01-01',
-            }
+            },
         );
 
         const underOppfolging = await hentUnderOppfolging({
@@ -159,7 +167,8 @@ function arbeidssokerRoutes(
         });
 
         const erUnderOppfolging = underOppfolging.underoppfolging;
-        const erArbeidssoker = erUnderOppfolging || perioder.arbeidssokerperioder.length > 0;
+        const harRelevantePerioder = filtrerUtGamleArbeidssokerPerioder(perioder.arbeidssokerperioder).length > 0;
+        const erArbeidssoker = erUnderOppfolging || harRelevantePerioder;
         return res.send({ erArbeidssoker });
     });
 
@@ -169,7 +178,7 @@ function arbeidssokerRoutes(
                 `${veilarboppfolgingUrl}/veilarboppfolging/api/niva3/underoppfolging`,
                 {
                     headers,
-                }
+                },
             );
             return {
                 status,
