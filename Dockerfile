@@ -1,7 +1,5 @@
 FROM node:18-alpine as builder
 
-RUN apk add --update --no-cache openssl1.1-compat # nødvendig for prisma generate i node:18-alpine
-
 ADD / /src
 ENV CI=true
 WORKDIR /src

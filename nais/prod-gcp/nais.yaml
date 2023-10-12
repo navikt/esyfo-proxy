@@ -1,24 +1,21 @@
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
-  name: aia-backend
-  namespace: paw
+  name: esyfo-proxy
+  namespace: team-esyfo
   labels:
-    team: paw
+    team: team-esyfo
   annotations:
     config.linkerd.io/proxy-memory-limit: 512Mi
     config.linkerd.io/proxy-memory-request: 128Mi
 spec:
   image: {{image}}
   port: 3000
-  azure:
-    application:
-      enabled: true
   liveness:
-    path: /aia-backend/internal/isAlive
+    path: /esyfo-proxy/internal/isAlive
     initialDelay: 10
   readiness:
-    path: /aia-backend/internal/isReady
+    path: /esyfo-proxy/internal/isReady
     initialDelay: 10
   prometheus:
     enabled: false
@@ -31,55 +28,10 @@ spec:
     enabled: true
     sidecar:
       enabled: true
-      level: Level3
+      level: Level4
   webproxy: true
   ingresses:
-    - https://www.nav.no/aia-backend
-  envFrom:
-    - secret: aia-backend-unleash-api-token
-  env:
-    - name: BASE_PATH
-      value: /aia-backend
-    - name: CORS_ALLOWED_ORIGINS
-      value: www.nav.no
-    - name: CORS_ALLOWED_SCHEMES
-      value: https
-    - name: MELDEKORT_APP_NAME
-      value: meldekort-api
-    - name: MELDEKORT_URL
-      value: http://meldekort-api.meldekort.svc.cluster.local/meldekort/meldekort-api/api/person
-    - name: VEILARBDIALOG_API_URL
-      value: https://veilarbdialog.prod-fss-pub.nais.io/veilarbdialog/api
-    - name: DIALOG_APP_NAME
-      value: veilarbdialog
-    - name: POAO_TILGANG_APP_NAME
-      value: poao-tilgang
-    - name: POAO_TILGANG_URL
-      value: http://poao-tilgang.poao.svc.cluster.local
-    - name: VEILARBREGISTRERING_URL
-      value: http://veilarbregistrering
-    - name: VEILARBOPPFOLGING_URL
-      value: https://veilarboppfolging.prod-fss-pub.nais.io
-    - name: VEILARBVEDTAKINFO_URL
-      value: https://veilarbvedtakinfo.prod-fss-pub.nais.io
-    - name: UNLEASH_API_URL
-      value: https://unleash.nais.io/api/
-    - name: UNLEASH_ENVIRONMENT
-      value: prod
-    - name: DAGPENGER_INNSYN_URL
-      value: http://dp-innsyn.teamdagpenger.svc.cluster.local
-    - name: KAFKA_TOPIC
-      value: paw.arbeidssoker-reaktivering-v1
-    - name: BESVARELSE_URL
-      value: http://paw-arbeidssoker-besvarelse
-    - name: SSO_NAV_COOKIE
-      value: sso-nav.no
-    - name: UNLEASH_SERVER_API_URL
-      value: https://paw-unleash-api.nav.cloud.nais.io/api
-    - name: OPPGAVE_URL
-      value: https://oppgave.prod-fss-pub.nais.io
-    - name: OPPGAVE_API_SCOPE
-      value: api://prod-fss.oppgavehandtering.oppgave/.default
+    - https://www.nav.no/esyfo-proxy
   resources:
     limits:
       cpu: "3"
@@ -88,50 +40,19 @@ spec:
       cpu: 100m
       memory: 580Mi
   accessPolicy:
-    inbound:
-      rules:
-        - application: veientilarbeid
-        - application: paw-reaktiver-arbeidssoker
-        - application: tms-min-side-proxy
-          namespace: min-side
-        - application: poao-tilgang
-          namespace: poao
-        - application: veilarbvedtaksstotte
-          namespace: pto
-          cluster: prod-fss
-        - application: veilarbperson
-          namespace: pto
-          cluster: prod-fss
     outbound:
-      external:
-        - host: veilarboppfolging.prod-fss-pub.nais.io
-        - host: veilarbvedtakinfo.prod-fss-pub.nais.io
-        - host: paw-unleash-api.nav.cloud.nais.io
-        - host: oppgave.prod-fss-pub.nais.io
       rules:
-        - application: dp-innsyn
-          namespace: teamdagpenger
-        - application: meldekort-api
-          namespace: meldekort
-        - application: veilarbdialog
-          namespace: pto
-          cluster: prod-fss
-        - application: veilarbregistrering
-        - application: paw-arbeidssoker-besvarelse
-        - application: veilarboppfolging
-          namespace: pto
-          cluster: prod-fss
-        - application: poao-tilgang
-          namespace: poao
-          cluster: prod-gcp
-        - application: veilarbvedtakinfo
-          namespace: pto
-          cluster: prod-fss
-  gcp:
-    sqlInstances:
-      - type: POSTGRES_14
-        tier: db-custom-1-3840
-        databases:
-          - name: aia-backend
-  kafka:
-    pool: nav-prod
+        - application: aktivitetskrav-backend
+  env:
+    - name: BASE_PATH
+      value: /esyfo-proxy
+    - name: CORS_ALLOWED_ORIGINS
+      value: www.nav.no
+    - name: CORS_ALLOWED_SCHEMES
+      value: https
+    - name: SSO_NAV_COOKIE
+      value: sso-nav.no
+    - name: AKTIVITETSKRAV_BACKEND_HOST
+      value: https://aktivitetskrav-backend.intern.nav.no
+    - name: AKTIVITETSKRAV_BACKEND_CLIENT_ID
+      value: prod-gcp:team-esyfo:aktivitetskrav-backend

@@ -1,43 +1,23 @@
 export interface IEnvironmentVariables {
-    TOKEN_X_WELL_KNOWN_URL: string;
-    TOKEN_X_CLIENT_ID: string;
-    TOKEN_X_PRIVATE_JWK: string;
-    TOKEN_X_TOKEN_ENDPOINT: string;
-    TOKEN_X_JWKS_URI: string;
-    TOKEN_X_ISSUER: string;
-    UNLEASH_SERVER_API_URL: string;
-    UNLEASH_SERVER_API_TOKEN: string;
-    DAGPENGER_INNSYN_URL: string;
-    VEILARBDIALOG_API_URL: string;
-    DIALOG_APP_NAME: string;
-    VEILARBREGISTRERING_URL: string;
-    VEILARBOPPFOLGING_URL: string;
-    VEILARBVEDTAKINFO_URL: string;
-    NAIS_CLUSTER_NAME: string;
-    BASE_PATH: string;
-    MELDEKORT_APP_NAME: string;
-    MELDEKORT_URL: string;
-    IDPORTEN_JWKS_URI: string;
-    AZURE_APP_WELL_KNOWN_URL: string;
-    AZURE_APP_CLIENT_ID: string;
-    AZURE_OPENID_CONFIG_TOKEN_ENDPOINT: string;
-    AZURE_APP_CLIENT_SECRET: string;
-    APP_NAME: string;
-    KAFKA_TOPIC: string;
-    KAFKA_BROKERS: string;
-    KAFKA_CERTIFICATE: string;
-    KAFKA_CA: string;
-    KAFKA_PRIVATE_KEY: string;
-    BESVARELSE_URL: string;
-    SSO_NAV_COOKIE: string;
-    OPPGAVE_URL: string;
-    OPPGAVE_API_SCOPE: string;
+  TOKEN_X_WELL_KNOWN_URL: string;
+  TOKEN_X_CLIENT_ID: string;
+  TOKEN_X_PRIVATE_JWK: string;
+  TOKEN_X_TOKEN_ENDPOINT: string;
+  TOKEN_X_JWKS_URI: string;
+  TOKEN_X_ISSUER: string;
+  AKTIVITETSKRAV_BACKEND_HOST: string;
+  AKTIVITETSKRAV_BACKEND_CLIENT_ID: string;
+  NAIS_CLUSTER_NAME: string;
+  BASE_PATH: string;
+  IDPORTEN_JWKS_URI: string;
+  APP_NAME: string;
+  SSO_NAV_COOKIE: string;
 }
 
 const env = process.env as unknown as IEnvironmentVariables;
 
 export default {
-    CONSUMER_ID_HEADER_NAME: 'Nav-Consumer-Id',
-    CONSUMER_ID_HEADER_VALUE: 'paw:aia-backend',
-    ...env,
+  CONSUMER_ID_HEADER_NAME: "Nav-Consumer-Id",
+  CONSUMER_ID_HEADER_VALUE: "team-esyfo:esyfo-proxy",
+  ...env,
 };
