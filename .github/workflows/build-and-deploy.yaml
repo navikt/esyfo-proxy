@@ -1,58 +1,57 @@
 name: "Build and deploy"
 on: push
 jobs:
-    build:
-        name: build and push
-        permissions:
-          contents: "read"
-          id-token: "write"
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v3
+  build:
+    name: build and push
+    permissions:
+      contents: "read"
+      id-token: "write"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-            - name: docker-build-push
-              uses: nais/docker-build-push@v0
-              id: docker-build-push
-              with:
-                team: team-esyfo
-                identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-                project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
-        outputs:
-          image: ${{ steps.docker-build-push.outputs.image }}
+      - name: docker-build-push
+        uses: nais/docker-build-push@v0
+        id: docker-build-push
+        with:
+          team: team-esyfo
+          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+    outputs:
+      image: ${{ steps.docker-build-push.outputs.image }}
 
+  deploy-dev:
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/dev')
+    name: Deploy til dev
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    deploy-dev:
-        if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/dev')
-        name: Deploy til dev
-        needs: [build]
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v3
+      - name: Deploy
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          IMAGE: ${{ needs.build.outputs.image }}
+          RESOURCE: nais/dev-gcp/nais.yaml
 
-            - name: Deploy
-              uses: nais/deploy/actions/deploy@v1
-              env:
-                  APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-                  CLUSTER: dev-gcp
-                  IMAGE: ${{ needs.build.outputs.image }}
-                  RESOURCE: nais/dev-gcp/nais.yaml
+  deploy-prod:
+    if: github.ref == 'refs/heads/main'
+    name: Deploy til prod
+    needs: [build, deploy-dev]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    deploy-prod:
-        if: github.ref == 'refs/heads/main'
-        name: Deploy til prod
-        needs: [build, deploy-dev]
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v3
-
-            - name: Deploy
-              uses: nais/deploy/actions/deploy@v1
-              env:
-                  APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-                  CLUSTER: prod-gcp
-                  RESOURCE: nais/prod-gcp/nais.yaml
-                  IMAGE: ${{ needs.build.outputs.image }}
-                  DRY_RUN: false
+      - name: Deploy
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: prod-gcp
+          RESOURCE: nais/prod-gcp/nais.yaml
+          IMAGE: ${{ needs.build.outputs.image }}
+          DRY_RUN: false
