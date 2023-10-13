@@ -3,22 +3,22 @@ import config from "../config";
 import { Request, Router } from "express";
 import { proxyTokenXCall } from "../http";
 
-function aktivitetspliktRoutes(tokenDings: Auth) {
+function isdialogmoteRoutes(tokenDings: Auth) {
   const router = Router();
 
   const getTokenXHeaders = async (req: Request) => {
     const incomingToken = getTokenFromRequest(req);
     const access_token = await tokenDings.exchangeIDPortenToken(
       incomingToken,
-      config.AKTIVITETSKRAV_BACKEND_CLIENT_ID,
+      config.ISDIALOGMOTE_CLIENT_ID,
     );
     return { Authorization: `Bearer ${access_token}` };
   };
 
   router.get(
-    "/api/aktivitetsplikt",
+    "/api/dialogmote",
     proxyTokenXCall(
-      `${config.AKTIVITETSKRAV_BACKEND_HOST}/api/v1/aktivitetsplikt`,
+      `${config.ISDIALOGMOTE_HOST}/api/v2/arbeidstaker/brev`,
       getTokenXHeaders,
     ),
   );
@@ -26,4 +26,4 @@ function aktivitetspliktRoutes(tokenDings: Auth) {
   return router;
 }
 
-export default aktivitetspliktRoutes;
+export default isdialogmoteRoutes;

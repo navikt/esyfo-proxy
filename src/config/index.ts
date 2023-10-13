@@ -7,6 +7,10 @@ export interface IEnvironmentVariables {
   TOKEN_X_ISSUER: string;
   AKTIVITETSKRAV_BACKEND_HOST: string;
   AKTIVITETSKRAV_BACKEND_CLIENT_ID: string;
+  SYFOMOTEBEHOV_HOST: string;
+  SYFOMOTEBEHOV_CLIENT_ID: string;
+  ISDIALOGMOTE_HOST: string;
+  ISDIALOGMOTE_CLIENT_ID: string;
   NAIS_CLUSTER_NAME: string;
   BASE_PATH: string;
   IDPORTEN_JWKS_URI: string;
