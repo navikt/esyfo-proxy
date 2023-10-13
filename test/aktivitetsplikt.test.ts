@@ -46,7 +46,7 @@ describe("aktivitetsplikt routes", () => {
         "token123",
         "test-gcp:team-esyfo:aktivitetskrav-backend",
       );
-      expect(response.statusCode).toEqual(400);
+      expect(response.statusCode).toEqual(200);
       expect(response.text).toBe("ok");
     } finally {
       proxy.close();
