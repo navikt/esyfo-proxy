@@ -1,30 +1,30 @@
 {
-    "compilerOptions": {
-        "outDir": "build",
-        "rootDir": "src",
-        "module": "NodeNext",
-        "target": "ES2022",
-        "lib": ["ES2022"],
-        "sourceMap": true,
-        "allowJs": true,
-        "forceConsistentCasingInFileNames": true,
-        "noImplicitReturns": true,
-        "noImplicitThis": true,
-        "noImplicitAny": true,
-        "strictNullChecks": true,
-        "noUnusedLocals": true,
-        "skipLibCheck": true,
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "strict": true,
-        "resolveJsonModule": true,
-        "isolatedModules": true,
-        "noFallthroughCasesInSwitch": true
-    },
-    "exclude": ["node_modules", "src/test/**/*", "src/**/*.test.*", "build"],
-    "include": ["src", "types"],
-    "ts-node": {
-        "files": true
-    },
-    "files": ["types/uker-fra-dato.d.ts"]
+  "compilerOptions": {
+    "outDir": "build",
+    "rootDir": "src",
+    "module": "NodeNext",
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "sourceMap": true,
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "exclude": ["node_modules", "build"],
+  "include": ["src", "types"],
+  "ts-node": {
+    "files": true
+  },
+  "files": ["types/uker-fra-dato.d.ts"]
 }
