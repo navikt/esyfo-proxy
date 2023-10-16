@@ -68,6 +68,6 @@ spec:
     - name: SYFOMOTEBEHOV_CLIENT_ID
       value: dev-fss:team-esyfo:syfomotebehov
     - name: ISDIALOGMOTE_HOST
-      value: https://isdialogmote.intern.dev.nav.no
+      value: http://isdialogmote.teamsykefravr
     - name: ISDIALOGMOTE_CLIENT_ID
       value: dev-gcp:teamsykefravr:isdialogmote
