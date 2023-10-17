@@ -29,7 +29,6 @@ spec:
     sidecar:
       enabled: true
       level: Level4
-  webproxy: true
   ingresses:
     - https://www.nav.no/esyfo-proxy
   resources:
