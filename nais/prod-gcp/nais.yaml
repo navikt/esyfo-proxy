@@ -47,8 +47,8 @@ spec:
         - application: isdialogmote
           namespace: teamsykefravr
           cluster: prod-gcp
-    external:
-      - host: syfomotebehov.prod-fss-pub.nais.io
+      external:
+        - host: syfomotebehov.prod-fss-pub.nais.io
   env:
     - name: BASE_PATH
       value: /esyfo-proxy
