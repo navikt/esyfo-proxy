@@ -43,6 +43,13 @@ spec:
     outbound:
       rules:
         - application: aktivitetskrav-backend
+          namespace: team-esyfo
+          cluster: prod-gcp
+        - application: isdialogmote
+          namespace: teamsykefravr
+          cluster: prod-gcp
+    external:
+      - host: syfomotebehov.prod-fss-pub.nais.io
   env:
     - name: BASE_PATH
       value: /esyfo-proxy
@@ -56,3 +63,11 @@ spec:
       value: https://aktivitetskrav-backend.intern.nav.no
     - name: AKTIVITETSKRAV_BACKEND_CLIENT_ID
       value: prod-gcp:team-esyfo:aktivitetskrav-backend
+    - name: SYFOMOTEBEHOV_HOST
+      value: https://syfomotebehov.prod-fss-pub.nais.io
+    - name: SYFOMOTEBEHOV_CLIENT_ID
+      value: prod-fss:team-esyfo:syfomotebehov
+    - name: ISDIALOGMOTE_HOST
+      value: http://isdialogmote.teamsykefravr
+    - name: ISDIALOGMOTE_CLIENT_ID
+      value: prod-gcp:teamsykefravr:isdialogmote
