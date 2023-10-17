@@ -42,9 +42,6 @@ spec:
         - application: aktivitetskrav-backend
           namespace: team-esyfo
           cluster: dev-gcp
-        - application: syfomotebehov
-          namespace: team-esyfo
-          cluster: dev-fss
         - application: isdialogmote
           namespace: teamsykefravr
           cluster: dev-gcp
