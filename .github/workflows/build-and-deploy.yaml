@@ -24,6 +24,7 @@ jobs:
 
   deploy-dev:
     name: Deploy til dev
+    if: ${{ github.actor != 'dependabot[bot]' }}
     needs: [build]
     runs-on: ubuntu-latest
     steps:
