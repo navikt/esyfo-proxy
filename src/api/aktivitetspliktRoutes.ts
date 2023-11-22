@@ -23,6 +23,14 @@ function aktivitetspliktRoutes(tokenDings: Auth) {
     ),
   );
 
+  router.get(
+    "/api/aktivitetsplik/historikk",
+    proxyTokenXCall(
+      `${config.AKTIVITETSKRAV_BACKEND_HOST}/api/v1/aktivitetsplikt/historikk`,
+      getTokenXHeaders,
+    ),
+  );
+
   router.post(
     "/api/aktivitetsplikt/les",
     proxyTokenXCall(
