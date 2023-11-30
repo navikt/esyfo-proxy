@@ -24,7 +24,7 @@ function aktivitetspliktRoutes(tokenDings: Auth) {
   );
 
   router.get(
-    "/api/aktivitetsplik/historikk",
+    "/api/aktivitetsplikt/historikk",
     proxyTokenXCall(
       `${config.AKTIVITETSKRAV_BACKEND_HOST}/api/v1/aktivitetsplikt/historikk`,
       getTokenXHeaders,
