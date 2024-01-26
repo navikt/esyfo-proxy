@@ -27,6 +27,8 @@ jobs:
 
   deploy-dev:
     name: Deploy til dev
+    permissions:
+      id-token: "write"
     if: ${{ github.actor != 'dependabot[bot]' }}
     needs: [build]
     runs-on: ubuntu-latest
@@ -37,7 +39,6 @@ jobs:
       - name: Deploy
         uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           IMAGE: ${{ needs.build.outputs.image }}
           RESOURCE: nais/dev-gcp/nais.yaml
@@ -45,6 +46,8 @@ jobs:
   deploy-prod:
     if: github.ref == 'refs/heads/main'
     name: Deploy til prod
+    permissions:
+      id-token: "write"
     needs: [build, deploy-dev]
     runs-on: ubuntu-latest
     steps:
@@ -54,7 +57,6 @@ jobs:
       - name: Deploy
         uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
           RESOURCE: nais/prod-gcp/nais.yaml
           IMAGE: ${{ needs.build.outputs.image }}
