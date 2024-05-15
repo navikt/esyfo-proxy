@@ -19,6 +19,10 @@ spec:
     initialDelay: 10
   prometheus:
     enabled: false
+  observability:
+    autoInstrumentation:
+      enabled: true
+      runtime: nodejs
   replicas:
     min: 2
     max: 4
