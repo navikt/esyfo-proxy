@@ -45,6 +45,9 @@ spec:
         - application: syfomotebehov
           namespace: team-esyfo
           cluster: dev-gcp
+        - application: meroppfolging-backend
+          namespace: team-esyfo
+          cluster: dev-gcp
         - application: isdialogmote
           namespace: teamsykefravr
           cluster: dev-gcp
@@ -65,6 +68,10 @@ spec:
       value: http://syfomotebehov
     - name: SYFOMOTEBEHOV_CLIENT_ID
       value: dev-gcp:team-esyfo:syfomotebehov
+    - name: MEROPPFOLGING_BACKEND_HOST
+      value: http://meroppfolging-backend
+    - name: MEROPPFOLGING_BACKEND_CLIENT_ID
+      value: dev-gcp:team-esyfo:meroppfolging-backend
     - name: ISDIALOGMOTE_HOST
       value: http://isdialogmote.teamsykefravr
     - name: ISDIALOGMOTE_CLIENT_ID
