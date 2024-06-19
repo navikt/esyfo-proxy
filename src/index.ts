@@ -13,6 +13,7 @@ import tokenValidation from "./middleware/token-validation";
 import nivaa4Authentication from "./middleware/nivaa4-authentication";
 import motebehovRoutes from "./api/motebehovRoutes";
 import isdialogmoteRoutes from "./api/isdialogmoteRoutes";
+import meroppfolgingRoutes from "./api/meroppfolgingRoutes";
 
 dotenv.config();
 
@@ -35,6 +36,7 @@ async function setUpRoutes() {
   router.use(aktivitetspliktRoutes(await tokenDings));
   router.use(motebehovRoutes(await tokenDings));
   router.use(isdialogmoteRoutes(await tokenDings));
+  router.use(meroppfolgingRoutes(await tokenDings));
 
   app.use(config.BASE_PATH || "", router);
 }
