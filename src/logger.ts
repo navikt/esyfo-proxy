@@ -8,8 +8,8 @@ import { AxiosError } from "axios";
 const logger = pino({
   ...ecsFormat({ apmIntegration: false }),
   redact: {
-    paths: ['req.headers.authorization'],
-    censor: '[REDACTED]',
+    paths: ["req.headers.authorization", "req.headers.cookie"],
+    censor: "[REDACTED]",
   },
   formatters: {
     level: (label: string) => ({ level: label }),
