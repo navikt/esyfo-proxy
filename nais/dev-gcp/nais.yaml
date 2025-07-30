@@ -17,6 +17,14 @@ spec:
   prometheus:
     enabled: true
     path: /esyfo-proxy/internal/prometheus
+  observability:
+    logging:
+      destinations:
+        - id: elastic
+        - id: loki
+    autoInstrumentation:
+      enabled: true
+      runtime: nodejs
   replicas:
     min: 1
     max: 1
