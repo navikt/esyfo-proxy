@@ -20,6 +20,10 @@ spec:
   prometheus:
     enabled: false
   observability:
+    logging:
+      destinations:
+        - id: elastic
+        - id: loki
     autoInstrumentation:
       enabled: true
       runtime: nodejs
