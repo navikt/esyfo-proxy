@@ -64,7 +64,7 @@
     "ts-jest": "29.4.1",
     "ts-node-dev": "2.0.0",
     "typescript": "^5.9.2",
-    "typescript-eslint": "^7.15.0"
+    "typescript-eslint": "^8.39.1"
   },
   "repository": {
     "type": "git",
