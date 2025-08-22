@@ -24,7 +24,7 @@
     "dotenv": "16.6.0",
     "express": "5.1.0",
     "helmet": "8.1.0",
-    "jose": "5.10.0",
+    "jose": "6.0.12",
     "jsonwebtoken": "9.0.2",
     "node-cache": "^5.1.2",
     "node-jose": "2.2.0",
