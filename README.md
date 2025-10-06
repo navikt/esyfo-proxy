@@ -1,5 +1,7 @@
 # esyfo-proxy
 
+Brukes som "API gateway" for å utføre [TokenX token-veksling](https://docs.nais.io/auth/tokenx/) for frontender uten egen "frackend". Brukes av våre mikro-frontender og av aktivitetskrav-frontend.
+
 ## Utvikling
 
 Bruk Node.js 18.
