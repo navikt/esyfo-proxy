@@ -18,7 +18,7 @@ function motebehovRoutes(tokenDings: Auth) {
   router.get(
     "/api/motebehov",
     proxyTokenXCall(
-      `${config.SYFOMOTEBEHOV_HOST}/syfomotebehov/api/v3/arbeidstaker/motebehov/all`,
+      `${config.SYFOMOTEBEHOV_HOST}/syfomotebehov/api/v4/arbeidstaker/motebehov`,
       getTokenXHeaders,
     ),
   );

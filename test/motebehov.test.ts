@@ -24,7 +24,7 @@ describe("motebehov routes", () => {
 
     const proxyServer = express();
     proxyServer.get(
-      "/syfomotebehov/api/v3/arbeidstaker/motebehov/all",
+      "/syfomotebehov/api/v4/arbeidstaker/motebehov",
       (req, res) => {
         if (req.header("Authorization") === "Bearer tokenX-123") {
           res.status(200).send("ok");
