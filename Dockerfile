@@ -2,12 +2,12 @@ FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:24-dev AS bui
 WORKDIR /src
 ENV CI=true
 
-COPY package.json package-lock.json ./
+COPY --chown=node:node package.json package-lock.json ./
 RUN npm ci
 
-COPY . .
+COPY --chown=node:node . .
 RUN npm run build
-RUN npm prune --production
+RUN npm prune --omit=dev
 RUN chmod +x ./entrypoint.sh
 
 FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:24-slim
